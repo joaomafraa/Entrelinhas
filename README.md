@@ -10,7 +10,13 @@ O Entrelinhas é uma aplicação que integra inscrição em cursos, acompanhamen
 A proposta é unir aprendizado, organização e geração de renda dentro de uma única plataforma.
 
 ---
+## Links
 
+- [Protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
+- [Documentação no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
+- [Gestão do Projeto (Jira)](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
+
+---
 ## Funcionalidades
 
 ### 1. Inscrição no Curso
