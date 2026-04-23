@@ -379,7 +379,8 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 ## Protótipos
 
-Os wireframes do projeto foram desenvolvidos em SVG e representam as principais telas da aplicação.
+O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario
+[Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 
 ---
 
@@ -393,7 +394,7 @@ Os wireframes do projeto foram desenvolvidos em SVG e representam as principais 
 - Facilitar o ingresso no curso  
 - Melhorar o acompanhamento das alunas  
 - Organizar a gestão do projeto  
-- Permitir geração de renda através do bazar  
+- Permitir geração de renda para a ong através do bazar  
 
 ---
 
