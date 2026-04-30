@@ -10,22 +10,15 @@ O Entrelinhas é uma aplicação que integra inscrição em cursos, acompanhamen
 A proposta é unir aprendizado, organização e geração de renda dentro de uma única plataforma.
 
 ---
+
 ## Links
 
-<<<<<<< HEAD
-## Links
-
-=======
->>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 - [Protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 - [Documentação no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
 - [Gestão do Projeto (Jira)](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
 
 ---
-<<<<<<< HEAD
 
-=======
->>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 ## Funcionalidades
 
 ### 1. Inscrição no Curso
@@ -259,25 +252,25 @@ Esta funcionalidade permite que o administrador cadastre produtos e serviços no
 **Cenários (BDD)**
 
 - Cenário 1: Cadastro de produto ou serviço com sucesso
-  - Dado que sou administrador da plataforma
-  - Quando acesso a área de cadastro
-  - E preencho os dados de um produto ou serviço corretamente
-  - Então o item deve ser registrado no bazar
+	- Dado que sou administrador da plataforma
+	- Quando acesso a área de cadastro
+	- E preencho os dados de um produto ou serviço corretamente
+	- Então o item deve ser registrado no bazar
 
 - Cenário 2: Cadastro de produto
-  - Dado que estou cadastrando um produto
-  - Quando informo nome, descrição, preço e categoria
-  - Então o produto deve ser salvo corretamente
+	- Dado que estou cadastrando um produto
+	- Quando informo nome, descrição, preço e categoria
+	- Então o produto deve ser salvo corretamente
 
 - Cenário 3: Cadastro de serviço
-  - Dado que estou cadastrando um serviço
-  - Quando informo descrição, tipo de serviço e valor
-  - Então o serviço deve ser salvo corretamente
+	- Dado que estou cadastrando um serviço
+	- Quando informo descrição, tipo de serviço e valor
+	- Então o serviço deve ser salvo corretamente
 
 - Cenário 4: Validação de dados inválidos
-  - Dado que preencho dados inválidos ou incompletos
-  - Quando tento cadastrar
-  - Então devo receber mensagem de erro
+	- Dado que preencho dados inválidos ou incompletos
+	- Quando tento cadastrar
+	- Então devo receber mensagem de erro
 
 </details>
 
@@ -297,24 +290,24 @@ A vitrine deve destacar produtos e serviços selecionados, exibindo-os em uma á
 **Cenários (BDD)**
 
 - Cenário 1: Visualizar produtos e serviços em destaque
-  - Dado que acesso o bazar
-  - Quando entro na vitrine de produtos
-  - Então devo visualizar os itens em destaque
+	- Dado que acesso o bazar
+	- Quando entro na vitrine de produtos
+	- Então devo visualizar os itens em destaque
 
 - Cenário 2: Filtrar produtos
-  - Dado que estou na vitrine
-  - Quando aplico filtros (categoria, preço, etc.)
-  - Então devo ver apenas os produtos correspondentes
+	- Dado que estou na vitrine
+	- Quando aplico filtros (categoria, preço, etc.)
+	- Então devo ver apenas os produtos correspondentes
 
 - Cenário 3: Nenhum resultado encontrado
-  - Dado que aplico um filtro sem resultados
-  - Quando a lista é atualizada
-  - Então devo ver uma mensagem informativa
+	- Dado que aplico um filtro sem resultados
+	- Quando a lista é atualizada
+	- Então devo ver uma mensagem informativa
 
 - Cenário 4: Navegação entre produtos
-  - Dado que existem vários produtos
-  - Quando navego pela vitrine
-  - Então devo conseguir visualizar diferentes itens
+	- Dado que existem vários produtos
+	- Quando navego pela vitrine
+	- Então devo conseguir visualizar diferentes itens
 
 </details>
 
@@ -334,24 +327,24 @@ Esta funcionalidade permite que o administrador visualize e gerencie informaçõ
 **Critérios de Aceitação (BDD)**
 
 - Cenário 1: Visualizar contatos recebidos
-  - Dado que existem formulários enviados
-  - Quando o administrador acessa a área de gerenciamento
-  - Então deve visualizar a lista de pessoas que entraram em contato
+	- Dado que existem formulários enviados
+	- Quando o administrador acessa a área de gerenciamento
+	- Então deve visualizar a lista de pessoas que entraram em contato
 
 - Cenário 2: Visualizar detalhes do formulário
-  - Dado que existe um contato registrado
-  - Quando seleciono um registro
-  - Então devo visualizar todas as informações enviadas no formulário
+	- Dado que existe um contato registrado
+	- Quando seleciono um registro
+	- Então devo visualizar todas as informações enviadas no formulário
 
 - Cenário 3: Gerenciar solicitações
-  - Dado que estou na lista de contatos
-  - Quando marco ou organizo uma solicitação
-  - Então o status deve ser atualizado corretamente
+	- Dado que estou na lista de contatos
+	- Quando marco ou organizo uma solicitação
+	- Então o status deve ser atualizado corretamente
 
 - Cenário 4: Nenhum contato registrado
-  - Dado que não existem formulários enviados
-  - Quando acesso a área
-  - Então devo visualizar uma mensagem informativa
+	- Dado que não existem formulários enviados
+	- Quando acesso a área
+	- Então devo visualizar uma mensagem informativa
 
 </details>
 
@@ -371,25 +364,25 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 **Cenários (BDD)**
 
 - Cenário 1: Envio de solicitação com sucesso
-  - Dado que estou na página de contato
-  - Quando preencho os dados corretamente
-  - E envio o formulário
-  - Então a solicitação deve ser registrada com sucesso
+	- Dado que estou na página de contato
+	- Quando preencho os dados corretamente
+	- E envio o formulário
+	- Então a solicitação deve ser registrada com sucesso
 
 - Cenário 2: Solicitação de doação
-  - Dado que seleciono a opção de doação
-  - Quando preencho meus dados e mensagem
-  - Então a solicitação deve ser enviada para análise
+	- Dado que seleciono a opção de doação
+	- Quando preencho meus dados e mensagem
+	- Então a solicitação deve ser enviada para análise
 
 - Cenário 3: Solicitação de parceria
-  - Dado que seleciono a opção de parceria
-  - Quando preencho meus dados e proposta
-  - Então a solicitação deve ser enviada para análise
+	- Dado que seleciono a opção de parceria
+	- Quando preencho meus dados e proposta
+	- Então a solicitação deve ser enviada para análise
 
 - Cenário 4: Validação de dados
-  - Dado que deixo campos obrigatórios vazios ou inválidos
-  - Quando tento enviar o formulário
-  - Então devo receber mensagem de erro
+	- Dado que deixo campos obrigatórios vazios ou inválidos
+	- Quando tento enviar o formulário
+	- Então devo receber mensagem de erro
 
 </details>
 
@@ -397,66 +390,28 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 ## Protótipos
 
-<<<<<<< HEAD
-O protótipo Lo-fi foi desenvolvido no Figma representando as funcionalidades das histórias de usuário.  
-=======
-O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario
->>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
+O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario  
 [Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 
 ---
 
 ## Estrutura do Projeto
 
-```text
-Entrelinhas/
-+-- apps/
-|   +-- acompanhamento/
-|   +-- bazar/
-|   +-- core/
-|   +-- inscricoes/
-|   +-- usuarios/
-+-- config/
-|   +-- settings.py
-|   +-- urls.py
-|   +-- asgi.py
-|   +-- wsgi.py
-+-- docs/
-|   +-- historias-usuario.md
-|   +-- estrutura-django.md
-+-- media/
-+-- static/
-+-- templates/
-+-- .env.example
-+-- .gitignore
-+-- manage.py
-+-- README.md
-+-- requirements.txt
-```
 
 ---
 
 ## Objetivo
 
-<<<<<<< HEAD
-- Facilitar o ingresso no curso
-- Melhorar o acompanhamento das alunas
-- Organizar a gestão do projeto
-- Permitir geração de renda para a ONG através do bazar
-=======
 - Facilitar o ingresso no curso  
 - Melhorar o acompanhamento das alunas  
 - Organizar a gestão do projeto  
 - Permitir geração de renda para a ong através do bazar  
->>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 
 ---
 
 ## Tecnologias
 
-- Python
-- Django
-- SQLite
+Definir conforme implementação.
 
 ---
 
