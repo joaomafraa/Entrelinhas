@@ -11,20 +11,31 @@ A proposta é unir aprendizado, organização e geração de renda dentro de uma
 
 ---
 
+## Links
+
+- [Protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
+- [Documentação no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
+- [Gestão do Projeto (Jira)](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
+
+---
+
 ## Funcionalidades
 
 ### 1. Inscrição no Curso
+
 - Formulário de inscrição
 - Gerenciamento de inscrições
 - Edição e cancelamento de matrícula
 
 ### 2. Plataforma de Acompanhamento
+
 - Registro de presença
 - Calendário de aulas
 - Certificados
 - Acesso dinâmico conforme matrícula
 
 ### 3. Bazar Online
+
 - Cadastro de produtos e serviços
 - Vitrine com filtros
 - Gestão de vendas, doações e parcerias
@@ -34,6 +45,7 @@ A proposta é unir aprendizado, organização e geração de renda dentro de uma
 ## Metodologia
 
 O projeto foi estruturado com base em Scrum:
+
 - Épicos
 - Histórias de usuário
 - Critérios de aceitação (BDD)
@@ -189,7 +201,6 @@ Para que a aluna comprove a conclusão do curso
 - Quando tenta acessar
 - Então o certificado não deve estar disponível
 
-
 </details>
 
 <details>
@@ -241,25 +252,25 @@ Esta funcionalidade permite que o administrador cadastre produtos e serviços no
 **Cenários (BDD)**
 
 - Cenário 1: Cadastro de produto ou serviço com sucesso
-	- Dado que sou administrador da plataforma
-	- Quando acesso a área de cadastro
-	- E preencho os dados de um produto ou serviço corretamente
-	- Então o item deve ser registrado no bazar
+  - Dado que sou administrador da plataforma
+  - Quando acesso a área de cadastro
+  - E preencho os dados de um produto ou serviço corretamente
+  - Então o item deve ser registrado no bazar
 
 - Cenário 2: Cadastro de produto
-	- Dado que estou cadastrando um produto
-	- Quando informo nome, descrição, preço e categoria
-	- Então o produto deve ser salvo corretamente
+  - Dado que estou cadastrando um produto
+  - Quando informo nome, descrição, preço e categoria
+  - Então o produto deve ser salvo corretamente
 
 - Cenário 3: Cadastro de serviço
-	- Dado que estou cadastrando um serviço
-	- Quando informo descrição, tipo de serviço e valor
-	- Então o serviço deve ser salvo corretamente
+  - Dado que estou cadastrando um serviço
+  - Quando informo descrição, tipo de serviço e valor
+  - Então o serviço deve ser salvo corretamente
 
 - Cenário 4: Validação de dados inválidos
-	- Dado que preencho dados inválidos ou incompletos
-	- Quando tento cadastrar
-	- Então devo receber mensagem de erro
+  - Dado que preencho dados inválidos ou incompletos
+  - Quando tento cadastrar
+  - Então devo receber mensagem de erro
 
 </details>
 
@@ -279,24 +290,24 @@ A vitrine deve destacar produtos e serviços selecionados, exibindo-os em uma á
 **Cenários (BDD)**
 
 - Cenário 1: Visualizar produtos e serviços em destaque
-	- Dado que acesso o bazar
-	- Quando entro na vitrine de produtos
-	- Então devo visualizar os itens em destaque
+  - Dado que acesso o bazar
+  - Quando entro na vitrine de produtos
+  - Então devo visualizar os itens em destaque
 
 - Cenário 2: Filtrar produtos
-	- Dado que estou na vitrine
-	- Quando aplico filtros (categoria, preço, etc.)
-	- Então devo ver apenas os produtos correspondentes
+  - Dado que estou na vitrine
+  - Quando aplico filtros (categoria, preço, etc.)
+  - Então devo ver apenas os produtos correspondentes
 
 - Cenário 3: Nenhum resultado encontrado
-	- Dado que aplico um filtro sem resultados
-	- Quando a lista é atualizada
-	- Então devo ver uma mensagem informativa
+  - Dado que aplico um filtro sem resultados
+  - Quando a lista é atualizada
+  - Então devo ver uma mensagem informativa
 
 - Cenário 4: Navegação entre produtos
-	- Dado que existem vários produtos
-	- Quando navego pela vitrine
-	- Então devo conseguir visualizar diferentes itens
+  - Dado que existem vários produtos
+  - Quando navego pela vitrine
+  - Então devo conseguir visualizar diferentes itens
 
 </details>
 
@@ -316,24 +327,24 @@ Esta funcionalidade permite que o administrador visualize e gerencie informaçõ
 **Critérios de Aceitação (BDD)**
 
 - Cenário 1: Visualizar contatos recebidos
-	- Dado que existem formulários enviados
-	- Quando o administrador acessa a área de gerenciamento
-	- Então deve visualizar a lista de pessoas que entraram em contato
+  - Dado que existem formulários enviados
+  - Quando o administrador acessa a área de gerenciamento
+  - Então deve visualizar a lista de pessoas que entraram em contato
 
 - Cenário 2: Visualizar detalhes do formulário
-	- Dado que existe um contato registrado
-	- Quando seleciono um registro
-	- Então devo visualizar todas as informações enviadas no formulário
+  - Dado que existe um contato registrado
+  - Quando seleciono um registro
+  - Então devo visualizar todas as informações enviadas no formulário
 
 - Cenário 3: Gerenciar solicitações
-	- Dado que estou na lista de contatos
-	- Quando marco ou organizo uma solicitação
-	- Então o status deve ser atualizado corretamente
+  - Dado que estou na lista de contatos
+  - Quando marco ou organizo uma solicitação
+  - Então o status deve ser atualizado corretamente
 
 - Cenário 4: Nenhum contato registrado
-	- Dado que não existem formulários enviados
-	- Quando acesso a área
-	- Então devo visualizar uma mensagem informativa
+  - Dado que não existem formulários enviados
+  - Quando acesso a área
+  - Então devo visualizar uma mensagem informativa
 
 </details>
 
@@ -353,25 +364,25 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 **Cenários (BDD)**
 
 - Cenário 1: Envio de solicitação com sucesso
-	- Dado que estou na página de contato
-	- Quando preencho os dados corretamente
-	- E envio o formulário
-	- Então a solicitação deve ser registrada com sucesso
+  - Dado que estou na página de contato
+  - Quando preencho os dados corretamente
+  - E envio o formulário
+  - Então a solicitação deve ser registrada com sucesso
 
 - Cenário 2: Solicitação de doação
-	- Dado que seleciono a opção de doação
-	- Quando preencho meus dados e mensagem
-	- Então a solicitação deve ser enviada para análise
+  - Dado que seleciono a opção de doação
+  - Quando preencho meus dados e mensagem
+  - Então a solicitação deve ser enviada para análise
 
 - Cenário 3: Solicitação de parceria
-	- Dado que seleciono a opção de parceria
-	- Quando preencho meus dados e proposta
-	- Então a solicitação deve ser enviada para análise
+  - Dado que seleciono a opção de parceria
+  - Quando preencho meus dados e proposta
+  - Então a solicitação deve ser enviada para análise
 
 - Cenário 4: Validação de dados
-	- Dado que deixo campos obrigatórios vazios ou inválidos
-	- Quando tento enviar o formulário
-	- Então devo receber mensagem de erro
+  - Dado que deixo campos obrigatórios vazios ou inválidos
+  - Quando tento enviar o formulário
+  - Então devo receber mensagem de erro
 
 </details>
 
@@ -379,27 +390,55 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 ## Protótipos
 
-Os wireframes do projeto foram desenvolvidos em SVG e representam as principais telas da aplicação.
+O protótipo Lo-fi foi desenvolvido no Figma representando as funcionalidades das histórias de usuário.  
+[Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 
 ---
 
 ## Estrutura do Projeto
 
+```text
+Entrelinhas/
++-- apps/
+|   +-- acompanhamento/
+|   +-- bazar/
+|   +-- core/
+|   +-- inscricoes/
+|   +-- usuarios/
++-- config/
+|   +-- settings.py
+|   +-- urls.py
+|   +-- asgi.py
+|   +-- wsgi.py
++-- docs/
+|   +-- historias-usuario.md
+|   +-- estrutura-django.md
++-- media/
++-- static/
++-- templates/
++-- .env.example
++-- .gitignore
++-- manage.py
++-- README.md
++-- requirements.txt
+```
 
 ---
 
 ## Objetivo
 
-- Facilitar o ingresso no curso  
-- Melhorar o acompanhamento das alunas  
-- Organizar a gestão do projeto  
-- Permitir geração de renda através do bazar  
+- Facilitar o ingresso no curso
+- Melhorar o acompanhamento das alunas
+- Organizar a gestão do projeto
+- Permitir geração de renda para a ONG através do bazar
 
 ---
 
 ## Tecnologias
 
-Definir conforme implementação.
+- Python
+- Django
+- SQLite
 
 ---
 

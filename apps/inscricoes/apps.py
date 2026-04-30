@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class InscricoesConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.inscricoes"
+    verbose_name = "Inscricoes"
