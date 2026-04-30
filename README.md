@@ -10,15 +10,22 @@ O Entrelinhas é uma aplicação que integra inscrição em cursos, acompanhamen
 A proposta é unir aprendizado, organização e geração de renda dentro de uma única plataforma.
 
 ---
-
 ## Links
 
+<<<<<<< HEAD
+## Links
+
+=======
+>>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 - [Protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 - [Documentação no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
 - [Gestão do Projeto (Jira)](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
 
 ---
+<<<<<<< HEAD
 
+=======
+>>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 ## Funcionalidades
 
 ### 1. Inscrição no Curso
@@ -390,7 +397,11 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 ## Protótipos
 
+<<<<<<< HEAD
 O protótipo Lo-fi foi desenvolvido no Figma representando as funcionalidades das histórias de usuário.  
+=======
+O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario
+>>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 [Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 
 ---
@@ -427,10 +438,17 @@ Entrelinhas/
 
 ## Objetivo
 
+<<<<<<< HEAD
 - Facilitar o ingresso no curso
 - Melhorar o acompanhamento das alunas
 - Organizar a gestão do projeto
 - Permitir geração de renda para a ONG através do bazar
+=======
+- Facilitar o ingresso no curso  
+- Melhorar o acompanhamento das alunas  
+- Organizar a gestão do projeto  
+- Permitir geração de renda para a ong através do bazar  
+>>>>>>> d5da3ddd40f0043d81c32a175117b51accdaf632
 
 ---
 
