@@ -392,7 +392,8 @@ O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das 
 
 ## Estrutura do Projeto
 
-<!--EntreLinhas/
+```text
+EntreLinhas/
 │
 ├── manage.py
 ├── requirements.txt
@@ -631,7 +632,8 @@ O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das 
     ├── test_acompanhamento.py
     ├── test_bazar.py
     ├── test_dashboard.py
-    └── test_parcerias.py-->
+    └── test_parcerias.py 
+```
 
 ## Objetivo
 
