@@ -392,8 +392,246 @@ O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das 
 
 ## Estrutura do Projeto
 
-
----
+EntreLinhas/
+│
+├── manage.py
+├── requirements.txt
+├── README.md
+├── .env
+├── .gitignore
+├── Procfile
+├── runtime.txt
+├── build.sh
+├── render.yaml
+│
+├── configuracoes/
+│   │
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   ├── wsgi.py
+│   ├── permissions.py
+│   └── context_processors.py
+│
+├── usuarios/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── usuarios/
+│   │       ├── login.html
+│   │       ├── cadastro.html
+│   │       ├── perfil.html
+│   │       └── editar_perfil.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── services.py
+│   ├── signals.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── validators.py
+│   └── views.py
+│
+├── inscricoes/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── inscricoes/
+│   │       ├── inscricao.html
+│   │       ├── sucesso.html
+│   │       ├── listar_inscricoes.html
+│   │       ├── detalhes.html
+│   │       └── editar_matricula.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── services.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── validators.py
+│   └── views.py
+│
+├── acompanhamento/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── acompanhamento/
+│   │       ├── dashboard_aluna.html
+│   │       ├── calendario.html
+│   │       ├── presencas.html
+│   │       ├── certificados.html
+│   │       └── detalhes_aula.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── calendario.py
+│   ├── certificados.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── services.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── bazar/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── bazar/
+│   │       ├── home.html
+│   │       ├── vitrine.html
+│   │       ├── produto.html
+│   │       ├── cadastrar_produto.html
+│   │       ├── editar_produto.html
+│   │       └── filtros.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── filters.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── services.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── parcerias_doacoes/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── parcerias_doacoes/
+│   │       ├── contato.html
+│   │       ├── parceria.html
+│   │       ├── doacao.html
+│   │       ├── listar_solicitacoes.html
+│   │       └── detalhes_solicitacao.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── services.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── dashboard/
+│   │
+│   ├── migrations/
+│   │   └── __init__.py
+│   │
+│   ├── templates/
+│   │   └── dashboard/
+│   │       ├── admin_dashboard.html
+│   │       ├── instrutor_dashboard.html
+│   │       ├── visitante_dashboard.html
+│   │       └── redirecionamento.html
+│   │
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── services.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+│
+├── templates/
+│   │
+│   ├── base.html
+│   │
+│   ├── components/
+│   │   ├── navbar.html
+│   │   ├── footer.html
+│   │   ├── sidebar.html
+│   │   ├── mensagens.html
+│   │   ├── cards.html
+│   │   └── modal.html
+│   │
+│   ├── registration/
+│   │   ├── login.html
+│   │   ├── logout.html
+│   │   ├── password_reset.html
+│   │   └── password_change.html
+│   │
+│   ├── errors/
+│   │   ├── 403.html
+│   │   ├── 404.html
+│   │   └── 500.html
+│   │
+│   └── includes/
+│       ├── alerts.html
+│       ├── pagination.html
+│       └── breadcrumbs.html
+│
+├── static/
+│   │
+│   ├── css/
+│   │   ├── style.css
+│   │   ├── dashboard.css
+│   │   ├── formularios.css
+│   │   ├── bazar.css
+│   │   └── responsivo.css
+│   │
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── calendario.js
+│   │   ├── filtros.js
+│   │   ├── dashboard.js
+│   │   └── modal.js
+│   │
+│   ├── img/
+│   │   ├── logo/
+│   │   ├── banners/
+│   │   ├── produtos/
+│   │   ├── usuarios/
+│   │   └── icons/
+│   │
+│   └── vendor/
+│
+├── media/
+│   │
+│   ├── certificados/
+│   ├── produtos/
+│   ├── usuarios/
+│   └── documentos/
+│
+├── docs/
+│   │
+│   ├── backlog.md
+│   ├── arquitetura.md
+│   ├── casos_de_uso.md
+│   ├── regras_de_negocio.md
+│   ├── roadmap.md
+│   └── DER.png
+│
+└── tests/
+    │
+    ├── test_usuarios.py
+    ├── test_inscricoes.py
+    ├── test_acompanhamento.py
+    ├── test_bazar.py
+    ├── test_dashboard.py
+    └── test_parcerias.py
 
 ## Objetivo
 
