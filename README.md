@@ -755,6 +755,30 @@ EntreLinhas/
 ```
 </details>
 
+
+---
+## Entregas
+
+<details>
+<summary>Entrega</summary>
+
+<!-- escrever aqui -->
+
+### semana 1
+<details>
+<summary>Detalhes</summary>
+
+
+- implementacao do epico de inscricao do curso com suas funcionalidades
+
+![quadro](assets/semana%201_quadro%20do%20jira.png)
+</details>
+
+
+<!-- final da parte de entregas  -->
+</details>
+
+
 ## Objetivo
 
 - Facilitar o ingresso no curso  
