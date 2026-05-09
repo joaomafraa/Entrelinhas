@@ -48,6 +48,10 @@ O projeto foi estruturado com base em Scrum:
 
 ## Histórias de Usuário
 
+<details>
+<summary>Historias</summary>
+
+
 ### Épico 1 • Formulário de Inscrição
 
 <details>
@@ -381,6 +385,9 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 </details>
 
+</details>
+
+
 ---
 
 ## Protótipos
@@ -389,8 +396,120 @@ O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das 
 [Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
 
 ---
+## Como rodar
+<details> 
+<summary>tutorial</summary>
+
+### Clonar Projeto
+
+```bash
+git clone LINK_DO_REPOSITORIO
+```
+
+Entrar na pasta:
+
+```bash
+cd EntreLinhas
+```
+
+---
+
+### Criar Ambiente Virtual
+
+### Windows
+
+```bash
+python -m venv venv
+```
+
+---
+
+### Ativar Ambiente Virtual
+
+### PowerShell
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+### CMD
+
+```bash
+venv\Scripts\activate
+```
+
+Após ativar aparecerá:
+
+```text
+(venv)
+```
+
+---
+
+### Instalar Dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### Rodar Migrações
+
+```bash
+python manage.py makemigrations
+```
+
+```bash
+python manage.py migrate
+```
+
+---
+
+### Criar Superusuário
+
+```bash
+python manage.py createsuperuser
+```
+
+Preencher:
+- username
+- email
+- senha
+
+---
+
+### Rodar Servidor
+
+```bash
+python manage.py runserver
+```
+
+---
+
+### Abrir Projeto
+
+Abrir no navegador:
+
+```text
+http://127.0.0.1:8000/
+```
+
+---
+
+### Abrir Painel Administrativo
+
+```text
+http://127.0.0.1:8000/admin
+```
+
+---
+
+</details>
 
 ## Estrutura do Projeto
+<details>
+<summary>Estrutura</summary>
 
 ```text
 EntreLinhas/
@@ -634,6 +753,7 @@ EntreLinhas/
     ├── test_dashboard.py
     └── test_parcerias.py 
 ```
+</details>
 
 ## Objetivo
 
