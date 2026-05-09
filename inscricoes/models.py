@@ -2,9 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-from django.db import models
-
-
 class Inscricao(models.Model):
 
     DISPONIBILIDADE = (
