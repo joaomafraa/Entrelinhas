@@ -771,6 +771,10 @@ EntreLinhas/
 
 - implementacao do epico de inscricao do curso com suas funcionalidades
 
+### Quadro do backlog
+![backlog](assets/backlog_semana_1.png)
+
+### sprint
 ![quadro](assets/semana%201_quadro%20do%20jira.png)
 </details>
 
