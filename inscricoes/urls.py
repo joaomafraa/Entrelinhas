@@ -1,43 +1,49 @@
 from django.urls import path
 
-from . import views
-
+from .views import (
+    criar_inscricao,
+    sucesso,
+    listar_inscricoes,
+    detalhes_inscricao,
+    editar_matricula,
+    cancelar_matricula,
+)
 
 urlpatterns = [
 
     path(
         '',
-        views.criar_inscricao,
+        criar_inscricao,
         name='criar_inscricao'
     ),
 
     path(
         'sucesso/',
-        views.sucesso,
+        sucesso,
         name='sucesso'
     ),
 
     path(
         'inscricoes/',
-        views.listar_inscricoes,
+        listar_inscricoes,
         name='listar_inscricoes'
     ),
 
     path(
         'inscricao/<int:id>/',
-        views.detalhes_inscricao,
+        detalhes_inscricao,
         name='detalhes_inscricao'
     ),
 
     path(
         'editar/<int:id>/',
-        views.editar_matricula,
+        editar_matricula,
         name='editar_matricula'
     ),
 
     path(
         'cancelar/<int:id>/',
-        views.cancelar_matricula,
+        cancelar_matricula,
         name='cancelar_matricula'
     ),
 ]
