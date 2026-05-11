@@ -1,0 +1,52 @@
+{% extends 'inscricoes/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    Lista de Inscrições
+</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Disponibilidade</th>
+            <th>Status</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for inscricao in inscricoes %}
+
+        <tr>
+
+            <td>{{ inscricao.nome }}</td>
+
+            <td>{{ inscricao.email }}</td>
+
+            <td>{{ inscricao.disponibilidade }}</td>
+
+            <td>
+
+                {% if inscricao.ativa %}
+                    Ativa
+                {% else %}
+                    Cancelada
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
