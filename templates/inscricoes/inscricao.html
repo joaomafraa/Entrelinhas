@@ -1,0 +1,28 @@
+{% extends 'inscricoes/base.html' %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-4">
+        Inscrição — Costurando Sonhos
+    </h2>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Enviar Inscrição
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
