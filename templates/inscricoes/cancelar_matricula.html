@@ -1,0 +1,34 @@
+{% extends 'inscricoes/base.html' %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="text-danger">
+        Cancelar Matrícula
+    </h2>
+
+    <p>
+        Tem certeza que deseja cancelar a matrícula de:
+    </p>
+
+    <p>
+        <strong>{{ inscricao.nome }}</strong>
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+        >
+            Confirmar Cancelamento
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
