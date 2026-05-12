@@ -114,3 +114,10 @@ def cancelar_matricula(request, id):
         'inscricoes/cancelar_matricula.html',
         {'inscricao': inscricao}
     )
+
+def home(request):
+
+    return render(
+        request,
+        'inscricoes/home.html'
+    )

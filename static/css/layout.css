@@ -1,33 +1,40 @@
 /* Layout primitives */
 .container {
-    width: min(calc(100% - 2rem), var(--container-max));
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.25rem;
 }
 
-.page-section,
 main {
-    padding-top: var(--space-6);
-    padding-bottom: var(--space-6);
+    padding-top: 0;
+    padding-bottom: 2.5rem;
+}
+
+.page-section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
 }
 
 .section-spacing {
-    padding: clamp(3rem, 6vw, 6rem) 0;
+    padding: 4.75rem 0;
 }
 
 .stack {
     display: grid;
-    gap: var(--space-4);
+    gap: 1rem;
 }
 
 .cluster {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    gap: 1rem;
     align-items: center;
 }
 
 .grid {
     display: grid;
-    gap: var(--space-4);
+    gap: 1.5rem;
 }
 
 .grid-2 {
@@ -56,7 +63,7 @@ main {
 
 .rounded-4,
 .rounded-5 {
-    border-radius: var(--radius-lg) !important;
+    border-radius: var(--radius) !important;
 }
 
 .shadow,
@@ -66,7 +73,7 @@ main {
 }
 
 .bg-light {
-    background-color: var(--surface-alt) !important;
+    background-color: var(--secondary) !important;
 }
 
 .bg-white {

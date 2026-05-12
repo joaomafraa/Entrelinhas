@@ -1,34 +1,52 @@
 :root {
-    --primary: #5b4b8a;
-    --primary-dark: #46366d;
-    --primary-soft: #e9e3f6;
+    --radius: 0.75rem;
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-lg: calc(var(--radius) + 4px);
 
-    --background: #f5f1ea;
-    --surface: #ffffff;
-    --surface-alt: #fbf8f3;
+    --background: #f8f2ea;
+    --foreground: #1e1d28;
+    --surface: #fffaf3;
+    --card: #ffffff;
+    --card-foreground: #1e1d28;
 
-    --success: #7a9e7e;
-    --success-soft: #eaf3eb;
-    --danger: #b85c5c;
-    --danger-soft: #f8e9e9;
-    --warning: #c08a3b;
-    --warning-soft: #f8eedf;
+    --primary: #583b93;
+    --primary-foreground: #fcfbff;
+    --primary-soft: #e9e2ff;
+    --primary-deep: #4d3487;
+    --lavender: #f0ebff;
 
-    --text: #2e2e2e;
-    --text-light: #6b6b6b;
-    --muted: #8b8478;
+    --secondary: #f8f2ea;
+    --secondary-foreground: #403858;
 
-    --border: #ddd7ce;
-    --border-strong: #cfc7bb;
+    --muted: #efe6da;
+    --muted-foreground: #5c5870;
 
-    --shadow-sm: 0 8px 20px rgba(46, 46, 46, 0.06);
-    --shadow-md: 0 16px 40px rgba(46, 46, 46, 0.1);
-    --shadow-lg: 0 24px 60px rgba(46, 46, 46, 0.14);
+    --accent: #e6ddfb;
+    --accent-foreground: #493e6b;
 
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
+    --destructive: #b05c5c;
+    --destructive-foreground: #fffdfd;
+
+    --success: #4f946d;
+    --success-foreground: #fffdfd;
+
+    --warning: #c08b40;
+    --warning-foreground: #2d2518;
+
+    --border: #e6dccf;
+    --input: #d9cebf;
+    --ring: #5a4791;
+
+    --text: var(--foreground);
+    --text-light: var(--muted-foreground);
+    --border-strong: #d6c8b8;
+
+    --shadow-sm: 0 1px 2px 0 rgb(31 24 47 / 0.05);
+    --shadow-md: 0 10px 25px -20px rgb(31 24 47 / 0.35), 0 2px 5px -3px rgb(31 24 47 / 0.18);
+    --shadow-lg: 0 24px 60px -34px rgb(31 24 47 / 0.4);
+
+    --radius-md: var(--radius);
+    --radius-xl: 1rem;
 
     --space-1: 0.25rem;
     --space-2: 0.5rem;
@@ -40,8 +58,8 @@
     --space-10: 2.5rem;
     --space-12: 3rem;
 
-    --container-max: 1180px;
-    --container-narrow: 960px;
+    --container-max: 80rem;
+    --container-narrow: 60rem;
 
     --transition-base: 180ms ease;
 }

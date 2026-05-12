@@ -1,274 +1,212 @@
-{% load static %}
+{% extends 'inscricoes/base.html' %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
+{% block title %}EntreLinhas | Costurando Sonhos{% endblock %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
+<section class="section-spacing">
+    <div class="container">
+        <div class="hero-card overflow-hidden">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <div class="home-badge mb-4">✦ Inscrições abertas — turma 2025</div>
+                    <h1 class="display-4 fw-bold mb-4">
+                        Educação que <span class="text-primary">transforma</span> trajetórias.
+                    </h1>
+                    <p class="lead text-soft mb-4" style="max-width: 700px;">
+                        Há 9 anos formando mulheres em cursos profissionalizantes e fortalecendo suas histórias através do trabalho, do estudo e do bazar solidário.
+                    </p>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+                    <div class="cluster mb-4">
+                        <a href="{% url 'criar_inscricao' %}" class="btn btn-primary btn-lg px-4">
+                            Quero me inscrever <span class="ms-2">&rarr;</span>
+                        </a>
+                        <a href="#bazar" class="btn btn-outline-secondary btn-lg px-4">Visitar o bazar</a>
+                        <a href="#doar" class="btn btn-ghost btn-lg px-2">&hearts; Doar</a>
+                    </div>
 
-    <title>EntreLinhas</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="{% static 'css/style.css' %}"
-    >
-
-</head>
-
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-        <div class="container">
-
-            <a
-                class="navbar-brand"
-                href="/"
-            >
-                EntreLinhas
-            </a>
-
-            <div class="ms-auto">
-
-                <a
-                    href="/inscricao/"
-                    class="btn btn-primary"
-                >
-                    Inscreva-se
-                </a>
-
-            </div>
-
-        </div>
-
-    </nav>
-
-    <section class="section-spacing">
-
-        <div class="container">
-
-            <div class="hero-card p-5">
-
-                <div class="row align-items-center">
-
-                    <div class="col-lg-6">
-
-                        <span class="section-label mb-3">
-                            ONG • Educação • Inclusão
-                        </span>
-
-                        <h1 class="display-4 fw-bold mb-4">
-
-                            Costurando sonhos
-                            através da educação
-                            e autonomia feminina
-
-                        </h1>
-
-                        <p class="lead text-soft mb-4">
-
-                            O EntreLinhas conecta mulheres
-                            ao aprendizado da costura,
-                            empreendedorismo e geração de renda.
-
-                        </p>
-
-                        <div class="d-flex flex-wrap gap-3">
-
-                            <a
-                                href="/inscricao/"
-                                class="btn btn-primary btn-lg"
-                            >
-                                Fazer inscrição
-                            </a>
-
-                            <a
-                                href="#sobre"
-                                class="btn btn-outline-primary btn-lg"
-                            >
-                                Saiba mais
-                            </a>
-
+                    <div class="border-top pt-4 mt-4">
+                        <div class="row g-4">
+                            <div class="col-6 col-md-3">
+                                <div class="h2 fw-bold mb-1 text-primary">1.240</div>
+                                <div class="text-soft small">alunas formadas</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="h2 fw-bold mb-1 text-primary">18</div>
+                                <div class="text-soft small">cursos ativos</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="h2 fw-bold mb-1 text-primary">97%</div>
+                                <div class="text-soft small">de aprovação</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="h2 fw-bold mb-1 text-primary">9 anos</div>
+                                <div class="text-soft small">de história</div>
+                            </div>
                         </div>
-
                     </div>
-
-                    <div class="col-lg-6 mt-5 mt-lg-0">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1"
-                            class="img-fluid rounded-5 shadow"
-                        >
-
-                    </div>
-
                 </div>
 
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <section
-        id="sobre"
-        class="section-spacing"
-    >
-
-        <div class="container">
-
-            <div class="text-center mb-5">
-
-                <span class="section-label">
-                    Sobre o projeto
-                </span>
-
-                <h2 class="display-5 fw-bold mt-3">
-
-                    Transformando vidas
-                    através da costura
-
-                </h2>
-
-            </div>
-
-            <div class="row g-4">
-
-                <div class="col-md-4">
-
-                    <div class="card h-100 border-0">
-
-                        <div class="card-body">
-
-                            <h4 class="mb-3">
-                                Capacitação
-                            </h4>
-
-                            <p class="text-soft">
-
-                                Formação prática em costura
-                                para desenvolvimento profissional.
-
-                            </p>
-
+                <div class="col-lg-5">
+                    <div class="surface-card featured-course p-0 overflow-hidden">
+                        <div class="featured-course__header p-4 p-lg-4">
+                            <div class="section-label">Curso em destaque</div>
+                            <h2 class="h3 fw-bold mt-3 mb-3 text-white">Costurando Sonhos</h2>
+                            <p class="mb-0 text-white-50">120h • Presencial • 24 vagas</p>
                         </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="card h-100 border-0">
-
-                        <div class="card-body">
-
-                            <h4 class="mb-3">
-                                Inclusão
-                            </h4>
-
-                            <p class="text-soft">
-
-                                Oportunidades para mulheres
-                                em situação de vulnerabilidade social.
-
-                            </p>
-
+                        <div class="featured-course__body p-4 p-lg-4">
+                            <p class="mb-3">Da máquina às primeiras peças vendidas no bazar.</p>
+                            <ul class="check-list">
+                                <li>Material incluso</li>
+                                <li>Certificado oficial</li>
+                                <li>Bolsa-auxílio</li>
+                            </ul>
                         </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="card h-100 border-0">
-
-                        <div class="card-body">
-
-                            <h4 class="mb-3">
-                                Empreendedorismo
-                            </h4>
-
-                            <p class="text-soft">
-
-                                Incentivo à geração de renda
-                                e autonomia financeira.
-
-                            </p>
-
+                        <div class="p-4 p-lg-4 d-flex flex-wrap gap-3 align-items-center justify-content-between" style="background:#fff;">
+                            <strong>Próxima turma — Junho/2025</strong>
+                            <a href="#sobre" class="btn btn-primary px-4">Saber mais</a>
                         </div>
-
                     </div>
-
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<section id="sobre" class="section-spacing pt-0">
+    <div class="container">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6">
+                <div class="surface-card h-100 p-4 p-lg-5">
+                    <span class="section-label">Sobre a ONG</span>
+                    <h2 class="h3 fw-bold mt-3">Transformando vidas através da costura.</h2>
+                    <p class="text-soft mb-4">
+                        O EntreLinhas oferece formação, acolhimento e oportunidades para mulheres que desejam aprender, criar e gerar renda com autonomia.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="mini-surface p-3 h-100">
+                                <div class="fw-semibold mb-2">Capacitação</div>
+                                <div class="text-soft small">Formação prática e acompanhamento.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mini-surface p-3 h-100">
+                                <div class="fw-semibold mb-2">Inclusão</div>
+                                <div class="text-soft small">Acolhimento e acesso real.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mini-surface p-3 h-100">
+                                <div class="fw-semibold mb-2">Empreendedorismo</div>
+                                <div class="text-soft small">Geração de renda com autonomia.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mini-surface p-3 h-100">
+                                <div class="fw-semibold mb-2">Impacto social</div>
+                                <div class="text-soft small">Projeto com propósito e continuidade.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-        </div>
-
-    </section>
-
-    <section class="section-spacing">
-
-        <div class="container">
-
-            <div class="hero-card p-5 text-center">
-
-                <h2 class="display-5 fw-bold mb-4">
-
-                    Faça parte do EntreLinhas
-
-                </h2>
-
-                <p class="lead text-soft mb-4">
-
-                    Inscreva-se no curso
-                    Costurando Sonhos.
-
-                </p>
-
-                <a
-                    href="/inscricao/"
-                    class="btn btn-primary btn-lg"
-                >
-                    Quero me inscrever
-                </a>
-
+            <div class="col-lg-6">
+                <div class="surface-card h-100 p-4 p-lg-5" id="doar">
+                    <span class="section-label">O que você pode fazer</span>
+                    <h2 class="h3 fw-bold mt-3">Inscrever, apoiar e divulgar.</h2>
+                    <p class="text-soft mb-4">Cada ação ajuda a fortalecer a ONG e ampliar o acesso ao curso e ao bazar solidário.</p>
+                    <div class="stack">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="fw-bold fs-4 text-primary flex-shrink-0" style="line-height:1;">01</div>
+                            <div>
+                                <div class="fw-semibold">Inscreva-se no curso</div>
+                                <div class="text-soft small">Entre para a próxima turma do Costurando Sonhos.</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="fw-bold fs-4 text-primary flex-shrink-0" style="line-height:1;">02</div>
+                            <div>
+                                <div class="fw-semibold">Visite o bazar</div>
+                                <div class="text-soft small">Conheça produtos e serviços com valor social.</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="fw-bold fs-4 text-primary flex-shrink-0" style="line-height:1;">03</div>
+                            <div>
+                                <div class="fw-semibold">Faça uma doação</div>
+                                <div class="text-soft small">Apoie a continuidade do projeto e das alunas.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
+    </div>
+</section>
 
-    </section>
-
-
-    <footer class="py-4 mt-5">
-
-        <div class="container text-center">
-
-            <p class="mb-0">
-
-                © 2026 EntreLinhas —
-                Todos os direitos reservados.
-
-            </p>
-
+<section id="curso" class="section-spacing pt-0">
+    <div class="container">
+        <div class="surface-card p-4 p-lg-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <span class="section-label">Cursos disponíveis</span>
+                    <h2 class="h3 fw-bold mt-3">Costurando Sonhos é o curso principal do projeto.</h2>
+                    <p class="text-soft mb-0">
+                        A estrutura já está pronta para evoluir para novas turmas, calendário, presença e certificados.
+                    </p>
+                </div>
+                <div class="col-lg-5 text-lg-end">
+                    <a href="{% url 'criar_inscricao' %}" class="btn btn-primary btn-lg px-4">Saber mais</a>
+                </div>
+            </div>
         </div>
+    </div>
+</section>
 
-    </footer>
+<section id="bazar" class="section-spacing pt-0">
+    <div class="container">
+        <div class="surface-card p-4 p-lg-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    <span class="section-label">Bazar solidário</span>
+                    <h2 class="h3 fw-bold mt-3">Produtos, serviços e apoio para sustentar o projeto.</h2>
+                    <p class="text-soft mb-0">
+                        O bazar será a vitrine pública para visitantes e parceiros, com destaque para itens, serviços e oportunidades de colaboração.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="surface-card p-3 h-100">
+                                <div class="fw-semibold mb-2">Produtos</div>
+                                <div class="text-soft small">Peças e itens em destaque.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="surface-card p-3 h-100">
+                                <div class="fw-semibold mb-2">Serviços</div>
+                                <div class="text-soft small">Apoio com valor social.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="surface-card p-3 h-100">
+                                <div class="fw-semibold mb-2">Doações</div>
+                                <div class="text-soft small">Canal para fortalecer a ONG.</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="surface-card p-3 h-100">
+                                <div class="fw-semibold mb-2">Parcerias</div>
+                                <div class="text-soft small">Conexão com apoiadores.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-</body>
-
-</html>
+{% endblock %}

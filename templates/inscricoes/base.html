@@ -25,28 +25,66 @@
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand d-flex align-items-center gap-3" href="{% url 'home' %}">
+                <span class="brand-mark">E</span>
+                <span>EntreLinhas</span>
+            </a>
 
-        <div class="container">
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#entrelinhasNav"
+                aria-controls="entrelinhasNav"
+                aria-expanded="false"
+                aria-label="Alternar navegação"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <span class="navbar-brand">
-                EntreLinhas — Costurando Sonhos
-            </span>
+            <div class="collapse navbar-collapse" id="entrelinhasNav">
+                <ul class="navbar-nav mx-auto gap-lg-2 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#curso">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#bazar">Bazar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                </ul>
 
+                <div class="d-flex align-items-lg-center gap-3 ms-lg-auto mt-3 mt-lg-0">
+                    <a href="{% url 'criar_inscricao' %}" class="btn btn-ghost px-4">Entrar</a>
+                    <a href="{% url 'criar_inscricao' %}" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
+                        <span>&hearts;</span>
+                        <span>Inscreva-se</span>
+                    </a>
+                </div>
+            </div>
         </div>
-
     </nav>
 
-    <main class="container mt-5 mb-5">
+    <main>
 
         {% block content %}
         {% endblock %}
 
     </main>
 
-    <footer class="text-center text-muted py-4">
-        EntreLinhas
+    <footer class="site-footer py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 EntreLinhas — Todos os direitos reservados.</p>
+        </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

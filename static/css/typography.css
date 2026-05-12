@@ -12,8 +12,8 @@ h6,
 .display-5,
 .display-6 {
     color: var(--text);
-    line-height: 1.15;
-    letter-spacing: -0.03em;
+    line-height: 1.2;
+    letter-spacing: 0;
     font-weight: 700;
 }
 
@@ -28,7 +28,7 @@ th,
 }
 
 .lead {
-    font-size: 1.08rem;
+    font-size: 1.18rem;
     font-weight: 400;
 }
 
@@ -39,16 +39,33 @@ th,
     color: var(--text-light) !important;
 }
 
+.text-primary {
+    color: var(--primary) !important;
+}
+
 .section-label,
 .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.08em;
     color: var(--primary);
+}
+
+.home-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    gap: 0.35rem;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    line-height: 1.2;
 }
 
 .text-body-sm {
