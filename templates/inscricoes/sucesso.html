@@ -1,25 +1,48 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}Inscrição realizada | EntreLinhas{% endblock %}
+
 {% block content %}
 
-<div class="alert alert-success">
+<section class="page-section">
+    <div class="container layout-narrow">
+        <div class="surface-card p-4 p-lg-5">
+            <span class="home-badge mb-4">Curso Costurando Sonhos</span>
 
-    <h2>
-        Inscrição realizada com sucesso!
-    </h2>
+            <h1 class="h2 fw-bold mb-3">Sua inscrição foi realizada com sucesso!</h1>
 
-    <p>
-        Obrigado por se inscrever no projeto
-        Costurando Sonhos.
-    </p>
+            <p class="text-soft mb-4">
+                Obrigado por se inscrever no curso Costurando Sonhos. Agora você pode acompanhar sua inscrição pela plataforma.
+            </p>
 
-</div>
+            {% if inscricao %}
+                <div class="mini-surface p-3 mb-4">
+                    <div class="fw-semibold">Costurando Sonhos</div>
+                    <div class="text-soft small">
+                        {{ inscricao.nome }} · {{ inscricao.cpf_formatado|default:"CPF não informado" }} ·
+                        {% if inscricao.idade is not None %}{{ inscricao.idade }} anos{% else %}idade não informada{% endif %} ·
+                        {{ inscricao.get_disponibilidade_display }}
+                    </div>
+                </div>
+            {% endif %}
 
-<a
-    href="/"
-    class="btn btn-dark"
->
-    Voltar
-</a>
+            <div class="cluster">
+                <a
+                    href="{% url 'listar_inscricoes' %}"
+                    class="btn btn-primary"
+                >
+                    Ver minhas inscrições
+                </a>
+
+                <a
+                    href="{% url 'home' %}"
+                    class="btn btn-outline-secondary"
+                >
+                    Voltar ao início
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

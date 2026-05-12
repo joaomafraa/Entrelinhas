@@ -50,18 +50,27 @@
                         <a class="nav-link active" href="{% url 'home' %}">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#curso">Cursos</a>
+                        <a class="nav-link" href="{% url 'home' %}#curso">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#bazar">Bazar</a>
+                        <a class="nav-link" href="{% url 'home' %}#bazar">Bazar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#sobre">Sobre</a>
+                        <a class="nav-link" href="{% url 'home' %}#sobre">Sobre</a>
                     </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'listar_inscricoes' %}">Minhas inscrições</a>
+                        </li>
+                    {% endif %}
                 </ul>
 
                 <div class="d-flex align-items-lg-center gap-3 ms-lg-auto mt-3 mt-lg-0">
-                    <a href="{% url 'criar_inscricao' %}" class="btn btn-ghost px-4">Entrar</a>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'sair' %}" class="btn btn-ghost px-4">Sair</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-ghost px-4">Entrar</a>
+                    {% endif %}
                     <a href="{% url 'criar_inscricao' %}" class="btn btn-primary px-4 d-inline-flex align-items-center gap-2">
                         <span>&hearts;</span>
                         <span>Inscreva-se</span>
@@ -72,6 +81,16 @@
     </nav>
 
     <main>
+
+        {% if messages %}
+            <div class="container pt-4">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-3">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         {% block content %}
         {% endblock %}

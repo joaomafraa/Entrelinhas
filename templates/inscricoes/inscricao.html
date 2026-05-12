@@ -1,28 +1,34 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}Inscrição no Costurando Sonhos | EntreLinhas{% endblock %}
+
 {% block content %}
 
-<div class="card shadow p-4">
+<section class="page-section">
+    <div class="container layout-narrow">
+        <div class="card shadow p-4">
+            <div class="mb-4">
+                <span class="section-label">Curso Costurando Sonhos</span>
+                <h2 class="mt-2 mb-2">Inscrição no curso Costurando Sonhos</h2>
+                <p class="text-soft mb-0">
+                    Sua inscrição será vinculada à conta {{ request.user.email }}.
+                </p>
+            </div>
 
-    <h2 class="mb-4">
-        Inscrição — Costurando Sonhos
-    </h2>
+            <form method="POST">
+                {% csrf_token %}
 
-    <form method="POST">
+                {{ form.as_p }}
 
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Enviar Inscrição
-        </button>
-
-    </form>
-
-</div>
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Enviar inscrição
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

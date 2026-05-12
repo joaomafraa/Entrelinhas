@@ -1,34 +1,45 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}Cancelar inscrição | EntreLinhas{% endblock %}
+
 {% block content %}
 
-<div class="card shadow p-4">
+<section class="page-section">
+    <div class="container layout-narrow">
+        <div class="surface-card p-4 p-lg-5">
+            <span class="section-label">Curso Costurando Sonhos</span>
+            <h1 class="h2 mt-2 mb-3 text-danger">Cancelar inscrição</h1>
 
-    <h2 class="text-danger">
-        Cancelar Matrícula
-    </h2>
+            <p class="text-soft mb-4">
+                Você está prestes a cancelar sua inscrição no curso Costurando Sonhos. Ao confirmar, esta inscrição será removida da plataforma e deixará de aparecer em “Minhas inscrições”.
+            </p>
 
-    <p>
-        Tem certeza que deseja cancelar a matrícula de:
-    </p>
+            <div class="mini-surface p-3 mb-4">
+                <div class="fw-semibold">{{ inscricao.nome }}</div>
+                <div class="text-soft small">
+                    {{ inscricao.cpf_formatado|default:"CPF não informado" }} · {{ inscricao.get_disponibilidade_display }}
+                </div>
+            </div>
 
-    <p>
-        <strong>{{ inscricao.nome }}</strong>
-    </p>
+            <p class="mb-4">
+                Se essa decisão foi tomada por engano, volte para a área da aluna. Você poderá revisar seus dados sem perder a inscrição.
+            </p>
 
-    <form method="POST">
+            <form method="POST">
+                {% csrf_token %}
 
-        {% csrf_token %}
-
-        <button
-            type="submit"
-            class="btn btn-danger"
-        >
-            Confirmar Cancelamento
-        </button>
-
-    </form>
-
-</div>
+                <div class="cluster">
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        Sim, cancelar e remover inscrição
+                    </button>
+                    <a href="{% url 'listar_inscricoes' %}" class="btn btn-outline-secondary">Manter minha inscrição</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

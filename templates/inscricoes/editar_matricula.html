@@ -1,28 +1,29 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}Editar inscrição | EntreLinhas{% endblock %}
+
 {% block content %}
 
-<div class="card shadow p-4">
+<section class="page-section">
+    <div class="container layout-narrow">
+        <div class="card shadow p-4">
+            <span class="section-label">Curso Costurando Sonhos</span>
+            <h2 class="mt-2 mb-4">Editar inscrição</h2>
 
-    <h2 class="mb-4">
-        Editar Matrícula
-    </h2>
+            <form method="POST">
+                {% csrf_token %}
 
-    <form method="POST">
+                {{ form.as_p }}
 
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button
-            type="submit"
-            class="btn btn-warning"
-        >
-            Salvar Alterações
-        </button>
-
-    </form>
-
-</div>
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Salvar alterações
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

@@ -9,7 +9,7 @@
         <div class="hero-card overflow-hidden">
             <div class="row align-items-center g-5">
                 <div class="col-lg-7">
-                    <div class="home-badge mb-4">✦ Inscrições abertas — turma 2025</div>
+                    <div class="home-badge mb-4">* Inscrições abertas — turma 2025</div>
                     <h1 class="display-4 fw-bold mb-4">
                         Educação que <span class="text-primary">transforma</span> trajetórias.
                     </h1>
@@ -148,62 +148,58 @@
 
 <section id="curso" class="section-spacing pt-0">
     <div class="container">
-        <div class="surface-card p-4 p-lg-5">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-7">
-                    <span class="section-label">Cursos disponíveis</span>
-                    <h2 class="h3 fw-bold mt-3">Costurando Sonhos é o curso principal do projeto.</h2>
-                    <p class="text-soft mb-0">
-                        A estrutura já está pronta para evoluir para novas turmas, calendário, presença e certificados.
-                    </p>
-                </div>
-                <div class="col-lg-5 text-lg-end">
-                    <a href="{% url 'criar_inscricao' %}" class="btn btn-primary btn-lg px-4">Saber mais</a>
-                </div>
+        <span id="bazar" class="anchor-offset"></span>
+        <h2 class="display-6 fw-bold mb-4">Histórias que costuram esperança</h2>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <article class="story-card h-100">
+                    <p class="story-card__quote">"Vim sem saber ligar uma máquina. Hoje vendo minhas peças no bazar e sustento minha família com o que aprendi."</p>
+                    <div class="story-card__person">
+                        <span class="story-card__avatar">M</span>
+                        <span>
+                            <strong>Maria das Graças</strong>
+                            <small>Aluna de Costurando Sonhos</small>
+                        </span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="col-lg-4">
+                <article class="story-card h-100">
+                    <p class="story-card__quote">"Aprendi a usar o celular pra falar com meus filhos e procurar emprego. Mudou minha vida."</p>
+                    <div class="story-card__person">
+                        <span class="story-card__avatar">J</span>
+                        <span>
+                            <strong>Joana Silva</strong>
+                            <small>Aluna de Letramento Digital</small>
+                        </span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="col-lg-4">
+                <article class="story-card h-100">
+                    <p class="story-card__quote">"Hoje eu sei quanto custa cada peça que produzo. Parei de vender no prejuízo."</p>
+                    <div class="story-card__person">
+                        <span class="story-card__avatar">R</span>
+                        <span>
+                            <strong>Rosa Lima</strong>
+                            <small>Aluna de Gestão de Pequenos Negócios</small>
+                        </span>
+                    </div>
+                </article>
             </div>
         </div>
-    </div>
-</section>
 
-<section id="bazar" class="section-spacing pt-0">
-    <div class="container">
-        <div class="surface-card p-4 p-lg-5">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-6">
-                    <span class="section-label">Bazar solidário</span>
-                    <h2 class="h3 fw-bold mt-3">Produtos, serviços e apoio para sustentar o projeto.</h2>
-                    <p class="text-soft mb-0">
-                        O bazar será a vitrine pública para visitantes e parceiros, com destaque para itens, serviços e oportunidades de colaboração.
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <div class="surface-card p-3 h-100">
-                                <div class="fw-semibold mb-2">Produtos</div>
-                                <div class="text-soft small">Peças e itens em destaque.</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="surface-card p-3 h-100">
-                                <div class="fw-semibold mb-2">Serviços</div>
-                                <div class="text-soft small">Apoio com valor social.</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="surface-card p-3 h-100">
-                                <div class="fw-semibold mb-2">Doações</div>
-                                <div class="text-soft small">Canal para fortalecer a ONG.</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="surface-card p-3 h-100">
-                                <div class="fw-semibold mb-2">Parcerias</div>
-                                <div class="text-soft small">Conexão com apoiadores.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="donation-banner mt-5" id="doar-final">
+            <div>
+                <h2 class="h1 fw-bold text-white mb-3">Sua doação mantém uma sala de aula aberta.</h2>
+                <p class="mb-0">R$ 30 cobrem o material de uma aluna por um mês inteiro.</p>
+            </div>
+            <div class="donation-banner__actions">
+                <a href="#doar" class="btn donation-banner__primary px-5">Quero doar</a>
+                <a href="{% url 'criar_inscricao' %}" class="btn donation-banner__outline px-5">Seja parceiro</a>
             </div>
         </div>
     </div>

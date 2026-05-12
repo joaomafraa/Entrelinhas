@@ -1,43 +1,34 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}Detalhes da inscrição | EntreLinhas{% endblock %}
+
 {% block content %}
 
-<div class="card shadow p-4">
+<section class="page-section">
+    <div class="container layout-narrow">
+        <div class="card shadow p-4">
+            <span class="section-label">Curso Costurando Sonhos</span>
+            <h2 class="mt-2 mb-4">Detalhes da inscrição</h2>
 
-    <h2 class="mb-4">
-        Detalhes da Inscrição
-    </h2>
+            <p><strong>Curso:</strong> Costurando Sonhos</p>
+            <p><strong>Nome:</strong> {{ inscricao.nome }}</p>
+            <p><strong>Email:</strong> {{ inscricao.email }}</p>
+            <p><strong>CPF:</strong> {{ inscricao.cpf_formatado|default:"-" }}</p>
+            <p><strong>Data de nascimento:</strong> {{ inscricao.data_nascimento|date:"d/m/Y"|default:"-" }}</p>
+            <p>
+                <strong>Idade:</strong>
+                {% if inscricao.idade is not None %}{{ inscricao.idade }} anos{% else %}-{% endif %}
+            </p>
+            <p><strong>Telefone:</strong> {{ inscricao.telefone }}</p>
+            <p><strong>Disponibilidade:</strong> {{ inscricao.get_disponibilidade_display }}</p>
+            <p><strong>Status:</strong> {{ inscricao.get_status_display }}</p>
 
-    <p>
-        <strong>Nome:</strong>
-        {{ inscricao.nome }}
-    </p>
-
-    <p>
-        <strong>Email:</strong>
-        {{ inscricao.email }}
-    </p>
-
-    <p>
-        <strong>Telefone:</strong>
-        {{ inscricao.telefone }}
-    </p>
-
-    <p>
-        <strong>Disponibilidade:</strong>
-        {{ inscricao.disponibilidade }}
-    </p>
-
-    <p>
-        <strong>Status:</strong>
-
-        {% if inscricao.ativa %}
-            Ativa
-        {% else %}
-            Cancelada
-        {% endif %}
-    </p>
-
-</div>
+            <div class="cluster mt-4">
+                <a href="{% url 'editar_matricula' inscricao.id %}" class="btn btn-primary">Editar inscrição</a>
+                <a href="{% url 'listar_inscricoes' %}" class="btn btn-outline-secondary">Voltar</a>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

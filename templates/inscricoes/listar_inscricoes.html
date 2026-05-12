@@ -1,52 +1,158 @@
 {% extends 'inscricoes/base.html' %}
 
+{% block title %}
+    {% if is_admin_list %}Painel de inscrições{% else %}Minhas inscrições{% endif %} | EntreLinhas
+{% endblock %}
+
 {% block content %}
 
-<h2 class="mb-4">
-    Lista de Inscrições
-</h2>
+<section class="page-section">
+    <div class="container">
+        {% if is_admin_list %}
+            <form method="GET" class="admin-toolbar mb-4">
+                <label class="admin-search" for="q">
+                    <span class="admin-search__icon" aria-hidden="true">⌕</span>
+                    <input
+                        id="q"
+                        name="q"
+                        type="search"
+                        value="{{ q }}"
+                        placeholder="Buscar por nome, e-mail, CPF ou ID"
+                    >
+                </label>
 
-<table class="table table-bordered">
+                <button class="admin-tool-button" type="button">Filtros</button>
+                <button class="admin-tool-button" type="button">Exportar</button>
+            </form>
 
-    <thead>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-check-cell">
+                                <input type="checkbox" aria-label="Selecionar todas as inscrições">
+                            </th>
+                            <th>ID</th>
+                            <th>Aluna</th>
+                            <th>CPF</th>
+                            <th>Idade</th>
+                            <th>Curso</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
 
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Disponibilidade</th>
-            <th>Status</th>
-        </tr>
+                    <tbody>
+                        {% for inscricao in inscricoes %}
+                            <tr>
+                                <td class="admin-check-cell">
+                                    <input type="checkbox" aria-label="Selecionar inscrição {{ inscricao.id }}">
+                                </td>
+                                <td class="admin-id">INS-{{ inscricao.id|stringformat:"04d" }}</td>
+                                <td class="admin-student">{{ inscricao.nome }}</td>
+                                <td>{{ inscricao.cpf_formatado|default:"-" }}</td>
+                                <td>
+                                    {% if inscricao.idade is not None %}
+                                        {{ inscricao.idade }} anos
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>Costurando Sonhos</td>
+                                <td>{{ inscricao.data_criacao|date:"d/m/Y" }}</td>
+                                <td>
+                                    <span class="status-chip status-chip--{{ inscricao.status }}">
+                                        {{ inscricao.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="admin-actions">
+                                        <a href="{% url 'detalhes_inscricao' inscricao.id %}" class="admin-view-link">Ver</a>
+                                        <button class="btn btn-primary btn-sm admin-approve-button" type="button">Aprovar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center text-soft py-4">
+                                    Nenhuma inscrição encontrada.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-    </thead>
+            <div class="admin-pagination">
+                <span>Mostrando {{ start_index }}–{{ end_index }} de {{ total_count }}</span>
 
-    <tbody>
+                <div class="admin-pagination__actions">
+                    {% if page_obj.has_previous %}
+                        <a class="admin-page-button" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+                    {% else %}
+                        <span class="admin-page-button admin-page-button--disabled">Anterior</span>
+                    {% endif %}
 
-        {% for inscricao in inscricoes %}
+                    {% if page_obj.has_next %}
+                        <a class="admin-page-button" href="?q={{ q }}&page={{ page_obj.next_page_number }}">Próxima</a>
+                    {% else %}
+                        <span class="admin-page-button admin-page-button--disabled">Próxima</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <span class="section-label">Área da aluna</span>
+                    <h2 class="mt-2 mb-0">Minhas inscrições</h2>
+                    <p class="text-soft mb-0">Curso Costurando Sonhos</p>
+                </div>
 
-        <tr>
+                <a href="{% url 'criar_inscricao' %}" class="btn btn-primary">Nova inscrição</a>
+            </div>
 
-            <td>{{ inscricao.nome }}</td>
+            <div class="table-responsive surface-card p-0">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Disponibilidade</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
 
-            <td>{{ inscricao.email }}</td>
-
-            <td>{{ inscricao.disponibilidade }}</td>
-
-            <td>
-
-                {% if inscricao.ativa %}
-                    Ativa
-                {% else %}
-                    Cancelada
-                {% endif %}
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-    </tbody>
-
-</table>
+                    <tbody>
+                        {% for inscricao in inscricoes %}
+                            <tr>
+                                <td>Costurando Sonhos</td>
+                                <td>{{ inscricao.nome }}</td>
+                                <td>{{ inscricao.email }}</td>
+                                <td>{{ inscricao.get_disponibilidade_display }}</td>
+                                <td>{{ inscricao.get_status_display }}</td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a href="{% url 'detalhes_inscricao' inscricao.id %}" class="btn btn-outline-primary btn-sm">Detalhes</a>
+                                        <a href="{% url 'editar_matricula' inscricao.id %}" class="btn btn-outline-secondary btn-sm">Editar</a>
+                                        <a href="{% url 'cancelar_matricula' inscricao.id %}" class="btn btn-outline-secondary btn-sm">Cancelar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-soft py-4">
+                                    Você ainda não possui inscrições no curso Costurando Sonhos.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</section>
 
 {% endblock %}
