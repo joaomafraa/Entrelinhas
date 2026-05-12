@@ -1,0 +1,274 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>EntreLinhas</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="container">
+
+            <a
+                class="navbar-brand"
+                href="/"
+            >
+                EntreLinhas
+            </a>
+
+            <div class="ms-auto">
+
+                <a
+                    href="/inscricao/"
+                    class="btn btn-primary"
+                >
+                    Inscreva-se
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <section class="section-spacing">
+
+        <div class="container">
+
+            <div class="hero-card p-5">
+
+                <div class="row align-items-center">
+
+                    <div class="col-lg-6">
+
+                        <span class="section-label mb-3">
+                            ONG • Educação • Inclusão
+                        </span>
+
+                        <h1 class="display-4 fw-bold mb-4">
+
+                            Costurando sonhos
+                            através da educação
+                            e autonomia feminina
+
+                        </h1>
+
+                        <p class="lead text-soft mb-4">
+
+                            O EntreLinhas conecta mulheres
+                            ao aprendizado da costura,
+                            empreendedorismo e geração de renda.
+
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-3">
+
+                            <a
+                                href="/inscricao/"
+                                class="btn btn-primary btn-lg"
+                            >
+                                Fazer inscrição
+                            </a>
+
+                            <a
+                                href="#sobre"
+                                class="btn btn-outline-primary btn-lg"
+                            >
+                                Saiba mais
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 mt-5 mt-lg-0">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1"
+                            class="img-fluid rounded-5 shadow"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section
+        id="sobre"
+        class="section-spacing"
+    >
+
+        <div class="container">
+
+            <div class="text-center mb-5">
+
+                <span class="section-label">
+                    Sobre o projeto
+                </span>
+
+                <h2 class="display-5 fw-bold mt-3">
+
+                    Transformando vidas
+                    através da costura
+
+                </h2>
+
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="card h-100 border-0">
+
+                        <div class="card-body">
+
+                            <h4 class="mb-3">
+                                Capacitação
+                            </h4>
+
+                            <p class="text-soft">
+
+                                Formação prática em costura
+                                para desenvolvimento profissional.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="card h-100 border-0">
+
+                        <div class="card-body">
+
+                            <h4 class="mb-3">
+                                Inclusão
+                            </h4>
+
+                            <p class="text-soft">
+
+                                Oportunidades para mulheres
+                                em situação de vulnerabilidade social.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="card h-100 border-0">
+
+                        <div class="card-body">
+
+                            <h4 class="mb-3">
+                                Empreendedorismo
+                            </h4>
+
+                            <p class="text-soft">
+
+                                Incentivo à geração de renda
+                                e autonomia financeira.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="section-spacing">
+
+        <div class="container">
+
+            <div class="hero-card p-5 text-center">
+
+                <h2 class="display-5 fw-bold mb-4">
+
+                    Faça parte do EntreLinhas
+
+                </h2>
+
+                <p class="lead text-soft mb-4">
+
+                    Inscreva-se no curso
+                    Costurando Sonhos.
+
+                </p>
+
+                <a
+                    href="/inscricao/"
+                    class="btn btn-primary btn-lg"
+                >
+                    Quero me inscrever
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="py-4 mt-5">
+
+        <div class="container text-center">
+
+            <p class="mb-0">
+
+                © 2026 EntreLinhas —
+                Todos os direitos reservados.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
