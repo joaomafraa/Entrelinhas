@@ -1,8 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
-
-from django.contrib import admin
 from .models import Inscricao
 
 
@@ -12,7 +8,11 @@ class InscricaoAdmin(admin.ModelAdmin):
     list_display = (
         'nome',
         'email',
+        'cpf',
+        'idade',
+        'user',
         'disponibilidade',
+        'status',
         'ativa',
         'data_criacao',
     )
@@ -20,10 +20,12 @@ class InscricaoAdmin(admin.ModelAdmin):
     search_fields = (
         'nome',
         'email',
+        'cpf',
     )
 
     list_filter = (
         'disponibilidade',
+        'status',
         'ativa',
         'data_criacao',
     )
