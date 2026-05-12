@@ -1,0 +1,68 @@
+/* Form controls */
+.form-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+    min-height: 48px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background-color: rgba(255, 255, 255, 0.96);
+    color: var(--text);
+    box-shadow: none;
+}
+
+.form-control::placeholder {
+    color: var(--muted);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: rgba(91, 75, 138, 0.45);
+    box-shadow: 0 0 0 0.22rem rgba(91, 75, 138, 0.12);
+}
+
+textarea.form-control {
+    min-height: 132px;
+    resize: vertical;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.form-check-input:focus {
+    border-color: rgba(91, 75, 138, 0.45);
+    box-shadow: 0 0 0 0.22rem rgba(91, 75, 138, 0.12);
+}
+
+.invalid-feedback,
+.text-danger,
+.errorlist {
+    color: var(--danger) !important;
+}
+
+.errorlist {
+    padding-left: 1rem;
+    margin-bottom: 0;
+}
+
+.form-hint,
+.helptext {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-top: 0.35rem;
+}
+
+.form-control[disabled],
+.form-select[disabled],
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #f4f1eb;
+    opacity: 0.85;
+}

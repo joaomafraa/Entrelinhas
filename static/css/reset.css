@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, rgba(91, 75, 138, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(122, 158, 126, 0.08), transparent 24%),
+        linear-gradient(180deg, #faf7f2 0%, var(--background) 100%);
+    font-family: Inter, Poppins, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color var(--transition-base), opacity var(--transition-base);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+:focus-visible {
+    outline: 3px solid rgba(91, 75, 138, 0.28);
+    outline-offset: 3px;
+}
+
+::selection {
+    background: rgba(91, 75, 138, 0.16);
+    color: var(--text);
+}
