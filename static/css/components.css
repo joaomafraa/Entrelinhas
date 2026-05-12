@@ -342,7 +342,7 @@ footer,
 }
 
 .check-list li::before {
-    content: "✓";
+    content: "\2713";
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -360,4 +360,309 @@ footer,
     background: color-mix(in oklab, var(--surface) 72%, #ffffff);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+}
+
+.anchor-offset {
+    display: block;
+    position: relative;
+    top: -96px;
+    height: 0;
+    overflow: hidden;
+}
+
+.story-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.75rem;
+    min-height: 220px;
+    padding: 1.75rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.story-card__quote {
+    margin: 0;
+    color: var(--foreground);
+    font-size: 1rem;
+    line-height: 1.65;
+}
+
+.story-card__person {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.story-card__avatar {
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.story-card__person strong,
+.story-card__person small {
+    display: block;
+}
+
+.story-card__person strong {
+    color: var(--foreground);
+    line-height: 1.2;
+}
+
+.story-card__person small {
+    color: var(--text-light);
+    line-height: 1.35;
+}
+
+.donation-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(100deg, var(--primary) 0%, #7a62aa 100%);
+    color: rgba(255, 255, 255, 0.86);
+    box-shadow: var(--shadow-lg);
+}
+
+.donation-banner h2 {
+    max-width: 640px;
+    line-height: 1.14;
+}
+
+.donation-banner p {
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 1.12rem;
+    font-weight: 600;
+}
+
+.donation-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.donation-banner__primary {
+    background: var(--surface);
+    border-color: var(--surface);
+    color: var(--foreground);
+}
+
+.donation-banner__primary:hover,
+.donation-banner__primary:focus {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--primary);
+}
+
+.donation-banner__outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    color: #ffffff;
+}
+
+.donation-banner__outline:hover,
+.donation-banner__outline:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.56);
+    color: #ffffff;
+}
+
+.admin-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.admin-search {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-search__icon {
+    color: var(--muted-foreground);
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.admin-search input {
+    width: 100%;
+    min-width: 0;
+    color: var(--foreground);
+    background: transparent;
+    outline: 0;
+    font: inherit;
+}
+
+.admin-search input::placeholder {
+    color: var(--muted-foreground);
+}
+
+.admin-tool-button,
+.admin-page-button {
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.2rem;
+    color: var(--foreground);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    font-weight: 700;
+}
+
+.admin-tool-button:hover,
+.admin-tool-button:focus,
+.admin-page-button:hover,
+.admin-page-button:focus {
+    color: var(--primary);
+    background: #ffffff;
+}
+
+.admin-table-wrap {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.admin-table th {
+    color: var(--muted-foreground);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.admin-check-cell {
+    width: 3.5rem;
+}
+
+.admin-table input[type="checkbox"] {
+    width: 0.95rem;
+    height: 0.95rem;
+    border: 1px solid var(--input);
+    border-radius: 0.2rem;
+}
+
+.admin-id {
+    color: var(--foreground);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9rem;
+}
+
+.admin-student {
+    color: var(--foreground);
+    font-weight: 800;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 5.6rem;
+    padding: 0.28rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.status-chip--pendente {
+    color: #7b4c0b;
+    background: #fff0d9;
+    border: 1px solid #f0cc9b;
+}
+
+.status-chip--aprovada {
+    color: #35714f;
+    background: #e9f4ee;
+    border: 1px solid #b9d7c6;
+}
+
+.status-chip--recusada {
+    color: #bd3f3f;
+    background: #fde7e7;
+    border: 1px solid #efbbbb;
+}
+
+.admin-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-view-link {
+    color: var(--foreground);
+    font-weight: 700;
+}
+
+.admin-view-link:hover,
+.admin-view-link:focus {
+    color: var(--primary);
+}
+
+.admin-approve-button {
+    min-height: 40px;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius);
+}
+
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    color: var(--muted-foreground);
+}
+
+.admin-pagination__actions {
+    display: flex;
+    gap: 0.65rem;
+}
+
+.admin-page-button--disabled {
+    opacity: 0.55;
+    pointer-events: none;
 }

@@ -50,4 +50,65 @@
     .table-responsive {
         border-radius: var(--radius);
     }
+
+    .story-card {
+        min-height: auto;
+        padding: 1.35rem;
+    }
+
+    .donation-banner {
+        align-items: stretch;
+        text-align: left;
+    }
+
+    .donation-banner,
+    .donation-banner__actions {
+        flex-direction: column;
+    }
+
+    .donation-banner__actions {
+        width: 100%;
+    }
+
+    .login-page {
+        align-items: start;
+        padding: 1rem;
+    }
+
+    .login-shell {
+        min-height: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .login-welcome {
+        min-height: 360px;
+    }
+
+    .login-form__row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-tool-button,
+    .admin-page-button {
+        width: 100%;
+    }
+
+    .admin-table-wrap {
+        overflow-x: auto;
+    }
+
+    .admin-table {
+        min-width: 900px;
+    }
+
+    .admin-pagination,
+    .admin-pagination__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }
