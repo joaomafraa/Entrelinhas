@@ -1,0 +1,43 @@
+{% extends 'inscricoes/base.html' %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-4">
+        Detalhes da Inscrição
+    </h2>
+
+    <p>
+        <strong>Nome:</strong>
+        {{ inscricao.nome }}
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        {{ inscricao.email }}
+    </p>
+
+    <p>
+        <strong>Telefone:</strong>
+        {{ inscricao.telefone }}
+    </p>
+
+    <p>
+        <strong>Disponibilidade:</strong>
+        {{ inscricao.disponibilidade }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+
+        {% if inscricao.ativa %}
+            Ativa
+        {% else %}
+            Cancelada
+        {% endif %}
+    </p>
+
+</div>
+
+{% endblock %}
