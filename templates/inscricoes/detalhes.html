@@ -21,6 +21,7 @@
             </p>
             <p><strong>Telefone:</strong> {{ inscricao.telefone }}</p>
             <p><strong>Disponibilidade:</strong> {{ inscricao.get_disponibilidade_display }}</p>
+            <p><strong>Observações:</strong> {{ inscricao.observacoes|default:"-" }}</p>
             <p><strong>Status:</strong> {{ inscricao.get_status_display }}</p>
 
             <div class="cluster mt-4">
