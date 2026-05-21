@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
@@ -20,6 +21,10 @@ def _inscricoes_do_usuario(user):
 
 def home(request):
 
+    if request.user.is_authenticated and request.user.is_staff:
+
+        return redirect('dashboard_admin')
+
     return render(
         request,
         'inscricoes/home.html'
@@ -30,6 +35,10 @@ def login_plataforma(request):
 
     if request.user.is_authenticated:
 
+        if request.user.is_staff:
+
+            return redirect('dashboard_admin')
+
         return redirect('listar_inscricoes')
 
     if request.method == 'POST':
@@ -39,6 +48,10 @@ def login_plataforma(request):
         if form.is_valid():
 
             login(request, form.user)
+
+            if form.user.is_staff:
+
+                return redirect('dashboard_admin')
 
             return redirect('listar_inscricoes')
 
@@ -89,6 +102,41 @@ def sair(request):
     return redirect('home')
 
 
+def admin_redirect(request):
+
+    if request.user.is_authenticated:
+
+        if request.user.is_staff:
+
+            return redirect('dashboard_admin')
+
+        return redirect('listar_inscricoes')
+
+    return redirect('login')
+
+
+@login_required
+def dashboard_admin(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    total_inscricoes = Inscricao.objects.count()
+
+    return render(
+        request,
+        'inscricoes/dashboard_admin.html',
+        {
+            'current_admin_page': 'overview',
+            'total_inscricoes': total_inscricoes,
+            'total_pendentes': Inscricao.objects.filter(status='pendente').count(),
+            'total_aprovadas': Inscricao.objects.filter(status='aprovada').count(),
+            'total_recusadas': Inscricao.objects.filter(status='recusada').count(),
+        }
+    )
+
+
 @login_required
 def criar_inscricao(request):
 
@@ -111,7 +159,17 @@ def criar_inscricao(request):
             inscricao.email = request.user.email
             inscricao.save()
 
+            messages.success(
+                request,
+                'Inscricao registrada com sucesso. Voce ja pode acompanhar sua matricula pela plataforma.'
+            )
+
             return redirect('sucesso')
+
+        messages.warning(
+            request,
+            'Nao foi possivel concluir a inscricao. Revise os campos destacados e tente novamente.'
+        )
 
     else:
 
@@ -177,6 +235,8 @@ def listar_inscricoes(request):
             {
                 'inscricoes': page_obj.object_list,
                 'is_admin_list': True,
+                'base_template': 'inscricoes/admin_base.html',
+                'current_admin_page': 'inscricoes',
                 'page_obj': page_obj,
                 'q': q,
                 'total_count': paginator.count,
@@ -190,6 +250,35 @@ def listar_inscricoes(request):
         'inscricoes/listar_inscricoes.html',
         {'inscricoes': inscricoes}
     )
+
+
+@login_required
+@require_POST
+def excluir_inscricoes(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    ids = request.POST.getlist('inscricoes_selecionadas')
+
+    if not ids:
+
+        messages.warning(
+            request,
+            'Selecione pelo menos uma inscricao para excluir.'
+        )
+
+        return redirect('listar_inscricoes')
+
+    total_excluido, _ = Inscricao.objects.filter(id__in=ids).delete()
+
+    messages.success(
+        request,
+        f'{total_excluido} inscricao(oes) excluida(s) com sucesso.'
+    )
+
+    return redirect('listar_inscricoes')
 
 
 @login_required
@@ -232,7 +321,17 @@ def editar_matricula(request, id):
 
             inscricao.save()
 
+            messages.success(
+                request,
+                'Matricula atualizada com sucesso.'
+            )
+
             return redirect('listar_inscricoes')
+
+        messages.warning(
+            request,
+            'Nao foi possivel salvar as alteracoes. Revise os campos destacados e tente novamente.'
+        )
 
     else:
 

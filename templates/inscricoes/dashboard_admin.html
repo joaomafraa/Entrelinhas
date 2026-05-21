@@ -1,0 +1,50 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Visao geral | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-page-header">
+        <div>
+            <span class="section-label">Painel administrativo</span>
+            <h1>Visao geral</h1>
+            <p class="text-soft mb-0">Acompanhe o resumo das inscricoes do curso Costurando Sonhos.</p>
+        </div>
+
+        <a href="{% url 'listar_inscricoes' %}" class="btn btn-primary">Ver inscricoes</a>
+    </div>
+
+    <div class="admin-stat-grid">
+        <article class="admin-stat-card">
+            <span>Total de inscricoes</span>
+            <strong>{{ total_inscricoes }}</strong>
+        </article>
+
+        <article class="admin-stat-card">
+            <span>Pendentes</span>
+            <strong>{{ total_pendentes }}</strong>
+        </article>
+
+        <article class="admin-stat-card">
+            <span>Aprovadas</span>
+            <strong>{{ total_aprovadas }}</strong>
+        </article>
+
+        <article class="admin-stat-card">
+            <span>Recusadas</span>
+            <strong>{{ total_recusadas }}</strong>
+        </article>
+    </div>
+
+    <section class="admin-overview-panel">
+        <div>
+            <h2>Inscricoes do curso</h2>
+            <p class="text-soft mb-0">Use a area de inscricoes para buscar alunas, conferir dados e acompanhar o status de cada matricula.</p>
+        </div>
+
+        <a href="{% url 'listar_inscricoes' %}" class="admin-page-button">Abrir inscricoes</a>
+    </section>
+</section>
+
+{% endblock %}

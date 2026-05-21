@@ -1,0 +1,50 @@
+{% load static %}
+
+<aside class="admin-sidebar">
+    <div class="admin-sidebar__top">
+        <a href="{% url 'dashboard_admin' %}" class="admin-sidebar__brand">
+            <span class="brand-mark">E</span>
+            <span>
+                <strong>EntreLinhas</strong>
+                <small>Painel administrativo</small>
+            </span>
+        </a>
+
+        <nav class="admin-sidebar__nav" aria-label="Menu administrativo">
+            <span class="admin-sidebar__label">Menu</span>
+
+            <a
+                href="{% url 'dashboard_admin' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'overview' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/overview.svg' %}" alt="">
+                </span>
+                <span>Visao geral</span>
+            </a>
+
+            <a
+                href="{% url 'listar_inscricoes' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'inscricoes' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/inscricoes.svg' %}" alt="">
+                </span>
+                <span>Inscricoes</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="admin-sidebar__user">
+        <span class="admin-sidebar__avatar">
+            {{ request.user.get_full_name|default:request.user.username|first|upper }}
+        </span>
+
+        <span class="admin-sidebar__user-text">
+            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+            <small>Administradora</small>
+        </span>
+
+        <a href="{% url 'sair' %}" class="admin-sidebar__logout" aria-label="Sair">Sair</a>
+    </div>
+</aside>

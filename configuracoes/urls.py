@@ -1,13 +1,19 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from inscricoes.views import cadastro, home, login_plataforma, sair
+from inscricoes.views import admin_redirect, cadastro, home, login_plataforma, sair
 
 
 urlpatterns = [
 
     path(
         'admin/',
+        admin_redirect,
+        name='admin_redirect'
+    ),
+
+    path(
+        'django-admin/',
         admin.site.urls
     ),
 

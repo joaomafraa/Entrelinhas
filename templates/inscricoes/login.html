@@ -15,7 +15,7 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'css/main.css' %}"
+        href="{% static 'css/main.css' %}?v=7"
     >
 </head>
 
@@ -65,20 +65,8 @@
                         {{ form.senha.errors }}
                     </div>
 
-                    <div class="login-form__row">
-                        <label class="form-check d-inline-flex align-items-center gap-2 m-0">
-                            <input class="form-check-input mt-0" type="checkbox" name="lembrar">
-                            <span>Manter conectada</span>
-                        </label>
-
-                        <a href="{% url 'cadastro' %}" class="login-link">Esqueci minha senha</a>
-                    </div>
-
                     <button type="submit" class="btn btn-primary btn-lg w-100">Entrar</button>
-
-                    <a href="/admin/" class="btn btn-outline-secondary btn-lg w-100">Entrar como administrador</a>
-
-                    <p class="login-soon mb-0">Em breve: entrar com Google</p>
+                    <button type="submit" class="btn btn-outline-secondary btn-lg w-100">Entrar como administrador</button>
                 </form>
             </section>
         </section>
