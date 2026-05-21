@@ -13,11 +13,13 @@
             <form method="POST">
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                <div class="form-stack">
+                    {% include 'inscricoes/_inscricao_form_fields.html' %}
+                </div>
 
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn btn-primary mt-4"
                 >
                     Salvar alterações
                 </button>

@@ -13,6 +13,11 @@ def normalizar_cpf(cpf):
     return ''.join(caractere for caractere in cpf if caractere.isdigit())
 
 
+def normalizar_telefone(telefone):
+
+    return ''.join(caractere for caractere in telefone if caractere.isdigit())
+
+
 def cpf_valido(cpf):
 
     cpf = normalizar_cpf(cpf)
@@ -193,7 +198,10 @@ class InscricaoForm(forms.ModelForm):
                 'placeholder': '000.000.000-00',
                 'inputmode': 'numeric'
             }
-        )
+        ),
+        error_messages={
+            'required': 'Informe o CPF.'
+        }
     )
 
     class Meta:
@@ -238,7 +246,8 @@ class InscricaoForm(forms.ModelForm):
             'telefone': forms.TextInput(
                 attrs={
                     'class': 'form-control',
-                    'placeholder': '(00) 00000-0000'
+                    'placeholder': '(00) 00000-0000',
+                    'inputmode': 'numeric'
                 }
             ),
 
@@ -255,6 +264,22 @@ class InscricaoForm(forms.ModelForm):
                     'rows': 4
                 }
             ),
+        }
+
+        error_messages = {
+            'nome': {
+                'required': 'Informe o nome completo.',
+            },
+            'data_nascimento': {
+                'required': 'Informe a data de nascimento.',
+                'invalid': 'Informe uma data de nascimento valida.',
+            },
+            'telefone': {
+                'required': 'Informe o telefone.',
+            },
+            'disponibilidade': {
+                'required': 'Selecione a disponibilidade.',
+            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -297,3 +322,20 @@ class InscricaoForm(forms.ModelForm):
             raise forms.ValidationError('A data de nascimento não pode ser futura.')
 
         return data_nascimento
+
+    def clean_telefone(self):
+
+        telefone = self.cleaned_data['telefone'].strip()
+        caracteres_permitidos = set('0123456789 ()-+.')
+
+        if any(caractere not in caracteres_permitidos for caractere in telefone):
+
+            raise forms.ValidationError('O telefone deve conter apenas numeros.')
+
+        telefone_normalizado = normalizar_telefone(telefone)
+
+        if len(telefone_normalizado) < 10 or len(telefone_normalizado) > 11:
+
+            raise forms.ValidationError('Informe um telefone valido com DDD.')
+
+        return telefone_normalizado

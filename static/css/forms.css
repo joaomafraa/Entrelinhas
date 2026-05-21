@@ -26,6 +26,16 @@
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 20%, transparent);
 }
 
+.form-stack {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
 textarea.form-control {
     min-height: 132px;
     resize: vertical;
@@ -48,8 +58,19 @@ textarea.form-control {
 }
 
 .errorlist {
-    padding-left: 1rem;
+    padding-left: 0;
     margin-bottom: 0;
+    list-style: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.form-error-message {
+    padding: 0.75rem 0.9rem;
+    color: var(--destructive);
+    background: color-mix(in oklab, var(--destructive) 9%, transparent);
+    border: 1px solid color-mix(in oklab, var(--destructive) 26%, transparent);
+    border-radius: var(--radius-sm);
 }
 
 .form-hint,
@@ -202,15 +223,4 @@ textarea.form-control {
     justify-content: space-between;
     gap: 1rem;
     color: var(--muted-foreground);
-}
-
-.login-link {
-    color: var(--primary);
-    font-weight: 500;
-}
-
-.login-soon {
-    color: var(--muted-foreground);
-    text-align: center;
-    font-size: 0.95rem;
 }
