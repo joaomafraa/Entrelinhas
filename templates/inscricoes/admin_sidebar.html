@@ -42,7 +42,7 @@
 
         <span class="admin-sidebar__user-text">
             <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
-            <small>Administradora</small>
+            <small>Administrador</small>
         </span>
 
         <a href="{% url 'sair' %}" class="admin-sidebar__logout" aria-label="Sair">Sair</a>
