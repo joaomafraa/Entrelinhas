@@ -25,16 +25,43 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
-    'django-insecure-rehkgieoee!j*e5=5*t8-x&ghhf%kgehz%u(!l&eo-y3$^_u=w'
+    'bz*m8ekcwrwao6%pz2!q#*uu^7avl0vb#_ox$rzitn2gxz6rf@'
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS',
-    '127.0.0.1,localhost'
-).split(',')
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        'ALLOWED_HOSTS',
+        '127.0.0.1,localhost,entrelinhas-e759.onrender.com,.onrender.com'
+    ).split(',')
+    if host.strip()
+]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        'CSRF_TRUSTED_ORIGINS',
+        'https://entrelinhas-e759.onrender.com'
+    ).split(',')
+    if origin.strip()
+]
+
+if RENDER_EXTERNAL_HOSTNAME:
+
+    render_origin = f'https://{RENDER_EXTERNAL_HOSTNAME}'
+
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 
 # Application definition
