@@ -76,6 +76,11 @@ Para garantir minha participação
 - Então devo receber mensagens de erro
 - E a inscrição não deve ser concluída
 
+- Dado que informo letras em campos que devem receber números, como CPF ou telefone
+- Quando tento enviar o formulário
+- Então devo receber uma mensagem informativa indicando que o campo deve conter apenas números
+- E a inscrição não deve ser concluída
+
 </details>
 
 <details>
