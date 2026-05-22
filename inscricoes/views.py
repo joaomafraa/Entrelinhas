@@ -6,8 +6,8 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
-from .models import Inscricao
+from .forms import AulaForm, CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
+from .models import Aula, Inscricao
 
 
 def _inscricoes_do_usuario(user):
@@ -370,4 +370,30 @@ def cancelar_matricula(request, id):
         request,
         'inscricoes/cancelar_matricula.html',
         {'inscricao': inscricao}
+    )
+
+
+@login_required
+def listar_aulas(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    aulas = Aula.objects.all()
+
+    paginator = Paginator(aulas, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(
+        request,
+        'inscricoes/listar_aulas.html',
+        {
+            'aulas': page_obj.object_list,
+            'current_admin_page': 'aulas',
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+        }
     )
