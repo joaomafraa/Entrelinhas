@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils import timezone
 
-from .models import Inscricao
+from .models import Inscricao, Aula
 
 
 User = get_user_model()
@@ -339,3 +339,45 @@ class InscricaoForm(forms.ModelForm):
             raise forms.ValidationError('Informe um telefone valido com DDD.')
 
         return telefone_normalizado
+
+
+class AulaForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Aula
+
+        fields = [
+            'data',
+            'topico',
+        ]
+
+        labels = {
+            'data': 'Data da aula',
+            'topico': 'Tópico',
+        }
+
+        widgets = {
+
+            'data': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'class': 'form-control',
+                    'type': 'date'
+                }
+            ),
+
+            'topico': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ex.: Introdução à máquina de costura'
+                }
+            ),
+        }
+
+        error_messages = {
+            'data': {
+                'required': 'Informe a data da aula.',
+                'invalid': 'Informe uma data válida.',
+            },
+        }
