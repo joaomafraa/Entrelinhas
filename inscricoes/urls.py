@@ -9,6 +9,9 @@ from .views import (
     detalhes_inscricao,
     editar_matricula,
     cancelar_matricula,
+    listar_aulas,
+    criar_aula,
+    registrar_presenca,
 )
 
 urlpatterns = [
@@ -59,5 +62,23 @@ urlpatterns = [
         'cancelar/<int:id>/',
         cancelar_matricula,
         name='cancelar_matricula'
+    ),
+
+    path(
+        'aulas/',
+        listar_aulas,
+        name='listar_aulas'
+    ),
+
+    path(
+        'aulas/nova/',
+        criar_aula,
+        name='criar_aula'
+    ),
+
+    path(
+        'aulas/<int:id>/presenca/',
+        registrar_presenca,
+        name='registrar_presenca'
     ),
 ]
