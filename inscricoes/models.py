@@ -127,3 +127,27 @@ class Aula(models.Model):
             return f'{self.data:%d/%m/%Y} — {self.topico}'
 
         return self.data.strftime('%d/%m/%Y')
+
+
+class Presenca(models.Model):
+
+    aula = models.ForeignKey(
+        Aula,
+        on_delete=models.CASCADE
+    )
+
+    inscricao = models.ForeignKey(
+        Inscricao,
+        on_delete=models.CASCADE
+    )
+
+    presente = models.BooleanField(
+        default=False
+    )
+
+    registrada_em = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        unique_together = ('aula', 'inscricao')
