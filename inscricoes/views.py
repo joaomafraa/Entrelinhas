@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AulaForm, CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
-from .models import Aula, Inscricao
+from .models import Aula, Inscricao, Presenca
 
 
 def _inscricoes_do_usuario(user):
@@ -438,3 +438,36 @@ def criar_aula(request):
             'current_admin_page': 'aulas',
         }
     )
+
+
+@login_required
+def registrar_presenca(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    aula = get_object_or_404(Aula, id=id)
+
+    if request.method == 'POST':
+
+        alunas_aprovadas = Inscricao.objects.filter(status='aprovada')
+
+        for inscricao in alunas_aprovadas:
+
+            marcou = request.POST.get(f'presente_{inscricao.id}') == 'on'
+
+            Presenca.objects.update_or_create(
+                aula=aula,
+                inscricao=inscricao,
+                defaults={'presente': marcou}
+            )
+
+        messages.success(
+            request,
+            'Presencas registradas com sucesso.'
+        )
+
+        return redirect('registrar_presenca', id=aula.id)
+
+    return redirect('listar_aulas')
