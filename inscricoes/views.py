@@ -397,3 +397,44 @@ def listar_aulas(request):
             'end_index': page_obj.end_index() if paginator.count else 0,
         }
     )
+
+
+@login_required
+def criar_aula(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    if request.method == 'POST':
+
+        form = AulaForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Aula criada com sucesso.'
+            )
+
+            return redirect('listar_aulas')
+
+        messages.warning(
+            request,
+            'Nao foi possivel criar a aula. Revise os campos destacados e tente novamente.'
+        )
+
+    else:
+
+        form = AulaForm()
+
+    return render(
+        request,
+        'inscricoes/criar_aula.html',
+        {
+            'form': form,
+            'current_admin_page': 'aulas',
+        }
+    )
