@@ -1,0 +1,71 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Aulas | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Painel administrativo</span>
+                <h1>Aulas</h1>
+                <p class="text-soft mb-0">Cadastre aulas e registre a presenca das alunas do curso Costurando Sonhos.</p>
+            </div>
+
+            <a href="{% url 'criar_aula' %}" class="btn btn-primary">Nova aula</a>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Topico</th>
+                        <th class="text-end">Acoes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for aula in aulas %}
+                        <tr>
+                            <td class="admin-student">{{ aula.data|date:"d/m/Y" }}</td>
+                            <td>{{ aula.topico|default:"-" }}</td>
+                            <td>
+                                <div class="admin-actions">
+                                    <a href="{% url 'registrar_presenca' aula.id %}" class="admin-view-link">Registrar presenca</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-soft py-4">
+                                Nenhuma aula cadastrada.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-pagination">
+            <span>Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}</span>
+
+            <div class="admin-pagination__actions">
+                {% if page_obj.has_previous %}
+                    <a class="admin-page-button" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Anterior</span>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                    <a class="admin-page-button" href="?page={{ page_obj.next_page_number }}">Proxima</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Proxima</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

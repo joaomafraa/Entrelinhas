@@ -6,8 +6,8 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
-from .models import Inscricao
+from .forms import AulaForm, CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
+from .models import Aula, Inscricao, Presenca
 
 
 def _inscricoes_do_usuario(user):
@@ -371,3 +371,103 @@ def cancelar_matricula(request, id):
         'inscricoes/cancelar_matricula.html',
         {'inscricao': inscricao}
     )
+
+
+@login_required
+def listar_aulas(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    aulas = Aula.objects.all()
+
+    paginator = Paginator(aulas, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(
+        request,
+        'inscricoes/listar_aulas.html',
+        {
+            'aulas': page_obj.object_list,
+            'current_admin_page': 'aulas',
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+        }
+    )
+
+
+@login_required
+def criar_aula(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    if request.method == 'POST':
+
+        form = AulaForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Aula criada com sucesso.'
+            )
+
+            return redirect('listar_aulas')
+
+        messages.warning(
+            request,
+            'Nao foi possivel criar a aula. Revise os campos destacados e tente novamente.'
+        )
+
+    else:
+
+        form = AulaForm()
+
+    return render(
+        request,
+        'inscricoes/criar_aula.html',
+        {
+            'form': form,
+            'current_admin_page': 'aulas',
+        }
+    )
+
+
+@login_required
+def registrar_presenca(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    aula = get_object_or_404(Aula, id=id)
+
+    if request.method == 'POST':
+
+        alunas_aprovadas = Inscricao.objects.filter(status='aprovada')
+
+        for inscricao in alunas_aprovadas:
+
+            marcou = request.POST.get(f'presente_{inscricao.id}') == 'on'
+
+            Presenca.objects.update_or_create(
+                aula=aula,
+                inscricao=inscricao,
+                defaults={'presente': marcou}
+            )
+
+        messages.success(
+            request,
+            'Presencas registradas com sucesso.'
+        )
+
+        return redirect('registrar_presenca', id=aula.id)
+
+    return redirect('listar_aulas')

@@ -102,3 +102,52 @@ class Inscricao(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class Aula(models.Model):
+
+    data = models.DateField()
+
+    topico = models.CharField(
+        max_length=150,
+        blank=True
+    )
+
+    data_criacao = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ['-data', '-data_criacao']
+
+    def __str__(self):
+
+        if self.topico:
+
+            return f'{self.data:%d/%m/%Y} — {self.topico}'
+
+        return self.data.strftime('%d/%m/%Y')
+
+
+class Presenca(models.Model):
+
+    aula = models.ForeignKey(
+        Aula,
+        on_delete=models.CASCADE
+    )
+
+    inscricao = models.ForeignKey(
+        Inscricao,
+        on_delete=models.CASCADE
+    )
+
+    presente = models.BooleanField(
+        default=False
+    )
+
+    registrada_em = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        unique_together = ('aula', 'inscricao')

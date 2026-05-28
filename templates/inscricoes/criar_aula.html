@@ -1,0 +1,33 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Nova aula | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Painel administrativo</span>
+                <h1>Nova aula</h1>
+                <p class="text-soft mb-0">Cadastre uma aula para depois registrar a presenca das alunas.</p>
+            </div>
+
+            <a href="{% url 'listar_aulas' %}" class="btn btn-outline-secondary">Voltar</a>
+        </div>
+
+        <div class="surface-card p-4 p-lg-5">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-stack">
+                    {% include 'inscricoes/_inscricao_form_fields.html' %}
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-4">Criar aula</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
