@@ -395,3 +395,13 @@ class AulaForm(forms.ModelForm):
                 'invalid': 'Informe um horario valido.',
             },
         }
+
+    def clean_data(self):
+
+        data = self.cleaned_data['data']
+
+        if data < timezone.localdate():
+
+            raise forms.ValidationError('A data da aula nao pode ser passada.')
+
+        return data
