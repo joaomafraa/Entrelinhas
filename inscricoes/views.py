@@ -275,6 +275,44 @@ def listar_inscricoes(request):
 
 @login_required
 @require_POST
+def confirmar_exclusao_inscricoes(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    ids = request.POST.getlist('inscricoes_selecionadas')
+
+    if not ids:
+
+        messages.warning(
+            request,
+            'Selecione pelo menos uma inscricao para excluir.'
+        )
+
+        return redirect('listar_inscricoes')
+
+    inscricoes = Inscricao.objects.filter(id__in=ids).order_by('-data_criacao')
+
+    return render(
+        request,
+        'inscricoes/confirmar_exclusao_admin.html',
+        {
+            'tipo': 'inscricoes',
+            'titulo': 'Excluir inscricoes',
+            'descricao': 'Revise as inscricoes selecionadas antes de remover da plataforma.',
+            'itens': inscricoes,
+            'input_name': 'inscricoes_selecionadas',
+            'action_url': 'excluir_inscricoes',
+            'back_url': 'listar_inscricoes',
+            'confirm_label': 'Sim, excluir inscricoes',
+            'current_admin_page': 'inscricoes',
+        }
+    )
+
+
+@login_required
+@require_POST
 def excluir_inscricoes(request):
 
     if not request.user.is_staff:
@@ -509,6 +547,73 @@ def editar_aula(request, id):
             'texto_botao': 'Salvar alteracoes',
         }
     )
+
+
+@login_required
+@require_POST
+def confirmar_exclusao_aulas(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    ids = request.POST.getlist('aulas_selecionadas')
+
+    if not ids:
+
+        messages.warning(
+            request,
+            'Selecione pelo menos uma aula para excluir.'
+        )
+
+        return redirect('listar_aulas')
+
+    aulas = Aula.objects.filter(id__in=ids).order_by('-data', '-horario')
+
+    return render(
+        request,
+        'inscricoes/confirmar_exclusao_admin.html',
+        {
+            'tipo': 'aulas',
+            'titulo': 'Excluir aulas',
+            'descricao': 'Revise as aulas selecionadas antes de remover da plataforma.',
+            'itens': aulas,
+            'input_name': 'aulas_selecionadas',
+            'action_url': 'excluir_aulas',
+            'back_url': 'listar_aulas',
+            'confirm_label': 'Sim, excluir aulas',
+            'current_admin_page': 'aulas',
+        }
+    )
+
+
+@login_required
+@require_POST
+def excluir_aulas(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    ids = request.POST.getlist('aulas_selecionadas')
+
+    if not ids:
+
+        messages.warning(
+            request,
+            'Selecione pelo menos uma aula para excluir.'
+        )
+
+        return redirect('listar_aulas')
+
+    total_excluido, _ = Aula.objects.filter(id__in=ids).delete()
+
+    messages.success(
+        request,
+        f'{total_excluido} aula(s) excluida(s) com sucesso.'
+    )
+
+    return redirect('listar_aulas')
 
 
 @login_required

@@ -5,6 +5,7 @@ from .views import (
     criar_inscricao,
     sucesso,
     listar_inscricoes,
+    confirmar_exclusao_inscricoes,
     excluir_inscricoes,
     detalhes_inscricao,
     editar_matricula,
@@ -12,6 +13,8 @@ from .views import (
     listar_aulas,
     criar_aula,
     editar_aula,
+    confirmar_exclusao_aulas,
+    excluir_aulas,
     calendario_aulas,
     registrar_presenca,
 )
@@ -46,6 +49,12 @@ urlpatterns = [
         'inscricoes/excluir/',
         excluir_inscricoes,
         name='excluir_inscricoes'
+    ),
+
+    path(
+        'inscricoes/confirmar-exclusao/',
+        confirmar_exclusao_inscricoes,
+        name='confirmar_exclusao_inscricoes'
     ),
 
     path(
@@ -88,6 +97,18 @@ urlpatterns = [
         'aulas/<int:id>/editar/',
         editar_aula,
         name='editar_aula'
+    ),
+
+    path(
+        'aulas/excluir/',
+        excluir_aulas,
+        name='excluir_aulas'
+    ),
+
+    path(
+        'aulas/confirmar-exclusao/',
+        confirmar_exclusao_aulas,
+        name='confirmar_exclusao_aulas'
     ),
 
     path(

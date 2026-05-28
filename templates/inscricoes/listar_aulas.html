@@ -1,4 +1,5 @@
 {% extends 'inscricoes/admin_base.html' %}
+{% load static %}
 
 {% block title %}Aulas | EntreLinhas{% endblock %}
 
@@ -14,45 +15,83 @@
             </div>
 
             <div class="cluster justify-content-end">
+                <button
+                    class="admin-danger-button"
+                    type="submit"
+                    form="admin-delete-aulas-form"
+                    data-delete-selected
+                    aria-label="Excluir aulas selecionadas"
+                    title="Excluir aulas selecionadas"
+                    disabled
+                >
+                    <img src="{% static 'assets/icons/excluir_vermelho_claro.svg' %}" alt="" class="admin-action-icon">
+                    <span class="visually-hidden">Excluir aulas selecionadas</span>
+                </button>
                 <a href="{% url 'calendario_aulas' %}" class="btn btn-outline-secondary">Calendario</a>
                 <a href="{% url 'criar_aula' %}" class="btn btn-primary">Nova aula</a>
             </div>
         </div>
 
-        <div class="admin-table-wrap">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Horario</th>
-                        <th>Topico</th>
-                        <th class="text-end">Acoes</th>
-                    </tr>
-                </thead>
+        <form
+            id="admin-delete-aulas-form"
+            method="POST"
+            action="{% url 'confirmar_exclusao_aulas' %}"
+            data-bulk-delete-form
+        >
+            {% csrf_token %}
 
-                <tbody>
-                    {% for aula in aulas %}
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <td class="admin-student">{{ aula.data|date:"d/m/Y" }}</td>
-                            <td>{{ aula.horario|time:"H:i" }}</td>
-                            <td>{{ aula.topico|default:"-" }}</td>
-                            <td>
-                                <div class="admin-actions">
-                                    <a href="{% url 'editar_aula' aula.id %}" class="admin-view-link">Editar</a>
-                                    <a href="{% url 'registrar_presenca' aula.id %}" class="admin-view-link">Registrar presenca</a>
-                                </div>
-                            </td>
+                            <th class="admin-check-cell">
+                                <input
+                                    id="selecionar-todas-aulas"
+                                    type="checkbox"
+                                    aria-label="Selecionar todas as aulas"
+                                    data-select-all
+                                >
+                            </th>
+                            <th>Data</th>
+                            <th>Horario</th>
+                            <th>Topico</th>
+                            <th class="text-end">Acoes</th>
                         </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center text-soft py-4">
-                                Nenhuma aula cadastrada.
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+
+                    <tbody>
+                        {% for aula in aulas %}
+                            <tr>
+                                <td class="admin-check-cell">
+                                    <input
+                                        type="checkbox"
+                                        name="aulas_selecionadas"
+                                        value="{{ aula.id }}"
+                                        aria-label="Selecionar aula {{ aula.id }}"
+                                        data-row-checkbox
+                                    >
+                                </td>
+                                <td class="admin-student">{{ aula.data|date:"d/m/Y" }}</td>
+                                <td>{{ aula.horario|time:"H:i" }}</td>
+                                <td>{{ aula.topico|default:"-" }}</td>
+                                <td>
+                                    <div class="admin-actions">
+                                        <a href="{% url 'editar_aula' aula.id %}" class="admin-view-link">Editar</a>
+                                        <a href="{% url 'registrar_presenca' aula.id %}" class="admin-view-link">Registrar presenca</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-soft py-4">
+                                    Nenhuma aula cadastrada.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
 
         <div class="admin-pagination">
             <span>Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}</span>
@@ -73,5 +112,50 @@
         </div>
     </div>
 </section>
+
+<script>
+    (function () {
+        const form = document.querySelector('[data-bulk-delete-form]');
+        const selectAll = document.querySelector('[data-select-all]');
+        const rowCheckboxes = Array.from(document.querySelectorAll('[data-row-checkbox]'));
+        const deleteButton = document.querySelector('[data-delete-selected]');
+
+        if (!form || !selectAll || !deleteButton) {
+            return;
+        }
+
+        function selectedCount() {
+            return rowCheckboxes.filter((checkbox) => checkbox.checked).length;
+        }
+
+        function updateSelectionState() {
+            const checkedCount = selectedCount();
+
+            deleteButton.disabled = checkedCount === 0;
+            selectAll.checked = rowCheckboxes.length > 0 && checkedCount === rowCheckboxes.length;
+            selectAll.indeterminate = checkedCount > 0 && checkedCount < rowCheckboxes.length;
+        }
+
+        selectAll.addEventListener('change', function () {
+            rowCheckboxes.forEach((checkbox) => {
+                checkbox.checked = selectAll.checked;
+            });
+
+            updateSelectionState();
+        });
+
+        rowCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', updateSelectionState);
+        });
+
+        form.addEventListener('submit', function (event) {
+            if (selectedCount() === 0) {
+                event.preventDefault();
+            }
+        });
+
+        updateSelectionState();
+    }());
+</script>
 
 {% endblock %}

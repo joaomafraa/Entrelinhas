@@ -1,4 +1,5 @@
 {% extends base_template|default:'inscricoes/base.html' %}
+{% load static %}
 
 {% block title %}
     {% if is_admin_list %}Painel de inscricoes{% else %}Área da Aluna{% endif %} | EntreLinhas
@@ -21,9 +22,12 @@
                     type="submit"
                     form="admin-delete-form"
                     data-delete-selected
+                    aria-label="Excluir selecionadas"
+                    title="Excluir selecionadas"
                     disabled
                 >
-                    Excluir selecionadas
+                    <img src="{% static 'assets/icons/excluir_vermelho_claro.svg' %}" alt="" class="admin-action-icon">
+                    <span class="visually-hidden">Excluir selecionadas</span>
                 </button>
             </div>
 
@@ -43,7 +47,7 @@
             <form
                 id="admin-delete-form"
                 method="POST"
-                action="{% url 'excluir_inscricoes' %}"
+                action="{% url 'confirmar_exclusao_inscricoes' %}"
                 data-bulk-delete-form
             >
                 {% csrf_token %}
@@ -103,6 +107,7 @@
                                     <td>
                                         <div class="admin-actions">
                                             <a href="{% url 'detalhes_inscricao' inscricao.id %}" class="admin-view-link">Ver</a>
+                                            <a href="{% url 'editar_matricula' inscricao.id %}" class="admin-view-link">Editar</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -201,8 +206,12 @@
                 return;
             }
 
+            function selectedCount() {
+                return rowCheckboxes.filter((checkbox) => checkbox.checked).length;
+            }
+
             function updateSelectionState() {
-                const checkedCount = rowCheckboxes.filter((checkbox) => checkbox.checked).length;
+                const checkedCount = selectedCount();
 
                 deleteButton.disabled = checkedCount === 0;
                 selectAll.checked = rowCheckboxes.length > 0 && checkedCount === rowCheckboxes.length;
@@ -222,14 +231,7 @@
             });
 
             form.addEventListener('submit', function (event) {
-                const checkedCount = rowCheckboxes.filter((checkbox) => checkbox.checked).length;
-
-                if (checkedCount === 0) {
-                    event.preventDefault();
-                    return;
-                }
-
-                if (!window.confirm('Excluir as inscricoes selecionadas?')) {
+                if (selectedCount() === 0) {
                     event.preventDefault();
                 }
             });
