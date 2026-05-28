@@ -13,7 +13,10 @@
                 <p class="text-soft mb-0">Cadastre aulas e registre a presenca das alunas do curso Costurando Sonhos.</p>
             </div>
 
-            <a href="{% url 'criar_aula' %}" class="btn btn-primary">Nova aula</a>
+            <div class="cluster justify-content-end">
+                <a href="{% url 'calendario_aulas' %}" class="btn btn-outline-secondary">Calendario</a>
+                <a href="{% url 'criar_aula' %}" class="btn btn-primary">Nova aula</a>
+            </div>
         </div>
 
         <div class="admin-table-wrap">
@@ -21,6 +24,7 @@
                 <thead>
                     <tr>
                         <th>Data</th>
+                        <th>Horario</th>
                         <th>Topico</th>
                         <th class="text-end">Acoes</th>
                     </tr>
@@ -30,16 +34,18 @@
                     {% for aula in aulas %}
                         <tr>
                             <td class="admin-student">{{ aula.data|date:"d/m/Y" }}</td>
+                            <td>{{ aula.horario|time:"H:i" }}</td>
                             <td>{{ aula.topico|default:"-" }}</td>
                             <td>
                                 <div class="admin-actions">
+                                    <a href="{% url 'editar_aula' aula.id %}" class="admin-view-link">Editar</a>
                                     <a href="{% url 'registrar_presenca' aula.id %}" class="admin-view-link">Registrar presenca</a>
                                 </div>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="3" class="text-center text-soft py-4">
+                            <td colspan="4" class="text-center text-soft py-4">
                                 Nenhuma aula cadastrada.
                             </td>
                         </tr>

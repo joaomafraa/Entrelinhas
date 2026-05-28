@@ -1,3 +1,6 @@
+import calendar
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,6 +11,23 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AulaForm, CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
 from .models import Aula, Inscricao, Presenca
+
+
+MESES = [
+    '',
+    'Janeiro',
+    'Fevereiro',
+    'Marco',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+]
 
 
 def _inscricoes_do_usuario(user):
@@ -133,6 +153,7 @@ def dashboard_admin(request):
             'total_pendentes': Inscricao.objects.filter(status='pendente').count(),
             'total_aprovadas': Inscricao.objects.filter(status='aprovada').count(),
             'total_recusadas': Inscricao.objects.filter(status='recusada').count(),
+            'total_aulas': Aula.objects.count(),
         }
     )
 
@@ -436,6 +457,141 @@ def criar_aula(request):
         {
             'form': form,
             'current_admin_page': 'aulas',
+            'titulo': 'Nova aula',
+            'descricao': 'Cadastre uma aula para depois registrar a presenca das alunas.',
+            'texto_botao': 'Criar aula',
+        }
+    )
+
+
+@login_required
+def editar_aula(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    aula = get_object_or_404(Aula, id=id)
+
+    if request.method == 'POST':
+
+        form = AulaForm(request.POST, instance=aula)
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                'Aula atualizada com sucesso.'
+            )
+
+            return redirect('listar_aulas')
+
+        messages.warning(
+            request,
+            'Nao foi possivel atualizar a aula. Revise os campos destacados e tente novamente.'
+        )
+
+    else:
+
+        form = AulaForm(instance=aula)
+
+    return render(
+        request,
+        'inscricoes/criar_aula.html',
+        {
+            'form': form,
+            'aula': aula,
+            'current_admin_page': 'aulas',
+            'titulo': 'Editar aula',
+            'descricao': 'Atualize a data, o horario e o topico da aula.',
+            'texto_botao': 'Salvar alteracoes',
+        }
+    )
+
+
+@login_required
+def calendario_aulas(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    hoje = date.today()
+
+    try:
+
+        ano = int(request.GET.get('ano', hoje.year))
+        mes = int(request.GET.get('mes', hoje.month))
+
+        if mes < 1 or mes > 12:
+
+            raise ValueError
+
+    except (TypeError, ValueError):
+
+        ano = hoje.year
+        mes = hoje.month
+
+    primeiro_dia = date(ano, mes, 1)
+    _, ultimo_dia = calendar.monthrange(ano, mes)
+
+    if mes == 1:
+
+        mes_anterior = {'ano': ano - 1, 'mes': 12}
+
+    else:
+
+        mes_anterior = {'ano': ano, 'mes': mes - 1}
+
+    if mes == 12:
+
+        proximo_mes = {'ano': ano + 1, 'mes': 1}
+
+    else:
+
+        proximo_mes = {'ano': ano, 'mes': mes + 1}
+
+    aulas = Aula.objects.filter(
+        data__year=ano,
+        data__month=mes
+    ).order_by('data', 'horario')
+
+    aulas_por_dia = {}
+
+    for aula in aulas:
+
+        aulas_por_dia.setdefault(aula.data.day, []).append(aula)
+
+    semanas = []
+
+    for semana in calendar.Calendar(firstweekday=6).monthdayscalendar(ano, mes):
+
+        semanas.append([
+            {
+                'numero': dia,
+                'data': date(ano, mes, dia) if dia else None,
+                'aulas': aulas_por_dia.get(dia, []),
+                'is_today': dia != 0 and date(ano, mes, dia) == hoje,
+            }
+            for dia in semana
+        ])
+
+    return render(
+        request,
+        'inscricoes/calendario_aulas.html',
+        {
+            'current_admin_page': 'aulas',
+            'semanas': semanas,
+            'nome_mes': MESES[mes],
+            'ano': ano,
+            'mes': mes,
+            'mes_anterior': mes_anterior,
+            'proximo_mes': proximo_mes,
+            'total_aulas_mes': aulas.count(),
+            'primeiro_dia': primeiro_dia,
+            'ultimo_dia': date(ano, mes, ultimo_dia),
         }
     )
 

@@ -11,6 +11,8 @@ from .views import (
     cancelar_matricula,
     listar_aulas,
     criar_aula,
+    editar_aula,
+    calendario_aulas,
     registrar_presenca,
 )
 
@@ -74,6 +76,18 @@ urlpatterns = [
         'aulas/nova/',
         criar_aula,
         name='criar_aula'
+    ),
+
+    path(
+        'aulas/calendario/',
+        calendario_aulas,
+        name='calendario_aulas'
+    ),
+
+    path(
+        'aulas/<int:id>/editar/',
+        editar_aula,
+        name='editar_aula'
     ),
 
     path(

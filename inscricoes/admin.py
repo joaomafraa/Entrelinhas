@@ -36,6 +36,7 @@ class AulaAdmin(admin.ModelAdmin):
 
     list_display = (
         'data',
+        'horario',
         'topico',
         'data_criacao',
     )
@@ -46,4 +47,5 @@ class AulaAdmin(admin.ModelAdmin):
 
     list_filter = (
         'data',
+        'horario',
     )

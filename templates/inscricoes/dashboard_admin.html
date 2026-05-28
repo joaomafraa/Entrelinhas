@@ -9,10 +9,13 @@
         <div>
             <span class="section-label">Painel administrativo</span>
             <h1>Visao geral</h1>
-            <p class="text-soft mb-0">Acompanhe o resumo das inscricoes do curso Costurando Sonhos.</p>
+            <p class="text-soft mb-0">Acompanhe o resumo das inscricoes e das aulas do curso Costurando Sonhos.</p>
         </div>
 
-        <a href="{% url 'listar_inscricoes' %}" class="btn btn-primary">Ver inscricoes</a>
+        <div class="cluster">
+            <a href="{% url 'criar_aula' %}" class="btn btn-outline-secondary">Nova aula</a>
+            <a href="{% url 'listar_inscricoes' %}" class="btn btn-primary">Ver inscricoes</a>
+        </div>
     </div>
 
     <div class="admin-stat-grid">
@@ -35,6 +38,11 @@
             <span>Recusadas</span>
             <strong>{{ total_recusadas }}</strong>
         </article>
+
+        <article class="admin-stat-card">
+            <span>Aulas cadastradas</span>
+            <strong>{{ total_aulas }}</strong>
+        </article>
     </div>
 
     <section class="admin-overview-panel">
@@ -44,6 +52,18 @@
         </div>
 
         <a href="{% url 'listar_inscricoes' %}" class="admin-page-button">Abrir inscricoes</a>
+    </section>
+
+    <section class="admin-overview-panel">
+        <div>
+            <h2>Aulas do curso</h2>
+            <p class="text-soft mb-0">Cadastre aulas, confira o calendario mensal e registre a presenca das alunas aprovadas.</p>
+        </div>
+
+        <div class="cluster justify-content-end">
+            <a href="{% url 'calendario_aulas' %}" class="admin-page-button">Ver calendario</a>
+            <a href="{% url 'criar_aula' %}" class="admin-page-button">Nova aula</a>
+        </div>
     </section>
 </section>
 

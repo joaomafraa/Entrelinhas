@@ -349,11 +349,13 @@ class AulaForm(forms.ModelForm):
 
         fields = [
             'data',
+            'horario',
             'topico',
         ]
 
         labels = {
             'data': 'Data da aula',
+            'horario': 'Horario',
             'topico': 'Tópico',
         }
 
@@ -364,6 +366,14 @@ class AulaForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'type': 'date'
+                }
+            ),
+
+            'horario': forms.TimeInput(
+                format='%H:%M',
+                attrs={
+                    'class': 'form-control',
+                    'type': 'time'
                 }
             ),
 
@@ -379,5 +389,9 @@ class AulaForm(forms.ModelForm):
             'data': {
                 'required': 'Informe a data da aula.',
                 'invalid': 'Informe uma data válida.',
+            },
+            'horario': {
+                'required': 'Informe o horario da aula.',
+                'invalid': 'Informe um horario valido.',
             },
         }

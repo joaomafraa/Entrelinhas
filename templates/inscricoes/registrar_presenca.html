@@ -11,7 +11,7 @@
                 <span class="section-label">Painel administrativo</span>
                 <h1>Registrar presenca</h1>
                 <p class="text-soft mb-0">
-                    Aula de {{ aula.data|date:"d/m/Y" }}{% if aula.topico %} — {{ aula.topico }}{% endif %}.
+                    Aula de {{ aula.data|date:"d/m/Y" }} as {{ aula.horario|time:"H:i" }}{% if aula.topico %} — {{ aula.topico }}{% endif %}.
                     Marque as alunas presentes e clique em salvar.
                 </p>
             </div>

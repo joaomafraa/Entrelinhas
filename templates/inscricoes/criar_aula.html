@@ -1,6 +1,6 @@
 {% extends 'inscricoes/admin_base.html' %}
 
-{% block title %}Nova aula | EntreLinhas{% endblock %}
+{% block title %}{{ titulo|default:"Nova aula" }} | EntreLinhas{% endblock %}
 
 {% block content %}
 
@@ -9,8 +9,8 @@
         <div class="admin-page-header">
             <div>
                 <span class="section-label">Painel administrativo</span>
-                <h1>Nova aula</h1>
-                <p class="text-soft mb-0">Cadastre uma aula para depois registrar a presenca das alunas.</p>
+                <h1>{{ titulo|default:"Nova aula" }}</h1>
+                <p class="text-soft mb-0">{{ descricao|default:"Cadastre uma aula para depois registrar a presenca das alunas." }}</p>
             </div>
 
             <a href="{% url 'listar_aulas' %}" class="btn btn-outline-secondary">Voltar</a>
@@ -24,7 +24,7 @@
                     {% include 'inscricoes/_inscricao_form_fields.html' %}
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-4">Criar aula</button>
+                <button type="submit" class="btn btn-primary mt-4">{{ texto_botao|default:"Criar aula" }}</button>
             </form>
         </div>
     </div>

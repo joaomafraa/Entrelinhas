@@ -108,6 +108,8 @@ class Aula(models.Model):
 
     data = models.DateField()
 
+    horario = models.TimeField()
+
     topico = models.CharField(
         max_length=150,
         blank=True
@@ -118,15 +120,15 @@ class Aula(models.Model):
     )
 
     class Meta:
-        ordering = ['-data', '-data_criacao']
+        ordering = ['-data', '-horario', '-data_criacao']
 
     def __str__(self):
 
         if self.topico:
 
-            return f'{self.data:%d/%m/%Y} — {self.topico}'
+            return f'{self.data:%d/%m/%Y} {self.horario:%H:%M} - {self.topico}'
 
-        return self.data.strftime('%d/%m/%Y')
+        return f'{self.data:%d/%m/%Y} {self.horario:%H:%M}'
 
 
 class Presenca(models.Model):

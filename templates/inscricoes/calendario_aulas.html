@@ -1,0 +1,80 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Calendario de aulas | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Painel administrativo</span>
+                <h1>Calendario de aulas</h1>
+                <p class="text-soft mb-0">
+                    {{ nome_mes }} de {{ ano }}. {{ total_aulas_mes }} aula(s) cadastrada(s) neste periodo.
+                </p>
+            </div>
+
+            <div class="cluster justify-content-end">
+                <a href="{% url 'listar_aulas' %}" class="btn btn-outline-secondary">Lista</a>
+                <a href="{% url 'criar_aula' %}" class="btn btn-primary">Nova aula</a>
+            </div>
+        </div>
+
+        <div class="calendar-toolbar">
+            <a
+                class="admin-page-button"
+                href="?ano={{ mes_anterior.ano }}&mes={{ mes_anterior.mes }}"
+            >
+                Anterior
+            </a>
+
+            <strong>{{ nome_mes }} {{ ano }}</strong>
+
+            <a
+                class="admin-page-button"
+                href="?ano={{ proximo_mes.ano }}&mes={{ proximo_mes.mes }}"
+            >
+                Proximo
+            </a>
+        </div>
+
+        <div class="admin-calendar">
+            <div class="admin-calendar__weekday">Dom</div>
+            <div class="admin-calendar__weekday">Seg</div>
+            <div class="admin-calendar__weekday">Ter</div>
+            <div class="admin-calendar__weekday">Qua</div>
+            <div class="admin-calendar__weekday">Qui</div>
+            <div class="admin-calendar__weekday">Sex</div>
+            <div class="admin-calendar__weekday">Sab</div>
+
+            {% for semana in semanas %}
+                {% for dia in semana %}
+                    <div class="admin-calendar__day {% if not dia.numero %}admin-calendar__day--empty{% endif %} {% if dia.is_today %}admin-calendar__day--today{% endif %}">
+                        {% if dia.numero %}
+                            <div class="admin-calendar__date">{{ dia.numero }}</div>
+
+                            <div class="admin-calendar__items">
+                                {% for aula in dia.aulas %}
+                                    <article class="admin-calendar__item">
+                                        <strong>{{ aula.horario|time:"H:i" }}</strong>
+                                        <span>{{ aula.topico|default:"Aula sem topico" }}</span>
+
+                                        <div class="admin-calendar__actions">
+                                            <a href="{% url 'editar_aula' aula.id %}">Editar</a>
+                                            <a href="{% url 'registrar_presenca' aula.id %}">Presenca</a>
+                                        </div>
+                                    </article>
+                                {% empty %}
+                                    <span class="admin-calendar__empty-label">Sem aulas</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
