@@ -470,4 +470,24 @@ def registrar_presenca(request, id):
 
         return redirect('registrar_presenca', id=aula.id)
 
-    return redirect('listar_aulas')
+    alunas_aprovadas = Inscricao.objects.filter(status='aprovada').order_by('nome')
+
+    presencas_por_inscricao = {
+        presenca.inscricao_id: presenca.presente
+        for presenca in Presenca.objects.filter(aula=aula)
+    }
+
+    alunas = [
+        (aluna, presencas_por_inscricao.get(aluna.id, False))
+        for aluna in alunas_aprovadas
+    ]
+
+    return render(
+        request,
+        'inscricoes/registrar_presenca.html',
+        {
+            'aula': aula,
+            'alunas': alunas,
+            'current_admin_page': 'aulas',
+        }
+    )
