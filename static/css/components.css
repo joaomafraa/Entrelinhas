@@ -916,14 +916,20 @@ footer,
     font-size: 1.1rem;
 }
 
-.admin-calendar {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    overflow: hidden;
+.admin-calendar-wrap {
+    overflow-x: auto;
     background: #ffffff;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+}
+
+.admin-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(8.5rem, 1fr));
+    min-width: 760px;
+    overflow: hidden;
+    background: #ffffff;
 }
 
 .admin-calendar__weekday {
@@ -944,6 +950,7 @@ footer,
 
 .admin-calendar__day {
     min-height: 150px;
+    min-width: 0;
     display: grid;
     align-content: start;
     gap: 0.75rem;
@@ -1000,6 +1007,7 @@ footer,
 .admin-calendar__item span {
     color: var(--foreground);
     font-weight: 700;
+    overflow-wrap: anywhere;
 }
 
 .admin-calendar__actions {

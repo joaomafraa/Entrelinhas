@@ -39,40 +39,42 @@
             </a>
         </div>
 
-        <div class="admin-calendar">
-            <div class="admin-calendar__weekday">Dom</div>
-            <div class="admin-calendar__weekday">Seg</div>
-            <div class="admin-calendar__weekday">Ter</div>
-            <div class="admin-calendar__weekday">Qua</div>
-            <div class="admin-calendar__weekday">Qui</div>
-            <div class="admin-calendar__weekday">Sex</div>
-            <div class="admin-calendar__weekday">Sab</div>
+        <div class="admin-calendar-wrap">
+            <div class="admin-calendar">
+                <div class="admin-calendar__weekday">Dom</div>
+                <div class="admin-calendar__weekday">Seg</div>
+                <div class="admin-calendar__weekday">Ter</div>
+                <div class="admin-calendar__weekday">Qua</div>
+                <div class="admin-calendar__weekday">Qui</div>
+                <div class="admin-calendar__weekday">Sex</div>
+                <div class="admin-calendar__weekday">Sab</div>
 
-            {% for semana in semanas %}
-                {% for dia in semana %}
-                    <div class="admin-calendar__day {% if not dia.numero %}admin-calendar__day--empty{% endif %} {% if dia.is_today %}admin-calendar__day--today{% endif %}">
-                        {% if dia.numero %}
-                            <div class="admin-calendar__date">{{ dia.numero }}</div>
+                {% for semana in semanas %}
+                    {% for dia in semana %}
+                        <div class="admin-calendar__day {% if not dia.numero %}admin-calendar__day--empty{% endif %} {% if dia.is_today %}admin-calendar__day--today{% endif %}">
+                            {% if dia.numero %}
+                                <div class="admin-calendar__date">{{ dia.numero }}</div>
 
-                            <div class="admin-calendar__items">
-                                {% for aula in dia.aulas %}
-                                    <article class="admin-calendar__item">
-                                        <strong>{{ aula.horario|time:"H:i" }}</strong>
-                                        <span>{{ aula.topico|default:"Aula sem topico" }}</span>
+                                <div class="admin-calendar__items">
+                                    {% for aula in dia.aulas %}
+                                        <article class="admin-calendar__item">
+                                            <strong>{{ aula.horario|time:"H:i" }}</strong>
+                                            <span>{{ aula.topico|default:"Aula sem topico" }}</span>
 
-                                        <div class="admin-calendar__actions">
-                                            <a href="{% url 'editar_aula' aula.id %}">Editar</a>
-                                            <a href="{% url 'registrar_presenca' aula.id %}">Presenca</a>
-                                        </div>
-                                    </article>
-                                {% empty %}
-                                    <span class="admin-calendar__empty-label">Sem aulas</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
+                                            <div class="admin-calendar__actions">
+                                                <a href="{% url 'editar_aula' aula.id %}">Editar</a>
+                                                <a href="{% url 'registrar_presenca' aula.id %}">Presenca</a>
+                                            </div>
+                                        </article>
+                                    {% empty %}
+                                        <span class="admin-calendar__empty-label">Sem aulas</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
+            </div>
         </div>
     </div>
 </section>
