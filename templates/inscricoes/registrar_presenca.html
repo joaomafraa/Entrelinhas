@@ -1,0 +1,66 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Registrar presenca | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Painel administrativo</span>
+                <h1>Registrar presenca</h1>
+                <p class="text-soft mb-0">
+                    Aula de {{ aula.data|date:"d/m/Y" }}{% if aula.topico %} — {{ aula.topico }}{% endif %}.
+                    Marque as alunas presentes e clique em salvar.
+                </p>
+            </div>
+
+            <a href="{% url 'listar_aulas' %}" class="btn btn-outline-secondary">Voltar</a>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Aluna</th>
+                            <th>CPF</th>
+                            <th class="text-end">Presente</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for aluna, presente in alunas %}
+                            <tr>
+                                <td class="admin-student">{{ aluna.nome }}</td>
+                                <td>{{ aluna.cpf_formatado|default:"-" }}</td>
+                                <td class="text-end">
+                                    <input
+                                        type="checkbox"
+                                        name="presente_{{ aluna.id }}"
+                                        {% if presente %}checked{% endif %}
+                                    >
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-soft py-4">
+                                    Nenhuma aluna aprovada nesta turma.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Salvar presencas</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
