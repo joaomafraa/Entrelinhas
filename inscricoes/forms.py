@@ -400,7 +400,7 @@ class AulaForm(forms.ModelForm):
 
         data = self.cleaned_data['data']
 
-        if data < timezone.localdate():
+        if not self.instance.pk and data < timezone.localdate():
 
             raise forms.ValidationError('A data da aula nao pode ser passada.')
 
