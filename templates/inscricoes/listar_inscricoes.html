@@ -100,9 +100,22 @@
                                     <td>Costurando Sonhos</td>
                                     <td>{{ inscricao.data_criacao|date:"d/m/Y" }}</td>
                                     <td>
-                                        <span class="status-chip status-chip--{{ inscricao.status }}">
-                                            {{ inscricao.get_status_display }}
-                                        </span>
+                                        <select
+                                            class="status-select status-select--{{ inscricao.status }}"
+                                            name="status"
+                                            form="status-form-{{ inscricao.id }}"
+                                            aria-label="Alterar status de {{ inscricao.nome }}"
+                                            data-status-select
+                                        >
+                                            {% for status_value, status_label in status_choices %}
+                                                <option
+                                                    value="{{ status_value }}"
+                                                    {% if inscricao.status == status_value %}selected{% endif %}
+                                                >
+                                                    {{ status_label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
                                     </td>
                                     <td>
                                         <div class="admin-actions">
@@ -122,6 +135,18 @@
                     </table>
                 </div>
             </form>
+
+            {% for inscricao in inscricoes %}
+                <form
+                    id="status-form-{{ inscricao.id }}"
+                    method="POST"
+                    action="{% url 'atualizar_status_inscricao' inscricao.id %}"
+                    data-status-form
+                >
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                </form>
+            {% endfor %}
 
             <div class="admin-pagination">
                 <span>Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}</span>
@@ -228,6 +253,14 @@
 
             rowCheckboxes.forEach((checkbox) => {
                 checkbox.addEventListener('change', updateSelectionState);
+            });
+
+            document.querySelectorAll('[data-status-select]').forEach((select) => {
+                select.addEventListener('change', function () {
+                    if (select.form) {
+                        select.form.submit();
+                    }
+                });
             });
 
             form.addEventListener('submit', function (event) {

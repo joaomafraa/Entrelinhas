@@ -6,10 +6,19 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
 
-from .forms import AulaForm, CadastroForm, InscricaoForm, LoginForm, normalizar_cpf
+from .forms import (
+    AdminInscricaoForm,
+    AulaForm,
+    CadastroForm,
+    InscricaoForm,
+    LoginForm,
+    normalizar_cpf,
+)
 from .models import Aula, Inscricao, Presenca
 
 
@@ -39,6 +48,87 @@ def _inscricoes_do_usuario(user):
     return Inscricao.objects.filter(user=user)
 
 
+def _inscricao_aprovada_do_usuario(user):
+
+    filtros = Q(user=user)
+
+    if user.email:
+
+        filtros |= Q(email=user.email)
+
+    return Inscricao.objects.filter(
+        filtros,
+        status='aprovada'
+    ).order_by('-data_criacao').first()
+
+
+def _parametros_calendario(request):
+
+    hoje = date.today()
+
+    try:
+
+        ano = int(request.GET.get('ano', hoje.year))
+        mes = int(request.GET.get('mes', hoje.month))
+
+        if mes < 1 or mes > 12:
+
+            raise ValueError
+
+    except (TypeError, ValueError):
+
+        ano = hoje.year
+        mes = hoje.month
+
+    if mes == 1:
+
+        mes_anterior = {'ano': ano - 1, 'mes': 12}
+
+    else:
+
+        mes_anterior = {'ano': ano, 'mes': mes - 1}
+
+    if mes == 12:
+
+        proximo_mes = {'ano': ano + 1, 'mes': 1}
+
+    else:
+
+        proximo_mes = {'ano': ano, 'mes': mes + 1}
+
+    return hoje, ano, mes, mes_anterior, proximo_mes
+
+
+def _semanas_do_calendario(ano, mes, hoje):
+
+    aulas = Aula.objects.filter(
+        data__year=ano,
+        data__month=mes
+    ).order_by('data', 'horario')
+
+    aulas_por_dia = {}
+
+    for aula in aulas:
+
+        aulas_por_dia.setdefault(aula.data.day, []).append(aula)
+
+    semanas = []
+
+    for semana in calendar.Calendar(firstweekday=6).monthdayscalendar(ano, mes):
+
+        semanas.append([
+            {
+                'numero': dia,
+                'data': date(ano, mes, dia) if dia else None,
+                'aulas': aulas_por_dia.get(dia, []),
+                'is_today': dia != 0 and date(ano, mes, dia) == hoje,
+            }
+            for dia in semana
+        ])
+
+    return semanas, aulas
+
+
 def home(request):
 
     if request.user.is_authenticated and request.user.is_staff:
@@ -59,6 +149,10 @@ def login_plataforma(request):
 
             return redirect('dashboard_admin')
 
+        if _inscricao_aprovada_do_usuario(request.user):
+
+            return redirect('dashboard_aluna')
+
         return redirect('listar_inscricoes')
 
     if request.method == 'POST':
@@ -72,6 +166,10 @@ def login_plataforma(request):
             if form.user.is_staff:
 
                 return redirect('dashboard_admin')
+
+            if _inscricao_aprovada_do_usuario(form.user):
+
+                return redirect('dashboard_aluna')
 
             return redirect('listar_inscricoes')
 
@@ -130,6 +228,10 @@ def admin_redirect(request):
 
             return redirect('dashboard_admin')
 
+        if _inscricao_aprovada_do_usuario(request.user):
+
+            return redirect('dashboard_aluna')
+
         return redirect('listar_inscricoes')
 
     return redirect('login')
@@ -154,6 +256,95 @@ def dashboard_admin(request):
             'total_aprovadas': Inscricao.objects.filter(status='aprovada').count(),
             'total_recusadas': Inscricao.objects.filter(status='recusada').count(),
             'total_aulas': Aula.objects.count(),
+        }
+    )
+
+
+@login_required
+def dashboard_aluna(request):
+
+    if request.user.is_staff:
+
+        return redirect('dashboard_admin')
+
+    inscricao = _inscricao_aprovada_do_usuario(request.user)
+
+    if not inscricao:
+
+        return redirect('listar_inscricoes')
+
+    abas_validas = {'visao-geral', 'frequencia', 'perfil'}
+    aba_ativa = request.GET.get('aba', 'visao-geral')
+
+    if aba_ativa not in abas_validas:
+
+        aba_ativa = 'visao-geral'
+
+    hoje, ano, mes, mes_anterior, proximo_mes = _parametros_calendario(request)
+    semanas, aulas_mes = _semanas_do_calendario(ano, mes, hoje)
+
+    presencas = Presenca.objects.filter(
+        inscricao=inscricao,
+        aula__data__lte=hoje
+    )
+    presencas_por_aula = {
+        presenca.aula_id: presenca.presente
+        for presenca in Presenca.objects.filter(inscricao=inscricao)
+    }
+
+    for semana in semanas:
+
+        for dia in semana:
+
+            status_do_dia = ''
+
+            for aula in dia['aulas']:
+
+                presenca = presencas_por_aula.get(aula.id)
+
+                if presenca is True:
+
+                    aula.status_frequencia = 'presenca'
+
+                    if status_do_dia != 'falta':
+
+                        status_do_dia = 'presenca'
+
+                elif presenca is False:
+
+                    aula.status_frequencia = 'falta'
+                    status_do_dia = 'falta'
+
+                else:
+
+                    aula.status_frequencia = 'neutro'
+
+            dia['status_frequencia'] = status_do_dia
+
+    aulas_registradas = presencas.count()
+    presencas_confirmadas = presencas.filter(presente=True).count()
+    faltas = presencas.filter(presente=False).count()
+    frequencia = round((presencas_confirmadas / aulas_registradas) * 100) if aulas_registradas else 0
+
+    proximas_aulas = Aula.objects.filter(data__gte=hoje).order_by('data', 'horario')[:5]
+
+    return render(
+        request,
+        'inscricoes/dashboard_aluna.html',
+        {
+            'inscricao': inscricao,
+            'aba_ativa': aba_ativa,
+            'semanas': semanas,
+            'nome_mes': MESES[mes],
+            'ano': ano,
+            'mes_anterior': mes_anterior,
+            'proximo_mes': proximo_mes,
+            'total_aulas_mes': aulas_mes.count(),
+            'aulas_registradas': aulas_registradas,
+            'presencas_confirmadas': presencas_confirmadas,
+            'faltas': faltas,
+            'frequencia': frequencia,
+            'proximas_aulas': proximas_aulas,
         }
     )
 
@@ -227,6 +418,10 @@ def listar_inscricoes(request):
 
     inscricoes = _inscricoes_do_usuario(request.user)
 
+    if not request.user.is_staff and _inscricao_aprovada_do_usuario(request.user):
+
+        return redirect('dashboard_aluna')
+
     if request.user.is_staff:
 
         q = request.GET.get('q', '').strip()
@@ -263,6 +458,7 @@ def listar_inscricoes(request):
                 'total_count': paginator.count,
                 'start_index': page_obj.start_index() if paginator.count else 0,
                 'end_index': page_obj.end_index() if paginator.count else 0,
+                'status_choices': Inscricao.STATUS,
             }
         )
 
@@ -271,6 +467,47 @@ def listar_inscricoes(request):
         'inscricoes/listar_inscricoes.html',
         {'inscricoes': inscricoes}
     )
+
+
+@login_required
+@require_POST
+def atualizar_status_inscricao(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    inscricao = get_object_or_404(Inscricao, id=id)
+    status = request.POST.get('status')
+    status_validos = {valor for valor, _ in Inscricao.STATUS}
+    redirect_to = request.POST.get('next') or reverse('listar_inscricoes')
+
+    if not url_has_allowed_host_and_scheme(
+        redirect_to,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure()
+    ):
+
+        redirect_to = reverse('listar_inscricoes')
+
+    if status not in status_validos:
+
+        messages.warning(
+            request,
+            'Status de matricula invalido.'
+        )
+
+        return redirect(redirect_to)
+
+    inscricao.status = status
+    inscricao.save(update_fields=['status'])
+
+    messages.success(
+        request,
+        'Status da matricula atualizado com sucesso.'
+    )
+
+    return redirect(redirect_to)
 
 
 @login_required
@@ -362,10 +599,11 @@ def editar_matricula(request, id):
         _inscricoes_do_usuario(request.user),
         id=id
     )
+    form_class = AdminInscricaoForm if request.user.is_staff else InscricaoForm
 
     if request.method == 'POST':
 
-        form = InscricaoForm(
+        form = form_class(
             request.POST,
             instance=inscricao
         )
@@ -394,14 +632,16 @@ def editar_matricula(request, id):
 
     else:
 
-        form = InscricaoForm(instance=inscricao)
+        form = form_class(instance=inscricao)
 
     return render(
         request,
         'inscricoes/editar_matricula.html',
         {
             'form': form,
-            'inscricao': inscricao
+            'inscricao': inscricao,
+            'base_template': 'inscricoes/admin_base.html' if request.user.is_staff else 'inscricoes/base.html',
+            'current_admin_page': 'inscricoes' if request.user.is_staff else None,
         }
     )
 
@@ -623,65 +863,12 @@ def calendario_aulas(request):
 
         return redirect('listar_inscricoes')
 
-    hoje = date.today()
-
-    try:
-
-        ano = int(request.GET.get('ano', hoje.year))
-        mes = int(request.GET.get('mes', hoje.month))
-
-        if mes < 1 or mes > 12:
-
-            raise ValueError
-
-    except (TypeError, ValueError):
-
-        ano = hoje.year
-        mes = hoje.month
+    hoje, ano, mes, mes_anterior, proximo_mes = _parametros_calendario(request)
 
     primeiro_dia = date(ano, mes, 1)
     _, ultimo_dia = calendar.monthrange(ano, mes)
 
-    if mes == 1:
-
-        mes_anterior = {'ano': ano - 1, 'mes': 12}
-
-    else:
-
-        mes_anterior = {'ano': ano, 'mes': mes - 1}
-
-    if mes == 12:
-
-        proximo_mes = {'ano': ano + 1, 'mes': 1}
-
-    else:
-
-        proximo_mes = {'ano': ano, 'mes': mes + 1}
-
-    aulas = Aula.objects.filter(
-        data__year=ano,
-        data__month=mes
-    ).order_by('data', 'horario')
-
-    aulas_por_dia = {}
-
-    for aula in aulas:
-
-        aulas_por_dia.setdefault(aula.data.day, []).append(aula)
-
-    semanas = []
-
-    for semana in calendar.Calendar(firstweekday=6).monthdayscalendar(ano, mes):
-
-        semanas.append([
-            {
-                'numero': dia,
-                'data': date(ano, mes, dia) if dia else None,
-                'aulas': aulas_por_dia.get(dia, []),
-                'is_today': dia != 0 and date(ano, mes, dia) == hoje,
-            }
-            for dia in semana
-        ])
+    semanas, aulas = _semanas_do_calendario(ano, mes, hoje)
 
     return render(
         request,

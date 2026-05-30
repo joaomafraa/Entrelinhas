@@ -1,0 +1,60 @@
+{% load static %}
+
+<aside class="admin-sidebar student-sidebar">
+    <div class="admin-sidebar__top">
+        <a href="{% url 'dashboard_aluna' %}" class="admin-sidebar__brand">
+            <span class="brand-mark">E</span>
+            <span>
+                <strong>EntreLinhas</strong>
+                <small>Area da aluna</small>
+            </span>
+        </a>
+
+        <nav class="admin-sidebar__nav" aria-label="Menu da aluna">
+            <span class="admin-sidebar__label">Menu</span>
+
+            <a
+                href="{% url 'dashboard_aluna' %}?aba=visao-geral"
+                class="admin-sidebar__link {% if aba_ativa == 'visao-geral' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/overview.svg' %}" alt="">
+                </span>
+                <span>Visao geral</span>
+            </a>
+
+            <a
+                href="{% url 'dashboard_aluna' %}?aba=frequencia"
+                class="admin-sidebar__link {% if aba_ativa == 'frequencia' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/calendar.svg' %}" alt="">
+                </span>
+                <span>Frequencia</span>
+            </a>
+
+            <a
+                href="{% url 'dashboard_aluna' %}?aba=perfil"
+                class="admin-sidebar__link {% if aba_ativa == 'perfil' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/inscricoes.svg' %}" alt="">
+                </span>
+                <span>Perfil</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="admin-sidebar__user">
+        <span class="admin-sidebar__avatar">
+            {{ inscricao.nome|default:request.user.username|first|upper }}
+        </span>
+
+        <span class="admin-sidebar__user-text">
+            <strong>{{ inscricao.nome|default:request.user.username }}</strong>
+            <small>Aluna</small>
+        </span>
+
+        <a href="{% url 'sair' %}" class="admin-sidebar__logout" aria-label="Sair">Sair</a>
+    </div>
+</aside>

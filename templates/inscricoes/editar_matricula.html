@@ -1,13 +1,13 @@
-{% extends 'inscricoes/base.html' %}
+{% extends base_template|default:'inscricoes/base.html' %}
 
 {% block title %}Editar inscrição | EntreLinhas{% endblock %}
 
 {% block content %}
 
-<section class="page-section">
-    <div class="container layout-narrow">
+<section class="{% if current_admin_page %}admin-page{% else %}page-section{% endif %}">
+    <div class="{% if current_admin_page %}admin-content{% else %}container layout-narrow{% endif %}">
         <div class="card shadow p-4">
-            <span class="section-label">Curso Costurando Sonhos</span>
+            <span class="section-label">{% if current_admin_page %}Painel administrativo{% else %}Curso Costurando Sonhos{% endif %}</span>
             <h2 class="mt-2 mb-4">Editar inscrição</h2>
 
             <form method="POST">

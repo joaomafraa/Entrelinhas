@@ -1,0 +1,194 @@
+{% extends 'inscricoes/student_base.html' %}
+
+{% block title %}Area da Aluna | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page student-dashboard">
+    <div class="admin-page-header">
+        <div>
+            <span class="section-label">Area da aluna</span>
+            <h1>Ola, {{ inscricao.nome }}</h1>
+            <p class="text-soft mb-0">Sua matricula no curso Costurando Sonhos esta aprovada.</p>
+        </div>
+    </div>
+
+    {% if aba_ativa == 'visao-geral' %}
+        <section class="student-overview-grid">
+            <article class="student-frequency-card">
+                <span>Frequencia</span>
+                <strong>{{ frequencia }}%</strong>
+                <small>{{ presencas_confirmadas }} presenca(s) em {{ aulas_registradas }} aula(s) registrada(s)</small>
+            </article>
+
+            <article class="admin-overview-panel student-next-classes">
+                <div>
+                    <h2>Proximas aulas</h2>
+                    <p class="text-soft mb-0">Datas e horarios dos proximos encontros.</p>
+                </div>
+
+                <div class="student-class-list">
+                    {% for aula in proximas_aulas %}
+                        <span>{{ aula.data|date:"d/m/Y" }} as {{ aula.horario|time:"H:i" }}{% if aula.topico %} - {{ aula.topico }}{% endif %}</span>
+                    {% empty %}
+                        <span>Nenhuma aula futura cadastrada.</span>
+                    {% endfor %}
+                </div>
+            </article>
+        </section>
+    {% endif %}
+
+    {% if aba_ativa == 'frequencia' %}
+    <section class="student-section">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Frequencia</span>
+                <h2>Calendario de presencas</h2>
+                <p class="text-soft mb-0">Verde indica presenca registrada; vermelho indica falta registrada.</p>
+            </div>
+        </div>
+
+        <div class="admin-stat-grid">
+            <article class="admin-stat-card">
+                <span>Total de aulas</span>
+                <strong>{{ aulas_registradas }}</strong>
+            </article>
+
+            <article class="admin-stat-card">
+                <span>Presencas</span>
+                <strong>{{ presencas_confirmadas }}</strong>
+            </article>
+
+            <article class="admin-stat-card">
+                <span>Faltas</span>
+                <strong>{{ faltas }}</strong>
+            </article>
+
+            <article class="admin-stat-card">
+                <span>Frequencia</span>
+                <strong>{{ frequencia }}%</strong>
+            </article>
+        </div>
+
+        <div class="calendar-toolbar">
+            <a
+                class="admin-page-button"
+                href="?aba=frequencia&ano={{ mes_anterior.ano }}&mes={{ mes_anterior.mes }}"
+            >
+                Anterior
+            </a>
+
+            <strong>{{ nome_mes }} {{ ano }}</strong>
+
+            <a
+                class="admin-page-button"
+                href="?aba=frequencia&ano={{ proximo_mes.ano }}&mes={{ proximo_mes.mes }}"
+            >
+                Proximo
+            </a>
+        </div>
+
+        <div class="admin-calendar-wrap">
+            <div class="admin-calendar student-frequency-calendar">
+                <div class="admin-calendar__weekday">Dom</div>
+                <div class="admin-calendar__weekday">Seg</div>
+                <div class="admin-calendar__weekday">Ter</div>
+                <div class="admin-calendar__weekday">Qua</div>
+                <div class="admin-calendar__weekday">Qui</div>
+                <div class="admin-calendar__weekday">Sex</div>
+                <div class="admin-calendar__weekday">Sab</div>
+
+                {% for semana in semanas %}
+                    {% for dia in semana %}
+                        <div class="admin-calendar__day {% if not dia.numero %}admin-calendar__day--empty{% endif %} {% if dia.is_today %}admin-calendar__day--today{% endif %} {% if dia.status_frequencia == 'presenca' %}student-calendar-day--present{% elif dia.status_frequencia == 'falta' %}student-calendar-day--absent{% endif %}">
+                            {% if dia.numero %}
+                                <div class="admin-calendar__date">{{ dia.numero }}</div>
+
+                                <div class="admin-calendar__items">
+                                    {% for aula in dia.aulas %}
+                                        <article class="admin-calendar__item student-calendar-item student-calendar-item--{{ aula.status_frequencia }}">
+                                            <strong>{{ aula.horario|time:"H:i" }}</strong>
+                                            <span>{{ aula.topico|default:"Aula sem topico" }}</span>
+
+                                            {% if aula.status_frequencia == 'presenca' %}
+                                                <small>Presenca</small>
+                                            {% elif aula.status_frequencia == 'falta' %}
+                                                <small>Falta</small>
+                                            {% else %}
+                                                <small>Sem registro</small>
+                                            {% endif %}
+                                        </article>
+                                    {% empty %}
+                                        <span class="admin-calendar__empty-label">Sem aulas</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if aba_ativa == 'perfil' %}
+    <section class="student-section">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Perfil</span>
+                <h2>Dados pessoais</h2>
+                <p class="text-soft mb-0">Informacoes cadastradas na sua matricula.</p>
+            </div>
+        </div>
+
+        <div class="student-profile-grid">
+            <article>
+                <span>Nome</span>
+                <strong>{{ inscricao.nome }}</strong>
+            </article>
+
+            <article>
+                <span>Email</span>
+                <strong>{{ inscricao.email }}</strong>
+            </article>
+
+            <article>
+                <span>CPF</span>
+                <strong>{{ inscricao.cpf_formatado|default:"-" }}</strong>
+            </article>
+
+            <article>
+                <span>Data de nascimento</span>
+                <strong>{{ inscricao.data_nascimento|date:"d/m/Y"|default:"-" }}</strong>
+            </article>
+
+            <article>
+                <span>Idade</span>
+                <strong>{% if inscricao.idade is not None %}{{ inscricao.idade }} anos{% else %}-{% endif %}</strong>
+            </article>
+
+            <article>
+                <span>Telefone</span>
+                <strong>{{ inscricao.telefone }}</strong>
+            </article>
+
+            <article>
+                <span>Disponibilidade</span>
+                <strong>{{ inscricao.get_disponibilidade_display }}</strong>
+            </article>
+
+            <article>
+                <span>Status</span>
+                <strong>{{ inscricao.get_status_display }}</strong>
+            </article>
+
+            <article class="student-profile-grid__wide">
+                <span>Observacoes</span>
+                <strong>{{ inscricao.observacoes|default:"-" }}</strong>
+            </article>
+        </div>
+    </section>
+    {% endif %}
+</section>
+
+{% endblock %}

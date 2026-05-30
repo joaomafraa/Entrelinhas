@@ -2,9 +2,11 @@ from django.urls import path
 
 from .views import (
     dashboard_admin,
+    dashboard_aluna,
     criar_inscricao,
     sucesso,
     listar_inscricoes,
+    atualizar_status_inscricao,
     confirmar_exclusao_inscricoes,
     excluir_inscricoes,
     detalhes_inscricao,
@@ -28,6 +30,12 @@ urlpatterns = [
     ),
 
     path(
+        'area-aluna/',
+        dashboard_aluna,
+        name='dashboard_aluna'
+    ),
+
+    path(
         '',
         criar_inscricao,
         name='criar_inscricao'
@@ -43,6 +51,12 @@ urlpatterns = [
         'inscricoes/',
         listar_inscricoes,
         name='listar_inscricoes'
+    ),
+
+    path(
+        'inscricoes/<int:id>/status/',
+        atualizar_status_inscricao,
+        name='atualizar_status_inscricao'
     ),
 
     path(

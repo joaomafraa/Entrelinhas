@@ -645,6 +645,39 @@ footer,
     border: 1px solid #efbbbb;
 }
 
+.status-select {
+    min-width: 8.2rem;
+    padding: 0.32rem 2rem 0.32rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.status-select:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+.status-select--pendente {
+    color: #7b4c0b;
+    background-color: #fff0d9;
+    border: 1px solid #f0cc9b;
+}
+
+.status-select--aprovada {
+    color: #35714f;
+    background-color: #e9f4ee;
+    border: 1px solid #b9d7c6;
+}
+
+.status-select--recusada {
+    color: #bd3f3f;
+    background-color: #fde7e7;
+    border: 1px solid #efbbbb;
+}
+
 .admin-actions {
     display: flex;
     justify-content: flex-end;
@@ -1022,4 +1055,152 @@ footer,
 .admin-calendar__empty-label {
     color: var(--muted-foreground);
     font-size: 0.9rem;
+}
+
+.student-dashboard .admin-page-header {
+    margin-bottom: 0;
+    scroll-margin-top: 1rem;
+}
+
+.student-shell .admin-sidebar__brand small {
+    color: var(--muted-foreground);
+}
+
+.student-sidebar .admin-sidebar__user {
+    background: #ffffff;
+}
+
+.student-dashboard .admin-overview-panel {
+    align-items: flex-start;
+}
+
+.student-section {
+    display: grid;
+    gap: 1.5rem;
+    scroll-margin-top: 1rem;
+}
+
+.student-overview-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
+    gap: 1rem;
+}
+
+.student-frequency-card {
+    display: grid;
+    gap: 0.75rem;
+    min-height: 100%;
+    padding: 1.5rem;
+    color: var(--primary-foreground);
+    background: var(--primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.student-frequency-card span,
+.student-frequency-card small {
+    color: rgba(255, 255, 255, 0.82);
+    font-weight: 700;
+}
+
+.student-frequency-card strong {
+    align-self: end;
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.student-next-classes {
+    margin: 0;
+}
+
+.student-class-list {
+    display: grid;
+    gap: 0.5rem;
+    min-width: min(100%, 26rem);
+    color: var(--foreground);
+    font-weight: 700;
+}
+
+.student-class-list span {
+    display: block;
+    padding: 0.7rem 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.student-calendar-day--present {
+    background: #edf8f1;
+}
+
+.student-calendar-day--absent {
+    background: #fff0f0;
+}
+
+.student-calendar-item {
+    border-width: 2px;
+}
+
+.student-calendar-item small {
+    color: var(--muted-foreground);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.student-calendar-item--presenca {
+    background: #f2fbf5;
+    border-color: #8fc7a5;
+}
+
+.student-calendar-item--presenca strong,
+.student-calendar-item--presenca small {
+    color: #2f6f4d;
+}
+
+.student-calendar-item--falta {
+    background: #fff5f5;
+    border-color: #e6a1a1;
+}
+
+.student-calendar-item--falta strong,
+.student-calendar-item--falta small {
+    color: #bd3f3f;
+}
+
+.student-calendar-item--neutro {
+    background: #ffffff;
+}
+
+.student-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.student-profile-grid article {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.student-profile-grid span {
+    color: var(--muted-foreground);
+    font-size: 0.86rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.student-profile-grid strong {
+    color: var(--foreground);
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.student-profile-grid__wide {
+    grid-column: 1 / -1;
 }

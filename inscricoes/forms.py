@@ -341,6 +341,29 @@ class InscricaoForm(forms.ModelForm):
         return telefone_normalizado
 
 
+class AdminInscricaoForm(InscricaoForm):
+
+    class Meta(InscricaoForm.Meta):
+
+        fields = InscricaoForm.Meta.fields + [
+            'status',
+        ]
+
+        labels = {
+            **InscricaoForm.Meta.labels,
+            'status': 'Status da matricula',
+        }
+
+        widgets = {
+            **InscricaoForm.Meta.widgets,
+            'status': forms.Select(
+                attrs={
+                    'class': 'form-select'
+                }
+            ),
+        }
+
+
 class AulaForm(forms.ModelForm):
 
     class Meta:

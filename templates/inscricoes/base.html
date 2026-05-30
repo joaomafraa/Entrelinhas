@@ -18,7 +18,7 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'css/main.css' %}?v=8"
+        href="{% static 'css/main.css' %}?v=11"
     >
 
 </head>
@@ -60,7 +60,7 @@
                     </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'listar_inscricoes' %}">Área da Aluna</a>
+                            <a class="nav-link" href="{% url 'dashboard_aluna' %}">Área da Aluna</a>
                         </li>
                     {% endif %}
                 </ul>
