@@ -73,6 +73,15 @@ class Inscricao(models.Model):
         auto_now_add=True
     )
 
+    certificado_liberado = models.BooleanField(
+        default=False
+    )
+
+    certificado_liberado_em = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     @property
     def idade(self):
 
