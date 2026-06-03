@@ -188,6 +188,10 @@
             </article>
         </div>
     </section>
+    {% if curso_concluido %}
+        <a href="{% url 'liberar_certificado' %}">
+            Ver certificado
+        </a>
     {% endif %}
 </section>
 

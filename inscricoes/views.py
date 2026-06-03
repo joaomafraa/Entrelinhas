@@ -345,6 +345,7 @@ def dashboard_aluna(request):
             'faltas': faltas,
             'frequencia': frequencia,
             'proximas_aulas': proximas_aulas,
+            'curso_concluido': inscricao.concluiu_curso(),
         }
     )
 
@@ -937,5 +938,30 @@ def registrar_presenca(request, id):
             'aula': aula,
             'alunas': alunas,
             'current_admin_page': 'aulas',
+        }
+    )
+
+@login_required
+def liberar_certificado(request):
+
+    inscricao = _inscricao_aprovada_do_usuario(request.user)
+
+    if not inscricao:
+        return redirect('listar_inscricoes')
+
+    if not inscricao.concluiu_curso():
+
+        messages.warning(
+            request,
+            'Certificado ainda não disponível. Você precisa concluir o curso.'
+        )
+
+        return redirect('dashboard_aluna')
+
+    return render(
+        request,
+        'inscricoes/certificado.html',
+        {
+            'inscricao': inscricao
         }
     )
