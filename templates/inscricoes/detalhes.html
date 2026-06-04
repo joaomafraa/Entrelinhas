@@ -29,6 +29,32 @@
                 <a href="{% url 'listar_inscricoes' %}" class="btn btn-outline-secondary">Voltar</a>
             </div>
         </div>
+
+        {% if request.user.is_staff %}
+        <div class="card shadow p-4 mt-4">
+            <span class="section-label">Certificado</span>
+
+            {% if inscricao.certificado_liberado %}
+                <p class="mt-2 mb-0">
+                    Certificado liberado em
+                    {{ inscricao.certificado_liberado_em|date:"d/m/Y H:i" }}.
+                </p>
+
+            {% elif inscricao.concluiu_curso %}
+                <p class="mt-2 mb-3">A aluna atende aos critérios de conclusão do curso.</p>
+                <form method="post" action="{% url 'liberar_certificado' inscricao.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'detalhes_inscricao' inscricao.id %}">
+                    <button type="submit" class="btn btn-success">Liberar certificado</button>
+                </form>
+
+            {% else %}
+                <p class="mt-2 mb-0 text-muted">
+                    A aluna ainda não atende aos critérios para receber o certificado.
+                </p>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </section>
 

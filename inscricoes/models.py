@@ -73,6 +73,15 @@ class Inscricao(models.Model):
         auto_now_add=True
     )
 
+    certificado_liberado = models.BooleanField(
+        default=False
+    )
+
+    certificado_liberado_em = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
     @property
     def idade(self):
 
@@ -102,6 +111,26 @@ class Inscricao(models.Model):
 
     def __str__(self):
         return self.nome
+    
+    def concluiu_curso(self):
+
+        if self.status != 'aprovada':
+            return False
+
+        total_aulas = self.presenca_set.count()
+
+        if total_aulas == 0:
+            return False
+
+        presencas_confirmadas = self.presenca_set.filter(
+            presente=True
+        ).count()
+
+        frequencia = (
+            presencas_confirmadas / total_aulas
+        ) * 100
+
+        return frequencia >= 75
 
 
 class Aula(models.Model):

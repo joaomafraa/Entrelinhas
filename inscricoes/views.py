@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
@@ -345,6 +346,7 @@ def dashboard_aluna(request):
             'faltas': faltas,
             'frequencia': frequencia,
             'proximas_aulas': proximas_aulas,
+            'curso_concluido': inscricao.concluiu_curso(),
         }
     )
 
@@ -505,6 +507,46 @@ def atualizar_status_inscricao(request, id):
     messages.success(
         request,
         'Status da matricula atualizado com sucesso.'
+    )
+
+    return redirect(redirect_to)
+
+
+@login_required
+@require_POST
+def liberar_certificado(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    inscricao = get_object_or_404(Inscricao, id=id)
+    redirect_to = request.POST.get('next') or reverse('detalhes_inscricao', args=[inscricao.id])
+
+    if not url_has_allowed_host_and_scheme(
+        redirect_to,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure()
+    ):
+
+        redirect_to = reverse('detalhes_inscricao', args=[inscricao.id])
+
+    if not inscricao.concluiu_curso():
+
+        messages.warning(
+            request,
+            'A aluna ainda nao atende aos criterios para receber o certificado.'
+        )
+
+        return redirect(redirect_to)
+
+    inscricao.certificado_liberado = True
+    inscricao.certificado_liberado_em = timezone.now()
+    inscricao.save(update_fields=['certificado_liberado', 'certificado_liberado_em'])
+
+    messages.success(
+        request,
+        'Certificado liberado com sucesso.'
     )
 
     return redirect(redirect_to)

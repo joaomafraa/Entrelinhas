@@ -19,6 +19,7 @@ from .views import (
     excluir_aulas,
     calendario_aulas,
     registrar_presenca,
+    liberar_certificado,
 )
 
 urlpatterns = [
@@ -129,5 +130,11 @@ urlpatterns = [
         'aulas/<int:id>/presenca/',
         registrar_presenca,
         name='registrar_presenca'
+    ),
+    
+    path(
+        'certificado/',
+        liberar_certificado,
+        name='liberar_certificado'
     ),
 ]
