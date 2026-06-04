@@ -605,6 +605,47 @@ footer,
     border-radius: 0.2rem;
 }
 
+.certificate-upload-form {
+    display: grid;
+    grid-template-columns: 2.75rem auto;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.certificate-upload-input {
+    display: none;
+}
+
+.certificate-upload-button {
+    display: inline-grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    margin: 0;
+    background: #ffffff;
+    border: 1px solid #2f3437;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.certificate-upload-button img {
+    display: block;
+    width: 1.35rem;
+    height: 1.35rem;
+}
+
+.certificate-upload-button:hover,
+.certificate-upload-button:focus {
+    background: #2f3437;
+    border-color: #2f3437;
+}
+
+.certificate-upload-button:hover img,
+.certificate-upload-button:focus img {
+    filter: brightness(0) invert(1);
+}
+
 .admin-id {
     color: var(--foreground);
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

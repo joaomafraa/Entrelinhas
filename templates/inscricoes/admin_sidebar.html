@@ -42,6 +42,16 @@
                 </span>
                 <span>Aulas</span>
             </a>
+
+            <a
+                href="{% url 'listar_certificados' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'certificados' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/certificado.svg' %}" alt="">
+                </span>
+                <span>Certificados</span>
+            </a>
         </nav>
     </div>
 

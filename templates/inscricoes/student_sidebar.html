@@ -42,6 +42,16 @@
                 </span>
                 <span>Perfil</span>
             </a>
+
+            <a
+                href="{% url 'dashboard_aluna' %}?aba=certificados"
+                class="admin-sidebar__link {% if aba_ativa == 'certificados' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/certificado.svg' %}" alt="">
+                </span>
+                <span>Certificados</span>
+            </a>
         </nav>
     </div>
 

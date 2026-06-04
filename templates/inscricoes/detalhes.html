@@ -39,14 +39,15 @@
                     Certificado liberado em
                     {{ inscricao.certificado_liberado_em|date:"d/m/Y H:i" }}.
                 </p>
+                {% if inscricao.certificado_arquivo %}
+                    <a href="{% url 'baixar_certificado_admin' inscricao.id %}" class="btn btn-outline-primary mt-3">
+                        Baixar certificado
+                    </a>
+                {% endif %}
 
             {% elif inscricao.concluiu_curso %}
                 <p class="mt-2 mb-3">A aluna atende aos critérios de conclusão do curso.</p>
-                <form method="post" action="{% url 'liberar_certificado' inscricao.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{% url 'detalhes_inscricao' inscricao.id %}">
-                    <button type="submit" class="btn btn-success">Liberar certificado</button>
-                </form>
+                <a href="{% url 'listar_certificados' %}" class="btn btn-success">Anexar certificado</a>
 
             {% else %}
                 <p class="mt-2 mb-0 text-muted">

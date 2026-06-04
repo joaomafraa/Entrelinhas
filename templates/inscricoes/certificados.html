@@ -1,0 +1,103 @@
+{% extends 'inscricoes/admin_base.html' %}
+{% load static %}
+
+{% block title %}Certificados | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-page-header">
+        <div>
+            <span class="section-label">Painel administrativo</span>
+            <h1>Certificados</h1>
+            <p class="text-soft mb-0">Anexe e libere certificados para alunas que concluiram o curso.</p>
+        </div>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Aluna</th>
+                    <th>Email</th>
+                    <th>Conclusao</th>
+                    <th>Certificado</th>
+                    <th>Arquivo</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for inscricao in inscricoes %}
+                    <tr>
+                        <td class="admin-student">{{ inscricao.nome }}</td>
+                        <td>{{ inscricao.email }}</td>
+                        <td>
+                            {% if inscricao.concluiu_curso %}
+                                <span class="status-chip status-chip--aprovada">Concluiu</span>
+                            {% else %}
+                                <span class="status-chip status-chip--pendente">Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if inscricao.certificado_liberado and inscricao.certificado_arquivo %}
+                                <a href="{% url 'baixar_certificado_admin' inscricao.id %}" class="admin-page-button">
+                                    Baixar atual
+                                </a>
+                            {% else %}
+                                <span class="text-soft">Nao liberado</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if inscricao.concluiu_curso %}
+                                <form method="post" action="{% url 'upload_certificado' inscricao.id %}" enctype="multipart/form-data" class="certificate-upload-form">
+                                    {% csrf_token %}
+                                    <label class="certificate-upload-button" for="certificado-{{ inscricao.id }}" title="Anexar certificado">
+                                        <img src="{% static 'assets/icons/plus-certificado.svg' %}" alt="">
+                                    </label>
+                                    <input
+                                        id="certificado-{{ inscricao.id }}"
+                                        class="certificate-upload-input"
+                                        type="file"
+                                        name="certificado_arquivo"
+                                        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                                        required
+                                        hidden
+                                    >
+                                    <button type="submit" class="admin-page-button">Liberar certificado</button>
+                                </form>
+                            {% else %}
+                                <span class="text-soft">Aguardando criterios de conclusao.</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-soft py-4">
+                            Nenhuma aluna aprovada encontrada.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-pagination">
+        <span>Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}</span>
+
+        <div class="admin-pagination__actions">
+            {% if page_obj.has_previous %}
+                <a class="admin-page-button" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% else %}
+                <span class="admin-page-button admin-page-button--disabled">Anterior</span>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a class="admin-page-button" href="?page={{ page_obj.next_page_number }}">Proxima</a>
+            {% else %}
+                <span class="admin-page-button admin-page-button--disabled">Proxima</span>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
