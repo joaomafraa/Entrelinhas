@@ -1,4 +1,5 @@
 import calendar
+import mimetypes
 from datetime import date
 
 from django.contrib import messages
@@ -6,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -16,6 +18,7 @@ from .forms import (
     AdminInscricaoForm,
     AulaForm,
     CadastroForm,
+    CertificadoUploadForm,
     InscricaoForm,
     LoginForm,
     normalizar_cpf,
@@ -262,6 +265,33 @@ def dashboard_admin(request):
 
 
 @login_required
+def listar_certificados(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    inscricoes = Inscricao.objects.filter(
+        status='aprovada'
+    ).order_by('nome')
+    paginator = Paginator(inscricoes, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(
+        request,
+        'inscricoes/certificados.html',
+        {
+            'current_admin_page': 'certificados',
+            'inscricoes': page_obj.object_list,
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+        }
+    )
+
+
+@login_required
 def dashboard_aluna(request):
 
     if request.user.is_staff:
@@ -274,80 +304,91 @@ def dashboard_aluna(request):
 
         return redirect('listar_inscricoes')
 
-    abas_validas = {'visao-geral', 'frequencia', 'perfil'}
+    abas_validas = {'visao-geral', 'frequencia', 'perfil', 'certificados'}
     aba_ativa = request.GET.get('aba', 'visao-geral')
 
     if aba_ativa not in abas_validas:
 
         aba_ativa = 'visao-geral'
 
-    hoje, ano, mes, mes_anterior, proximo_mes = _parametros_calendario(request)
-    semanas, aulas_mes = _semanas_do_calendario(ano, mes, hoje)
-
+    hoje = date.today()
     presencas = Presenca.objects.filter(
         inscricao=inscricao,
         aula__data__lte=hoje
     )
-    presencas_por_aula = {
-        presenca.aula_id: presenca.presente
-        for presenca in Presenca.objects.filter(inscricao=inscricao)
-    }
-
-    for semana in semanas:
-
-        for dia in semana:
-
-            status_do_dia = ''
-
-            for aula in dia['aulas']:
-
-                presenca = presencas_por_aula.get(aula.id)
-
-                if presenca is True:
-
-                    aula.status_frequencia = 'presenca'
-
-                    if status_do_dia != 'falta':
-
-                        status_do_dia = 'presenca'
-
-                elif presenca is False:
-
-                    aula.status_frequencia = 'falta'
-                    status_do_dia = 'falta'
-
-                else:
-
-                    aula.status_frequencia = 'neutro'
-
-            dia['status_frequencia'] = status_do_dia
-
     aulas_registradas = presencas.count()
     presencas_confirmadas = presencas.filter(presente=True).count()
     faltas = presencas.filter(presente=False).count()
     frequencia = round((presencas_confirmadas / aulas_registradas) * 100) if aulas_registradas else 0
 
-    proximas_aulas = Aula.objects.filter(data__gte=hoje).order_by('data', 'horario')[:5]
+    contexto = {
+        'inscricao': inscricao,
+        'aba_ativa': aba_ativa,
+        'aulas_registradas': aulas_registradas,
+        'presencas_confirmadas': presencas_confirmadas,
+        'faltas': faltas,
+        'frequencia': frequencia,
+        'curso_concluido': inscricao.concluiu_curso(),
+    }
+
+    if aba_ativa == 'visao-geral':
+
+        contexto['proximas_aulas'] = Aula.objects.filter(
+            data__gte=hoje
+        ).order_by('data', 'horario')[:5]
+
+    if aba_ativa == 'frequencia':
+
+        hoje, ano, mes, mes_anterior, proximo_mes = _parametros_calendario(request)
+        semanas, _ = _semanas_do_calendario(ano, mes, hoje)
+        presencas_por_aula = {
+            presenca.aula_id: presenca.presente
+            for presenca in Presenca.objects.filter(inscricao=inscricao)
+        }
+
+        for semana in semanas:
+
+            for dia in semana:
+
+                status_do_dia = ''
+
+                for aula in dia['aulas']:
+
+                    presenca = presencas_por_aula.get(aula.id)
+
+                    if presenca is True:
+
+                        aula.status_frequencia = 'presenca'
+
+                        if status_do_dia != 'falta':
+
+                            status_do_dia = 'presenca'
+
+                    elif presenca is False:
+
+                        aula.status_frequencia = 'falta'
+                        status_do_dia = 'falta'
+
+                    else:
+
+                        aula.status_frequencia = 'neutro'
+
+                dia['status_frequencia'] = status_do_dia
+
+        contexto.update(
+            {
+                'semanas': semanas,
+                'nome_mes': MESES[mes],
+                'ano': ano,
+                'mes_anterior': mes_anterior,
+                'proximo_mes': proximo_mes,
+            }
+        )
 
     return render(
         request,
         'inscricoes/dashboard_aluna.html',
-        {
-            'inscricao': inscricao,
-            'aba_ativa': aba_ativa,
-            'semanas': semanas,
-            'nome_mes': MESES[mes],
-            'ano': ano,
-            'mes_anterior': mes_anterior,
-            'proximo_mes': proximo_mes,
-            'total_aulas_mes': aulas_mes.count(),
-            'aulas_registradas': aulas_registradas,
-            'presencas_confirmadas': presencas_confirmadas,
-            'faltas': faltas,
-            'frequencia': frequencia,
-            'proximas_aulas': proximas_aulas,
-            'curso_concluido': inscricao.concluiu_curso(),
-        }
+        contexto
     )
 
 
@@ -540,6 +581,15 @@ def liberar_certificado(request, id):
 
         return redirect(redirect_to)
 
+    if not inscricao.certificado_arquivo:
+
+        messages.warning(
+            request,
+            'Anexe o arquivo do certificado antes de liberar para a aluna.'
+        )
+
+        return redirect('listar_certificados')
+
     inscricao.certificado_liberado = True
     inscricao.certificado_liberado_em = timezone.now()
     inscricao.save(update_fields=['certificado_liberado', 'certificado_liberado_em'])
@@ -550,6 +600,115 @@ def liberar_certificado(request, id):
     )
 
     return redirect(redirect_to)
+
+
+@login_required
+@require_POST
+def upload_certificado(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    inscricao = get_object_or_404(
+        Inscricao,
+        id=id,
+        status='aprovada'
+    )
+
+    if not inscricao.concluiu_curso():
+
+        messages.warning(
+            request,
+            'A aluna ainda nao atende aos criterios para receber o certificado.'
+        )
+
+        return redirect('listar_certificados')
+
+    form = CertificadoUploadForm(
+        request.POST,
+        request.FILES,
+        instance=inscricao
+    )
+
+    if form.is_valid():
+
+        inscricao = form.save(commit=False)
+        inscricao.certificado_liberado = True
+        inscricao.certificado_liberado_em = timezone.now()
+        inscricao.save(
+            update_fields=[
+                'certificado_arquivo',
+                'certificado_liberado',
+                'certificado_liberado_em',
+            ]
+        )
+
+        messages.success(
+            request,
+            'Certificado anexado e liberado com sucesso.'
+        )
+
+    else:
+
+        messages.warning(
+            request,
+            form.errors.get('certificado_arquivo', ['Nao foi possivel anexar o certificado.'])[0]
+        )
+
+    return redirect('listar_certificados')
+
+
+@login_required
+def baixar_certificado(request, id=None):
+
+    if id is not None:
+
+        inscricao = get_object_or_404(Inscricao, id=id)
+        usuario_da_inscricao = inscricao.user_id == request.user.id
+        email_da_inscricao = bool(request.user.email and inscricao.email == request.user.email)
+
+        if not request.user.is_staff and not (usuario_da_inscricao or email_da_inscricao):
+
+            return redirect('dashboard_aluna')
+
+    else:
+
+        inscricao = _inscricao_aprovada_do_usuario(request.user)
+
+        if not inscricao:
+
+            return redirect('listar_inscricoes')
+
+    if not inscricao.certificado_liberado or not inscricao.certificado_arquivo:
+
+        messages.warning(
+            request,
+            'O certificado ainda nao esta disponivel para download.'
+        )
+
+        if request.user.is_staff:
+
+            return redirect('listar_certificados')
+
+        return redirect('dashboard_aluna')
+
+    try:
+
+        arquivo = inscricao.certificado_arquivo.open('rb')
+
+    except FileNotFoundError as exc:
+
+        raise Http404('Arquivo do certificado nao encontrado.') from exc
+
+    content_type, _ = mimetypes.guess_type(inscricao.certificado_arquivo.name)
+
+    return FileResponse(
+        arquivo,
+        as_attachment=True,
+        filename=inscricao.certificado_arquivo.name.split('/')[-1],
+        content_type=content_type or 'application/octet-stream'
+    )
 
 
 @login_required

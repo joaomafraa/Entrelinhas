@@ -7,6 +7,9 @@ from .models import Inscricao, Aula
 
 User = get_user_model()
 
+CERTIFICADO_EXTENSOES_PERMITIDAS = {'.pdf', '.jpg', '.jpeg', '.png'}
+CERTIFICADO_TAMANHO_MAXIMO = 10 * 1024 * 1024
+
 
 def normalizar_cpf(cpf):
 
@@ -362,6 +365,50 @@ class AdminInscricaoForm(InscricaoForm):
                 }
             ),
         }
+
+
+class CertificadoUploadForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Inscricao
+
+        fields = [
+            'certificado_arquivo',
+        ]
+
+        labels = {
+            'certificado_arquivo': 'Arquivo do certificado',
+        }
+
+        widgets = {
+            'certificado_arquivo': forms.ClearableFileInput(
+                attrs={
+                    'class': 'form-control',
+                    'accept': '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+                }
+            ),
+        }
+
+    def clean_certificado_arquivo(self):
+
+        arquivo = self.cleaned_data.get('certificado_arquivo')
+
+        if not arquivo:
+
+            raise forms.ValidationError('Anexe o arquivo do certificado.')
+
+        nome = arquivo.name.lower()
+
+        if not any(nome.endswith(extensao) for extensao in CERTIFICADO_EXTENSOES_PERMITIDAS):
+
+            raise forms.ValidationError('Envie um arquivo PDF, JPG, JPEG ou PNG.')
+
+        if arquivo.size > CERTIFICADO_TAMANHO_MAXIMO:
+
+            raise forms.ValidationError('O arquivo deve ter no maximo 10 MB.')
+
+        return arquivo
 
 
 class AulaForm(forms.ModelForm):

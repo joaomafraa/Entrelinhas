@@ -82,6 +82,12 @@ class Inscricao(models.Model):
         blank=True
     )
 
+    certificado_arquivo = models.FileField(
+        upload_to='certificados/',
+        blank=True,
+        null=True
+    )
+
     @property
     def idade(self):
 

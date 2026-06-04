@@ -6,6 +6,7 @@ from .views import (
     criar_inscricao,
     sucesso,
     listar_inscricoes,
+    listar_certificados,
     atualizar_status_inscricao,
     confirmar_exclusao_inscricoes,
     excluir_inscricoes,
@@ -20,6 +21,8 @@ from .views import (
     calendario_aulas,
     registrar_presenca,
     liberar_certificado,
+    upload_certificado,
+    baixar_certificado,
 )
 
 urlpatterns = [
@@ -52,6 +55,12 @@ urlpatterns = [
         'inscricoes/',
         listar_inscricoes,
         name='listar_inscricoes'
+    ),
+
+    path(
+        'certificados/',
+        listar_certificados,
+        name='listar_certificados'
     ),
 
     path(
@@ -133,8 +142,26 @@ urlpatterns = [
     ),
     
     path(
-        'certificado/',
+        'inscricoes/<int:id>/certificado/liberar/',
         liberar_certificado,
         name='liberar_certificado'
+    ),
+
+    path(
+        'inscricoes/<int:id>/certificado/upload/',
+        upload_certificado,
+        name='upload_certificado'
+    ),
+
+    path(
+        'inscricoes/<int:id>/certificado/baixar/',
+        baixar_certificado,
+        name='baixar_certificado_admin'
+    ),
+
+    path(
+        'certificado/baixar/',
+        baixar_certificado,
+        name='baixar_certificado'
     ),
 ]
