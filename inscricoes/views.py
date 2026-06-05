@@ -563,7 +563,8 @@ def liberar_certificado(request, id):
 
     inscricao.certificado_liberado = True
     inscricao.certificado_liberado_em = timezone.now()
-    inscricao.save(update_fields=['certificado_liberado', 'certificado_liberado_em'])
+    inscricao.curso_concluido = True
+    inscricao.save(update_fields=['certificado_liberado', 'certificado_liberado_em', 'curso_concluido'])
 
     messages.success(
         request,
@@ -600,6 +601,7 @@ def upload_certificado(request, id):
         inscricao.certificado_conteudo = arquivo.read()
         inscricao.certificado_liberado = True
         inscricao.certificado_liberado_em = timezone.now()
+        inscricao.curso_concluido = True
         inscricao.save(
             update_fields=[
                 'certificado_nome_arquivo',
@@ -607,6 +609,7 @@ def upload_certificado(request, id):
                 'certificado_conteudo',
                 'certificado_liberado',
                 'certificado_liberado_em',
+                'curso_concluido',
             ]
         )
 

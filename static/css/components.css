@@ -1248,35 +1248,91 @@ footer,
     background: #ffffff;
 }
 
-.student-profile-grid {
+.student-profile-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.6fr);
+    gap: 1.5rem;
+    align-items: stretch;
 }
 
-.student-profile-grid article {
-    display: grid;
-    gap: 0.35rem;
-    padding: 1rem;
+.student-profile-card,
+.student-profile-panel {
     background: #ffffff;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
 }
 
-.student-profile-grid span {
-    color: var(--muted-foreground);
-    font-size: 0.86rem;
-    font-weight: 800;
-    text-transform: uppercase;
+.student-profile-card {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: 1.25rem;
+    min-height: 26rem;
+    padding: 2rem;
+    text-align: center;
 }
 
-.student-profile-grid strong {
+.student-profile-avatar {
+    display: grid;
+    width: 7.5rem;
+    height: 7.5rem;
+    place-items: center;
+    color: var(--primary-foreground);
+    font-size: 3rem;
+    font-weight: 800;
+    background: var(--primary);
+    border-radius: 999px;
+}
+
+.student-profile-card h3,
+.student-profile-panel h3 {
+    margin: 0;
+    color: var(--foreground);
+}
+
+.student-profile-card p {
+    margin: 0.3rem 0 0;
+    color: var(--muted-foreground);
+    font-weight: 700;
+}
+
+.student-profile-panel {
+    display: grid;
+    gap: 1.6rem;
+    padding: 2rem;
+}
+
+.student-profile-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.student-profile-fields article {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.student-profile-fields span {
+    color: var(--foreground);
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.student-profile-fields strong {
+    min-height: 3.8rem;
+    padding: 1rem;
     color: var(--foreground);
     font-size: 1rem;
+    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), var(--shadow-sm);
     overflow-wrap: anywhere;
 }
 
-.student-profile-grid__wide {
+.student-profile-field--wide {
     grid-column: 1 / -1;
 }

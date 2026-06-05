@@ -145,6 +145,19 @@
     .student-overview-grid {
         grid-template-columns: 1fr;
     }
+
+    .student-profile-layout,
+    .student-profile-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .student-profile-card {
+        min-height: auto;
+    }
+
+    .student-profile-field--wide {
+        grid-column: auto;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1199.98px) {

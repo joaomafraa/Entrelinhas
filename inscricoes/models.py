@@ -73,6 +73,10 @@ class Inscricao(models.Model):
         auto_now_add=True
     )
 
+    curso_concluido = models.BooleanField(
+        default=False
+    )
+
     certificado_liberado = models.BooleanField(
         default=False
     )
@@ -168,7 +172,7 @@ class Inscricao(models.Model):
         if self.status != 'aprovada':
             return False
 
-        return self.frequencia_percentual >= 75
+        return self.curso_concluido or self.frequencia_percentual >= 75
 
 
 class Aula(models.Model):

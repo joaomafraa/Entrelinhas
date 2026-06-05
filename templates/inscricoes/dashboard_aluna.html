@@ -141,51 +141,72 @@
             </div>
         </div>
 
-        <div class="student-profile-grid">
-            <article>
-                <span>Nome</span>
-                <strong>{{ inscricao.nome }}</strong>
-            </article>
+        <div class="student-profile-layout">
+            <aside class="student-profile-card">
+                <span class="student-profile-avatar">
+                    {{ inscricao.nome|first|upper }}
+                </span>
 
-            <article>
-                <span>Email</span>
-                <strong>{{ inscricao.email }}</strong>
-            </article>
+                <div>
+                    <h3>{{ inscricao.nome }}</h3>
+                    <p>Aluna desde {{ inscricao.data_criacao|date:"Y" }}</p>
+                </div>
+            </aside>
 
-            <article>
-                <span>CPF</span>
-                <strong>{{ inscricao.cpf_formatado|default:"-" }}</strong>
-            </article>
+            <section class="student-profile-panel">
+                <h3>Dados pessoais</h3>
 
-            <article>
-                <span>Data de nascimento</span>
-                <strong>{{ inscricao.data_nascimento|date:"d/m/Y"|default:"-" }}</strong>
-            </article>
+                <div class="student-profile-fields">
+                    <article>
+                        <span>Nome completo</span>
+                        <strong>{{ inscricao.nome }}</strong>
+                    </article>
 
-            <article>
-                <span>Idade</span>
-                <strong>{% if inscricao.idade is not None %}{{ inscricao.idade }} anos{% else %}-{% endif %}</strong>
-            </article>
+                    <article>
+                        <span>CPF</span>
+                        <strong>{{ inscricao.cpf_formatado|default:"-" }}</strong>
+                    </article>
 
-            <article>
-                <span>Telefone</span>
-                <strong>{{ inscricao.telefone }}</strong>
-            </article>
+                    <article>
+                        <span>E-mail</span>
+                        <strong>{{ inscricao.email }}</strong>
+                    </article>
 
-            <article>
-                <span>Disponibilidade</span>
-                <strong>{{ inscricao.get_disponibilidade_display }}</strong>
-            </article>
+                    <article>
+                        <span>Celular</span>
+                        <strong>{{ inscricao.telefone }}</strong>
+                    </article>
 
-            <article>
-                <span>Status</span>
-                <strong>{{ inscricao.get_status_display }}</strong>
-            </article>
+                    <article>
+                        <span>Data de nascimento</span>
+                        <strong>{{ inscricao.data_nascimento|date:"d/m/Y"|default:"-" }}</strong>
+                    </article>
 
-            <article class="student-profile-grid__wide">
-                <span>Observacoes</span>
-                <strong>{{ inscricao.observacoes|default:"-" }}</strong>
-            </article>
+                    <article>
+                        <span>Idade</span>
+                        <strong>{% if inscricao.idade is not None %}{{ inscricao.idade }} anos{% else %}-{% endif %}</strong>
+                    </article>
+                </div>
+
+                <h3>Matricula</h3>
+
+                <div class="student-profile-fields student-profile-fields--compact">
+                    <article>
+                        <span>Disponibilidade</span>
+                        <strong>{{ inscricao.get_disponibilidade_display }}</strong>
+                    </article>
+
+                    <article>
+                        <span>Status</span>
+                        <strong>{{ inscricao.get_status_display }}</strong>
+                    </article>
+
+                    <article class="student-profile-field--wide">
+                        <span>Observacoes</span>
+                        <strong>{{ inscricao.observacoes|default:"-" }}</strong>
+                    </article>
+                </div>
+            </section>
         </div>
     </section>
     {% endif %}
