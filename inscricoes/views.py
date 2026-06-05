@@ -135,10 +135,6 @@ def _semanas_do_calendario(ano, mes, hoje):
 
 def home(request):
 
-    if request.user.is_authenticated and request.user.is_staff:
-
-        return redirect('dashboard_admin')
-
     return render(
         request,
         'inscricoes/home.html'
@@ -149,15 +145,7 @@ def login_plataforma(request):
 
     if request.user.is_authenticated:
 
-        if request.user.is_staff:
-
-            return redirect('dashboard_admin')
-
-        if _inscricao_aprovada_do_usuario(request.user):
-
-            return redirect('dashboard_aluna')
-
-        return redirect('listar_inscricoes')
+        return redirect('home')
 
     if request.method == 'POST':
 
@@ -167,15 +155,7 @@ def login_plataforma(request):
 
             login(request, form.user)
 
-            if form.user.is_staff:
-
-                return redirect('dashboard_admin')
-
-            if _inscricao_aprovada_do_usuario(form.user):
-
-                return redirect('dashboard_aluna')
-
-            return redirect('listar_inscricoes')
+            return redirect('home')
 
     else:
 
@@ -572,15 +552,6 @@ def liberar_certificado(request, id):
 
         redirect_to = reverse('detalhes_inscricao', args=[inscricao.id])
 
-    if not inscricao.concluiu_curso():
-
-        messages.warning(
-            request,
-            'A aluna ainda nao atende aos criterios para receber o certificado.'
-        )
-
-        return redirect(redirect_to)
-
     if not inscricao.certificado_conteudo:
 
         messages.warning(
@@ -615,15 +586,6 @@ def upload_certificado(request, id):
         id=id,
         status='aprovada'
     )
-
-    if not inscricao.concluiu_curso():
-
-        messages.warning(
-            request,
-            'A aluna ainda nao atende aos criterios para receber o certificado.'
-        )
-
-        return redirect('listar_certificados')
 
     form = CertificadoUploadForm(
         request.POST,

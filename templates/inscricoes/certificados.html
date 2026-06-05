@@ -29,7 +29,14 @@
             <tbody>
                 {% for inscricao in inscricoes %}
                     <tr>
-                        <td class="admin-student">{{ inscricao.nome }}</td>
+                        <td class="admin-student">
+                            <span class="certificate-student">
+                                <span>{{ inscricao.nome }}</span>
+                                <span class="frequency-chip frequency-chip--{{ inscricao.frequencia_classe }}">
+                                    {{ inscricao.frequencia_percentual }}%
+                                </span>
+                            </span>
+                        </td>
                         <td>{{ inscricao.email }}</td>
                         <td>
                             {% if inscricao.concluiu_curso %}
@@ -48,26 +55,22 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if inscricao.concluiu_curso %}
-                                <form method="post" action="{% url 'upload_certificado' inscricao.id %}" enctype="multipart/form-data" class="certificate-upload-form">
-                                    {% csrf_token %}
-                                    <label class="certificate-upload-button" for="certificado-{{ inscricao.id }}" title="Anexar certificado">
-                                        <img src="{% static 'assets/icons/plus-certificado.svg' %}" alt="">
-                                    </label>
-                                    <input
-                                        id="certificado-{{ inscricao.id }}"
-                                        class="certificate-upload-input"
-                                        type="file"
-                                        name="certificado_arquivo"
-                                        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-                                        required
-                                        hidden
-                                    >
-                                    <button type="submit" class="admin-page-button">Liberar certificado</button>
-                                </form>
-                            {% else %}
-                                <span class="text-soft">Aguardando criterios de conclusao.</span>
-                            {% endif %}
+                            <form method="post" action="{% url 'upload_certificado' inscricao.id %}" enctype="multipart/form-data" class="certificate-upload-form">
+                                {% csrf_token %}
+                                <label class="certificate-upload-button" for="certificado-{{ inscricao.id }}" title="Anexar certificado">
+                                    <img src="{% static 'assets/icons/plus-certificado.svg' %}" alt="">
+                                </label>
+                                <input
+                                    id="certificado-{{ inscricao.id }}"
+                                    class="certificate-upload-input"
+                                    type="file"
+                                    name="certificado_arquivo"
+                                    accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                                    required
+                                    hidden
+                                >
+                                <button type="submit" class="admin-page-button">Liberar certificado</button>
+                            </form>
                         </td>
                     </tr>
                 {% empty %}

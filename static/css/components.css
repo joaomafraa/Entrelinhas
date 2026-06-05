@@ -646,6 +646,41 @@ footer,
     filter: brightness(0) invert(1);
 }
 
+.certificate-student {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.frequency-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.4rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.frequency-chip--baixa {
+    color: #bd3f3f;
+    background: #fde7e7;
+    border: 1px solid #efbbbb;
+}
+
+.frequency-chip--media {
+    color: #7b4c0b;
+    background: #fff0d9;
+    border: 1px solid #f0cc9b;
+}
+
+.frequency-chip--alta {
+    color: #35714f;
+    background: #e9f4ee;
+    border: 1px solid #b9d7c6;
+}
+
 .admin-id {
     color: var(--foreground);
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;

@@ -130,6 +130,36 @@ class Inscricao(models.Model):
 
         return self.certificado_liberado and bool(self.certificado_conteudo)
 
+    @property
+    def frequencia_percentual(self):
+
+        total_aulas = self.presenca_set.count()
+
+        if total_aulas == 0:
+
+            return 0
+
+        presencas_confirmadas = self.presenca_set.filter(
+            presente=True
+        ).count()
+
+        return round((presencas_confirmadas / total_aulas) * 100)
+
+    @property
+    def frequencia_classe(self):
+
+        frequencia = self.frequencia_percentual
+
+        if frequencia < 50:
+
+            return 'baixa'
+
+        if frequencia <= 70:
+
+            return 'media'
+
+        return 'alta'
+
     def __str__(self):
         return self.nome
     
@@ -138,20 +168,7 @@ class Inscricao(models.Model):
         if self.status != 'aprovada':
             return False
 
-        total_aulas = self.presenca_set.count()
-
-        if total_aulas == 0:
-            return False
-
-        presencas_confirmadas = self.presenca_set.filter(
-            presente=True
-        ).count()
-
-        frequencia = (
-            presencas_confirmadas / total_aulas
-        ) * 100
-
-        return frequencia >= 75
+        return self.frequencia_percentual >= 75
 
 
 class Aula(models.Model):
