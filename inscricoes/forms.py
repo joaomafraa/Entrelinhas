@@ -2,13 +2,33 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils import timezone
 
-from .models import Inscricao, Aula
+from .models import Aula, Inscricao, Produto, Servico
 
 
 User = get_user_model()
 
 CERTIFICADO_EXTENSOES_PERMITIDAS = {'.pdf', '.jpg', '.jpeg', '.png'}
 CERTIFICADO_TAMANHO_MAXIMO = 10 * 1024 * 1024
+BAZAR_IMAGEM_EXTENSOES_PERMITIDAS = {'.jpg', '.jpeg', '.png', '.webp'}
+BAZAR_IMAGEM_TAMANHO_MAXIMO = 5 * 1024 * 1024
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+
+    def clean(self, data, initial=None):
+
+        files = data if isinstance(data, (list, tuple)) else [data] if data else []
+
+        return [
+            super(MultipleFileField, self).clean(file, initial)
+            for file in files
+            if file
+        ]
 
 
 def normalizar_cpf(cpf):
@@ -464,3 +484,118 @@ class AulaForm(forms.ModelForm):
             raise forms.ValidationError('A data da aula nao pode ser passada.')
 
         return data
+
+
+class BazarItemForm(forms.ModelForm):
+
+    imagem = MultipleFileField(
+        label='Imagens',
+        required=False,
+        widget=MultipleFileInput(
+            attrs={
+                'class': 'form-control',
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'multiple': True,
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.pk or not self.instance.tem_imagem:
+
+            self.fields['imagem'].required = True
+
+    def clean_preco(self):
+
+        preco = self.cleaned_data['preco']
+
+        if preco <= 0:
+
+            raise forms.ValidationError('Informe um valor maior que zero.')
+
+        return preco
+
+    def clean_imagem(self):
+
+        imagens = self.cleaned_data.get('imagem') or []
+
+        if not imagens:
+
+            if self.instance.pk and self.instance.tem_imagem:
+
+                return imagens
+
+            raise forms.ValidationError('Anexe pelo menos uma imagem.')
+
+        for imagem in imagens:
+
+            nome = imagem.name.lower()
+
+            if not any(nome.endswith(extensao) for extensao in BAZAR_IMAGEM_EXTENSOES_PERMITIDAS):
+
+                raise forms.ValidationError('Envie apenas imagens JPG, JPEG, PNG ou WEBP.')
+
+            if imagem.size > BAZAR_IMAGEM_TAMANHO_MAXIMO:
+
+                raise forms.ValidationError('Cada imagem deve ter no maximo 5 MB.')
+
+        return imagens
+
+
+class ProdutoForm(BazarItemForm):
+
+    class Meta:
+
+        model = Produto
+        fields = [
+            'nome',
+            'descricao',
+            'preco',
+            'categoria',
+            'ativo',
+        ]
+        labels = {
+            'nome': 'Nome',
+            'descricao': 'Descricao',
+            'preco': 'Valor',
+            'categoria': 'Categoria',
+            'ativo': 'Ativo',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Bolsa de tecido'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Descreva o produto'}),
+            'preco': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0.01'}),
+            'categoria': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Bolsas'}),
+            'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+class ServicoForm(BazarItemForm):
+
+    class Meta:
+
+        model = Servico
+        fields = [
+            'nome',
+            'descricao',
+            'preco',
+            'tipo',
+            'ativo',
+        ]
+        labels = {
+            'nome': 'Nome',
+            'descricao': 'Descricao',
+            'preco': 'Valor',
+            'tipo': 'Tipo de servico',
+            'ativo': 'Ativo',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Ajuste de roupa'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Descreva o servico'}),
+            'preco': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0.01'}),
+            'tipo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Costura'}),
+            'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

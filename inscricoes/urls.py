@@ -5,6 +5,16 @@ from .views import (
     dashboard_aluna,
     criar_inscricao,
     sucesso,
+    listar_produtos,
+    criar_produto,
+    editar_produto,
+    excluir_produto,
+    imagem_produto,
+    listar_servicos,
+    criar_servico,
+    editar_servico,
+    excluir_servico,
+    imagem_servico,
     listar_inscricoes,
     listar_certificados,
     atualizar_status_inscricao,
@@ -55,6 +65,66 @@ urlpatterns = [
         'inscricoes/',
         listar_inscricoes,
         name='listar_inscricoes'
+    ),
+
+    path(
+        'produtos/',
+        listar_produtos,
+        name='listar_produtos'
+    ),
+
+    path(
+        'produtos/novo/',
+        criar_produto,
+        name='criar_produto'
+    ),
+
+    path(
+        'produtos/<int:id>/editar/',
+        editar_produto,
+        name='editar_produto'
+    ),
+
+    path(
+        'produtos/<int:id>/excluir/',
+        excluir_produto,
+        name='excluir_produto'
+    ),
+
+    path(
+        'produtos/<int:id>/imagem/',
+        imagem_produto,
+        name='imagem_produto'
+    ),
+
+    path(
+        'servicos/',
+        listar_servicos,
+        name='listar_servicos'
+    ),
+
+    path(
+        'servicos/novo/',
+        criar_servico,
+        name='criar_servico'
+    ),
+
+    path(
+        'servicos/<int:id>/editar/',
+        editar_servico,
+        name='editar_servico'
+    ),
+
+    path(
+        'servicos/<int:id>/excluir/',
+        excluir_servico,
+        name='excluir_servico'
+    ),
+
+    path(
+        'servicos/<int:id>/imagem/',
+        imagem_servico,
+        name='imagem_servico'
     ),
 
     path(

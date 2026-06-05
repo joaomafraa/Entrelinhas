@@ -17,13 +17,15 @@ from django.views.decorators.http import require_POST
 from .forms import (
     AdminInscricaoForm,
     AulaForm,
+    ProdutoForm,
     CadastroForm,
     CertificadoUploadForm,
     InscricaoForm,
     LoginForm,
+    ServicoForm,
     normalizar_cpf,
 )
-from .models import Aula, Inscricao, Presenca
+from .models import Aula, Inscricao, Presenca, Produto, ProdutoImagem, Servico, ServicoImagem
 
 
 MESES = [
@@ -133,6 +135,27 @@ def _semanas_do_calendario(ano, mes, hoje):
     return semanas, aulas
 
 
+def _salvar_imagens_bazar(item, imagens, imagem_model, campo_item):
+
+    if not imagens:
+
+        return
+
+    ordem_inicial = item.imagens.count()
+
+    for indice, imagem in enumerate(imagens, start=ordem_inicial):
+
+        imagem_model.objects.create(
+            **{
+                campo_item: item,
+                'nome': imagem.name,
+                'tipo': imagem.content_type or '',
+                'conteudo': imagem.read(),
+                'ordem': indice,
+            }
+        )
+
+
 def home(request):
 
     return render(
@@ -240,7 +263,359 @@ def dashboard_admin(request):
             'total_aprovadas': Inscricao.objects.filter(status='aprovada').count(),
             'total_recusadas': Inscricao.objects.filter(status='recusada').count(),
             'total_aulas': Aula.objects.count(),
+            'total_produtos': Produto.objects.count(),
+            'total_servicos': Servico.objects.count(),
         }
+    )
+
+
+@login_required
+def listar_produtos(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    produtos = Produto.objects.all()
+    paginator = Paginator(produtos, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    for produto in page_obj.object_list:
+
+        produto.etiqueta_bazar = produto.categoria
+
+    return render(
+        request,
+        'inscricoes/listar_bazar.html',
+        {
+            'current_admin_page': 'produtos',
+            'titulo': 'Produtos',
+            'descricao': 'Gerencie os produtos disponiveis no bazar.',
+            'contador': f'{paginator.count} produto(s) cadastrado(s)',
+            'novo_label': 'Novo produto',
+            'novo_url': 'criar_produto',
+            'editar_url': 'editar_produto',
+            'excluir_url': 'excluir_produto',
+            'imagem_url': 'imagem_produto',
+            'itens': page_obj.object_list,
+            'empty_text': 'Nenhum produto cadastrado.',
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+        }
+    )
+
+
+@login_required
+def criar_produto(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    if request.method == 'POST':
+
+        form = ProdutoForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            produto = form.save(commit=False)
+            produto.save()
+            _salvar_imagens_bazar(
+                produto,
+                form.cleaned_data.get('imagem'),
+                ProdutoImagem,
+                'produto'
+            )
+            messages.success(request, 'Produto cadastrado com sucesso.')
+
+            return redirect('listar_produtos')
+
+        messages.warning(request, 'Nao foi possivel cadastrar o produto. Revise os campos destacados.')
+
+    else:
+
+        form = ProdutoForm()
+
+    return render(
+        request,
+        'inscricoes/form_bazar.html',
+        {
+            'current_admin_page': 'produtos',
+            'titulo': 'Novo produto',
+            'descricao': 'Cadastre nome, descricao, valor, categoria e imagem do produto.',
+            'form': form,
+            'back_url': 'listar_produtos',
+            'texto_botao': 'Salvar produto',
+        }
+    )
+
+
+@login_required
+def editar_produto(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    produto = get_object_or_404(Produto, id=id)
+
+    if request.method == 'POST':
+
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
+
+        if form.is_valid():
+
+            produto = form.save(commit=False)
+            produto.save()
+            _salvar_imagens_bazar(
+                produto,
+                form.cleaned_data.get('imagem'),
+                ProdutoImagem,
+                'produto'
+            )
+            messages.success(request, 'Produto atualizado com sucesso.')
+
+            return redirect('listar_produtos')
+
+        messages.warning(request, 'Nao foi possivel atualizar o produto. Revise os campos destacados.')
+
+    else:
+
+        form = ProdutoForm(instance=produto)
+
+    return render(
+        request,
+        'inscricoes/form_bazar.html',
+        {
+            'current_admin_page': 'produtos',
+            'titulo': 'Editar produto',
+            'descricao': 'Atualize as informacoes do produto.',
+            'form': form,
+            'back_url': 'listar_produtos',
+            'texto_botao': 'Salvar alteracoes',
+            'item': produto,
+            'imagem_url': 'imagem_produto',
+        }
+    )
+
+
+@login_required
+@require_POST
+def excluir_produto(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    produto = get_object_or_404(Produto, id=id)
+    produto.delete()
+    messages.success(request, 'Produto excluido com sucesso.')
+
+    return redirect('listar_produtos')
+
+
+@login_required
+def imagem_produto(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    produto = get_object_or_404(Produto, id=id)
+
+    if not produto.tem_imagem:
+
+        return HttpResponse(status=404)
+
+    imagem = produto.imagem_capa
+
+    if imagem:
+
+        return HttpResponse(
+            bytes(imagem.conteudo),
+            content_type=imagem.tipo or 'application/octet-stream'
+        )
+
+    return HttpResponse(
+        bytes(produto.imagem_conteudo),
+        content_type=produto.imagem_tipo or 'application/octet-stream'
+    )
+
+
+@login_required
+def listar_servicos(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    servicos = Servico.objects.all()
+    paginator = Paginator(servicos, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    for servico in page_obj.object_list:
+
+        servico.etiqueta_bazar = servico.tipo
+
+    return render(
+        request,
+        'inscricoes/listar_bazar.html',
+        {
+            'current_admin_page': 'servicos',
+            'titulo': 'Servicos',
+            'descricao': 'Gerencie os servicos oferecidos pelo bazar.',
+            'contador': f'{paginator.count} servico(s) cadastrado(s)',
+            'novo_label': 'Novo servico',
+            'novo_url': 'criar_servico',
+            'editar_url': 'editar_servico',
+            'excluir_url': 'excluir_servico',
+            'imagem_url': 'imagem_servico',
+            'itens': page_obj.object_list,
+            'empty_text': 'Nenhum servico cadastrado.',
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+        }
+    )
+
+
+@login_required
+def criar_servico(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    if request.method == 'POST':
+
+        form = ServicoForm(request.POST, request.FILES)
+
+        if form.is_valid():
+
+            servico = form.save(commit=False)
+            servico.save()
+            _salvar_imagens_bazar(
+                servico,
+                form.cleaned_data.get('imagem'),
+                ServicoImagem,
+                'servico'
+            )
+            messages.success(request, 'Servico cadastrado com sucesso.')
+
+            return redirect('listar_servicos')
+
+        messages.warning(request, 'Nao foi possivel cadastrar o servico. Revise os campos destacados.')
+
+    else:
+
+        form = ServicoForm()
+
+    return render(
+        request,
+        'inscricoes/form_bazar.html',
+        {
+            'current_admin_page': 'servicos',
+            'titulo': 'Novo servico',
+            'descricao': 'Cadastre nome, descricao, valor, tipo e imagem do servico.',
+            'form': form,
+            'back_url': 'listar_servicos',
+            'texto_botao': 'Salvar servico',
+        }
+    )
+
+
+@login_required
+def editar_servico(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    servico = get_object_or_404(Servico, id=id)
+
+    if request.method == 'POST':
+
+        form = ServicoForm(request.POST, request.FILES, instance=servico)
+
+        if form.is_valid():
+
+            servico = form.save(commit=False)
+            servico.save()
+            _salvar_imagens_bazar(
+                servico,
+                form.cleaned_data.get('imagem'),
+                ServicoImagem,
+                'servico'
+            )
+            messages.success(request, 'Servico atualizado com sucesso.')
+
+            return redirect('listar_servicos')
+
+        messages.warning(request, 'Nao foi possivel atualizar o servico. Revise os campos destacados.')
+
+    else:
+
+        form = ServicoForm(instance=servico)
+
+    return render(
+        request,
+        'inscricoes/form_bazar.html',
+        {
+            'current_admin_page': 'servicos',
+            'titulo': 'Editar servico',
+            'descricao': 'Atualize as informacoes do servico.',
+            'form': form,
+            'back_url': 'listar_servicos',
+            'texto_botao': 'Salvar alteracoes',
+            'item': servico,
+            'imagem_url': 'imagem_servico',
+        }
+    )
+
+
+@login_required
+@require_POST
+def excluir_servico(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    servico = get_object_or_404(Servico, id=id)
+    servico.delete()
+    messages.success(request, 'Servico excluido com sucesso.')
+
+    return redirect('listar_servicos')
+
+
+@login_required
+def imagem_servico(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    servico = get_object_or_404(Servico, id=id)
+
+    if not servico.tem_imagem:
+
+        return HttpResponse(status=404)
+
+    imagem = servico.imagem_capa
+
+    if imagem:
+
+        return HttpResponse(
+            bytes(imagem.conteudo),
+            content_type=imagem.tipo or 'application/octet-stream'
+        )
+
+    return HttpResponse(
+        bytes(servico.imagem_conteudo),
+        content_type=servico.imagem_tipo or 'application/octet-stream'
     )
 
 

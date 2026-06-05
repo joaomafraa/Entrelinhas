@@ -224,3 +224,113 @@ class Presenca(models.Model):
 
     class Meta:
         unique_together = ('aula', 'inscricao')
+
+
+class Produto(models.Model):
+
+    nome = models.CharField(max_length=120)
+    descricao = models.TextField()
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    categoria = models.CharField(max_length=80)
+    imagem_nome = models.CharField(max_length=255, blank=True)
+    imagem_tipo = models.CharField(max_length=100, blank=True)
+    imagem_conteudo = models.BinaryField(blank=True, null=True, editable=False)
+    ativo = models.BooleanField(default=True)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-data_criacao']
+
+    @property
+    def tem_imagem(self):
+
+        return self.imagens.exists() or bool(self.imagem_conteudo)
+
+    @property
+    def imagem_capa(self):
+
+        return self.imagens.order_by('ordem', 'id').first()
+
+    @property
+    def preco_formatado(self):
+
+        return f'R$ {self.preco:.2f}'.replace('.', ',')
+
+    def __str__(self):
+        return self.nome
+
+
+class ProdutoImagem(models.Model):
+
+    produto = models.ForeignKey(
+        Produto,
+        related_name='imagens',
+        on_delete=models.CASCADE
+    )
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=100)
+    conteudo = models.BinaryField(editable=False)
+    ordem = models.PositiveIntegerField(default=0)
+    criada_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['ordem', 'id']
+
+    def __str__(self):
+        return self.nome
+
+
+class Servico(models.Model):
+
+    nome = models.CharField(max_length=120)
+    descricao = models.TextField()
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo = models.CharField(max_length=80)
+    imagem_nome = models.CharField(max_length=255, blank=True)
+    imagem_tipo = models.CharField(max_length=100, blank=True)
+    imagem_conteudo = models.BinaryField(blank=True, null=True, editable=False)
+    ativo = models.BooleanField(default=True)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-data_criacao']
+
+    @property
+    def tem_imagem(self):
+
+        return self.imagens.exists() or bool(self.imagem_conteudo)
+
+    @property
+    def imagem_capa(self):
+
+        return self.imagens.order_by('ordem', 'id').first()
+
+    @property
+    def preco_formatado(self):
+
+        return f'R$ {self.preco:.2f}'.replace('.', ',')
+
+    def __str__(self):
+        return self.nome
+
+
+class ServicoImagem(models.Model):
+
+    servico = models.ForeignKey(
+        Servico,
+        related_name='imagens',
+        on_delete=models.CASCADE
+    )
+    nome = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=100)
+    conteudo = models.BinaryField(editable=False)
+    ordem = models.PositiveIntegerField(default=0)
+    criada_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['ordem', 'id']
+
+    def __str__(self):
+        return self.nome
