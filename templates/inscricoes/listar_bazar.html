@@ -1,0 +1,94 @@
+{% extends 'inscricoes/admin_base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-content">
+        <div class="admin-page-header">
+            <div>
+                <span class="section-label">Painel administrativo</span>
+                <h1>{{ titulo }}</h1>
+                <p class="text-soft mb-0">{{ descricao }}</p>
+            </div>
+
+            <a href="{% url novo_url %}" class="btn btn-primary bazar-new-button">
+                <span aria-hidden="true">+</span>
+                {{ novo_label }}
+            </a>
+        </div>
+
+        <div class="bazar-list-toolbar">
+            <span>{{ contador }}</span>
+        </div>
+
+        {% if itens %}
+            <div class="bazar-grid">
+                {% for item in itens %}
+                    <article class="bazar-card">
+                        <div class="bazar-card__media">
+                            {% if item.tem_imagem %}
+                                <img src="{% url imagem_url item.id %}" alt="{{ item.nome }}">
+                            {% else %}
+                                <span>Sem imagem</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="bazar-card__body">
+                            <div class="bazar-card__meta">
+                                <span class="bazar-card__tag">{{ item.etiqueta_bazar }}</span>
+
+                                {% if item.ativo %}
+                                    <span class="bazar-status bazar-status--active">Ativo</span>
+                                {% else %}
+                                    <span class="bazar-status bazar-status--inactive">Inativo</span>
+                                {% endif %}
+                            </div>
+
+                            <h2>{{ item.nome }}</h2>
+                            <strong class="bazar-card__price">{{ item.preco_formatado }}</strong>
+                            <p>{{ item.descricao|truncatechars:96 }}</p>
+
+                            <div class="bazar-card__actions">
+                                <a href="{% url editar_url item.id %}" class="bazar-edit-button">Editar</a>
+
+                                <form method="post" action="{% url excluir_url item.id %}" onsubmit="return confirm('Deseja excluir este item?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="bazar-delete-button" aria-label="Excluir {{ item.nome }}" title="Excluir">
+                                        <img src="{% static 'assets/icons/excluir_vermelho_claro.svg' %}" alt="">
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="admin-table-wrap">
+                <div class="bazar-empty-state">{{ empty_text }}</div>
+            </div>
+        {% endif %}
+
+        <div class="admin-pagination">
+            <span>Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}</span>
+
+            <div class="admin-pagination__actions">
+                {% if page_obj.has_previous %}
+                    <a class="admin-page-button" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Anterior</span>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                    <a class="admin-page-button" href="?page={{ page_obj.next_page_number }}">Proxima</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Proxima</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

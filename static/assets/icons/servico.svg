@@ -1,0 +1,36 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="servicoGradient" x1="32" y1="40" x2="224" y2="208" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#5A3D97"/>
+            <stop offset="1" stop-color="#25233D"/>
+        </linearGradient>
+    </defs>
+    <path
+        d="M88 72V56C88 47.2 95.2 40 104 40H152C160.8 40 168 47.2 168 56V72"
+        stroke="url(#servicoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+    <rect
+        x="32"
+        y="72"
+        width="192"
+        height="136"
+        rx="20"
+        stroke="url(#servicoGradient)"
+        stroke-width="16"
+    />
+    <path
+        d="M32 128H224"
+        stroke="url(#servicoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+    />
+    <path
+        d="M112 128H144"
+        stroke="url(#servicoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+    />
+</svg>

@@ -44,6 +44,26 @@
             </a>
 
             <a
+                href="{% url 'listar_produtos' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'produtos' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/produto.svg' %}" alt="">
+                </span>
+                <span>Produtos</span>
+            </a>
+
+            <a
+                href="{% url 'listar_servicos' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'servicos' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/servico.svg' %}" alt="">
+                </span>
+                <span>Servicos</span>
+            </a>
+
+            <a
                 href="{% url 'listar_certificados' %}"
                 class="admin-sidebar__link {% if current_admin_page == 'certificados' %}admin-sidebar__link--active{% endif %}"
             >

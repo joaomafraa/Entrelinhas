@@ -1,0 +1,35 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="produtoGradient" x1="48" y1="40" x2="208" y2="216" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#5A3D97"/>
+            <stop offset="1" stop-color="#25233D"/>
+        </linearGradient>
+    </defs>
+    <path
+        d="M48 80L128 40L208 80"
+        stroke="url(#produtoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+    <path
+        d="M48 80V176L128 216L208 176V80"
+        stroke="url(#produtoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+    <path
+        d="M128 40V216"
+        stroke="url(#produtoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+    />
+    <path
+        d="M48 80L128 120L208 80"
+        stroke="url(#produtoGradient)"
+        stroke-width="16"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+</svg>

@@ -160,6 +160,15 @@
         grid-template-columns: 1fr;
     }
 
+    .bazar-grid,
+    .bazar-form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .bazar-card p {
+        min-height: auto;
+    }
+
     .student-overview-grid {
         grid-template-columns: 1fr;
     }
@@ -188,6 +197,10 @@
     }
 
     .admin-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bazar-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

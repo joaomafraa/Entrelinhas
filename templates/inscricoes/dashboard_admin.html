@@ -9,7 +9,7 @@
         <div>
             <span class="section-label">Painel administrativo</span>
             <h1>Visao geral</h1>
-            <p class="text-soft mb-0">Acompanhe o resumo das inscricoes e das aulas do curso Costurando Sonhos.</p>
+            <p class="text-soft mb-0">Acompanhe o resumo das inscricoes, aulas, produtos e servicos do projeto.</p>
         </div>
 
         <div class="cluster">
@@ -43,6 +43,16 @@
             <span>Aulas cadastradas</span>
             <strong>{{ total_aulas }}</strong>
         </article>
+
+        <article class="admin-stat-card">
+            <span>Produtos cadastrados</span>
+            <strong>{{ total_produtos }}</strong>
+        </article>
+
+        <article class="admin-stat-card">
+            <span>Servicos cadastrados</span>
+            <strong>{{ total_servicos }}</strong>
+        </article>
     </div>
 
     <section class="admin-overview-panel">
@@ -63,6 +73,18 @@
         <div class="cluster justify-content-end">
             <a href="{% url 'calendario_aulas' %}" class="admin-page-button">Ver calendario</a>
             <a href="{% url 'criar_aula' %}" class="admin-page-button">Nova aula</a>
+        </div>
+    </section>
+
+    <section class="admin-overview-panel">
+        <div>
+            <h2>Produtos e servicos</h2>
+            <p class="text-soft mb-0">Cadastre itens do bazar com imagem, valor, descricao, etiqueta e status de exibicao.</p>
+        </div>
+
+        <div class="cluster justify-content-end">
+            <a href="{% url 'listar_produtos' %}" class="admin-page-button">Abrir produtos</a>
+            <a href="{% url 'listar_servicos' %}" class="admin-page-button">Abrir servicos</a>
         </div>
     </section>
 </section>
