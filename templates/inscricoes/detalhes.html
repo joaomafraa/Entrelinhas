@@ -39,7 +39,7 @@
                     Certificado liberado em
                     {{ inscricao.certificado_liberado_em|date:"d/m/Y H:i" }}.
                 </p>
-                {% if inscricao.certificado_arquivo %}
+                {% if inscricao.certificado_disponivel %}
                     <a href="{% url 'baixar_certificado_admin' inscricao.id %}" class="btn btn-outline-primary mt-3">
                         Baixar certificado
                     </a>

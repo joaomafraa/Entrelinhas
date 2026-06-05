@@ -367,28 +367,17 @@ class AdminInscricaoForm(InscricaoForm):
         }
 
 
-class CertificadoUploadForm(forms.ModelForm):
+class CertificadoUploadForm(forms.Form):
 
-    class Meta:
-
-        model = Inscricao
-
-        fields = [
-            'certificado_arquivo',
-        ]
-
-        labels = {
-            'certificado_arquivo': 'Arquivo do certificado',
-        }
-
-        widgets = {
-            'certificado_arquivo': forms.ClearableFileInput(
-                attrs={
-                    'class': 'form-control',
-                    'accept': '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
-                }
-            ),
-        }
+    certificado_arquivo = forms.FileField(
+        label='Arquivo do certificado',
+        widget=forms.ClearableFileInput(
+            attrs={
+                'class': 'form-control',
+                'accept': '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+            }
+        )
+    )
 
     def clean_certificado_arquivo(self):
 

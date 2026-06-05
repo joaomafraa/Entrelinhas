@@ -175,9 +175,6 @@ STATICFILES_DIRS = [
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = Path(os.environ.get('MEDIA_ROOT', BASE_DIR / 'media'))
-
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'listar_inscricoes'
 LOGOUT_REDIRECT_URL = 'home'

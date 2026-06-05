@@ -39,7 +39,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if inscricao.certificado_liberado and inscricao.certificado_arquivo %}
+                            {% if inscricao.certificado_disponivel %}
                                 <a href="{% url 'baixar_certificado_admin' inscricao.id %}" class="admin-page-button">
                                     Baixar atual
                                 </a>

@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import FileResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -581,7 +581,7 @@ def liberar_certificado(request, id):
 
         return redirect(redirect_to)
 
-    if not inscricao.certificado_arquivo:
+    if not inscricao.certificado_conteudo:
 
         messages.warning(
             request,
@@ -627,18 +627,22 @@ def upload_certificado(request, id):
 
     form = CertificadoUploadForm(
         request.POST,
-        request.FILES,
-        instance=inscricao
+        request.FILES
     )
 
     if form.is_valid():
 
-        inscricao = form.save(commit=False)
+        arquivo = form.cleaned_data['certificado_arquivo']
+        inscricao.certificado_nome_arquivo = arquivo.name
+        inscricao.certificado_tipo_arquivo = arquivo.content_type or ''
+        inscricao.certificado_conteudo = arquivo.read()
         inscricao.certificado_liberado = True
         inscricao.certificado_liberado_em = timezone.now()
         inscricao.save(
             update_fields=[
-                'certificado_arquivo',
+                'certificado_nome_arquivo',
+                'certificado_tipo_arquivo',
+                'certificado_conteudo',
                 'certificado_liberado',
                 'certificado_liberado_em',
             ]
@@ -680,7 +684,7 @@ def baixar_certificado(request, id=None):
 
             return redirect('listar_inscricoes')
 
-    if not inscricao.certificado_liberado or not inscricao.certificado_arquivo:
+    if not inscricao.certificado_disponivel:
 
         messages.warning(
             request,
@@ -693,22 +697,20 @@ def baixar_certificado(request, id=None):
 
         return redirect('dashboard_aluna')
 
-    try:
+    filename = inscricao.certificado_nome_arquivo or 'certificado'
+    content_type = inscricao.certificado_tipo_arquivo
 
-        arquivo = inscricao.certificado_arquivo.open('rb')
+    if not content_type:
 
-    except FileNotFoundError as exc:
+        content_type, _ = mimetypes.guess_type(filename)
 
-        raise Http404('Arquivo do certificado nao encontrado.') from exc
-
-    content_type, _ = mimetypes.guess_type(inscricao.certificado_arquivo.name)
-
-    return FileResponse(
-        arquivo,
-        as_attachment=True,
-        filename=inscricao.certificado_arquivo.name.split('/')[-1],
+    response = HttpResponse(
+        bytes(inscricao.certificado_conteudo),
         content_type=content_type or 'application/octet-stream'
     )
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    return response
 
 
 @login_required

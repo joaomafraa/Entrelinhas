@@ -82,10 +82,20 @@ class Inscricao(models.Model):
         blank=True
     )
 
-    certificado_arquivo = models.FileField(
-        upload_to='certificados/',
+    certificado_nome_arquivo = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    certificado_tipo_arquivo = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    certificado_conteudo = models.BinaryField(
         blank=True,
-        null=True
+        null=True,
+        editable=False
     )
 
     @property
@@ -114,6 +124,11 @@ class Inscricao(models.Model):
             return self.cpf or ''
 
         return f'{self.cpf[:3]}.{self.cpf[3:6]}.{self.cpf[6:9]}-{self.cpf[9:]}'
+
+    @property
+    def certificado_disponivel(self):
+
+        return self.certificado_liberado and bool(self.certificado_conteudo)
 
     def __str__(self):
         return self.nome

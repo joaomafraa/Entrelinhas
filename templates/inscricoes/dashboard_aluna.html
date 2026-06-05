@@ -203,7 +203,7 @@
         <section class="admin-overview-panel">
             <div>
                 <h2>Status do certificado</h2>
-                {% if inscricao.certificado_liberado and inscricao.certificado_arquivo %}
+                {% if inscricao.certificado_disponivel %}
                     <p class="text-soft mb-0">Seu certificado ja esta disponivel para download.</p>
                 {% elif curso_concluido %}
                     <p class="text-soft mb-0">Voce concluiu o curso. Aguarde a liberacao do certificado.</p>
@@ -212,7 +212,7 @@
                 {% endif %}
             </div>
 
-            {% if inscricao.certificado_liberado and inscricao.certificado_arquivo %}
+            {% if inscricao.certificado_disponivel %}
                 <a href="{% url 'baixar_certificado' %}" class="admin-page-button">
                     Baixar certificado
                 </a>
