@@ -24,6 +24,18 @@
         {% include 'inscricoes/student_sidebar.html' %}
 
         <main class="admin-main">
+            <header class="internal-topbar">
+                <a href="{% url 'home' %}" class="internal-topbar__brand">
+                    <span class="brand-mark">E</span>
+                    <span>EntreLinhas</span>
+                </a>
+
+                <nav class="internal-topbar__nav" aria-label="Navegacao superior">
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'sair' %}">Sair</a>
+                </nav>
+            </header>
+
             {% if messages %}
                 <div class="admin-messages">
                     {% for message in messages %}

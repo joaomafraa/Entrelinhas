@@ -132,6 +132,24 @@
         padding: 1.25rem 1rem;
     }
 
+    .internal-topbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .internal-topbar__nav,
+    .internal-topbar__nav a {
+        width: 100%;
+    }
+
+    .internal-topbar__nav {
+        justify-content: stretch;
+    }
+
+    .internal-topbar__nav a {
+        justify-content: center;
+    }
+
     .admin-page-header,
     .admin-overview-panel {
         align-items: stretch;
