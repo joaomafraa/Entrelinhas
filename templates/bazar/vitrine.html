@@ -96,6 +96,10 @@
                 <div class="vitrine-grid">
                     {% for item in itens_vitrine %}
                         <article class="vitrine-card">
+                            <a
+                                href="{% if item.tipo == 'produto' %}{% url 'detalhe_vitrine_produto' item.objeto.id %}{% else %}{% url 'detalhe_vitrine_servico' item.objeto.id %}{% endif %}"
+                                class="vitrine-card__link"
+                            >
                             <div class="vitrine-card-imagem">
                                 {% if item.objeto.tem_imagem %}
                                     <img
@@ -125,6 +129,7 @@
                                     </span>
                                 {% endif %}
                             </div>
+                            </a>
                         </article>
                     {% endfor %}
                 </div>

@@ -9,11 +9,13 @@ from .views import (
     criar_produto,
     editar_produto,
     excluir_produto,
+    excluir_imagem_produto,
     imagem_produto,
     listar_servicos,
     criar_servico,
     editar_servico,
     excluir_servico,
+    excluir_imagem_servico,
     imagem_servico,
     listar_inscricoes,
     listar_certificados,
@@ -98,6 +100,12 @@ urlpatterns = [
     ),
 
     path(
+        'produtos/imagens/<int:id>/excluir/',
+        excluir_imagem_produto,
+        name='excluir_imagem_produto'
+    ),
+
+    path(
         'servicos/',
         listar_servicos,
         name='listar_servicos'
@@ -125,6 +133,12 @@ urlpatterns = [
         'servicos/<int:id>/imagem/',
         imagem_servico,
         name='imagem_servico'
+    ),
+
+    path(
+        'servicos/imagens/<int:id>/excluir/',
+        excluir_imagem_servico,
+        name='excluir_imagem_servico'
     ),
 
     path(

@@ -398,6 +398,9 @@ def editar_produto(request, id):
             'texto_botao': 'Salvar alteracoes',
             'item': produto,
             'imagem_url': 'imagem_produto',
+            'imagens': produto.imagens.all(),
+            'imagem_galeria_url': 'imagem_vitrine_produto_galeria',
+            'excluir_imagem_url': 'excluir_imagem_produto',
         }
     )
 
@@ -443,6 +446,22 @@ def imagem_produto(request, id):
         bytes(produto.imagem_conteudo),
         content_type=produto.imagem_tipo or 'application/octet-stream'
     )
+
+
+@login_required
+@require_POST
+def excluir_imagem_produto(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    imagem = get_object_or_404(ProdutoImagem, id=id)
+    produto_id = imagem.produto_id
+    imagem.delete()
+    messages.success(request, 'Imagem excluida com sucesso.')
+
+    return redirect('editar_produto', id=produto_id)
 
 
 @login_required
@@ -574,6 +593,9 @@ def editar_servico(request, id):
             'texto_botao': 'Salvar alteracoes',
             'item': servico,
             'imagem_url': 'imagem_servico',
+            'imagens': servico.imagens.all(),
+            'imagem_galeria_url': 'imagem_vitrine_servico_galeria',
+            'excluir_imagem_url': 'excluir_imagem_servico',
         }
     )
 
@@ -1601,6 +1623,40 @@ def imagem_vitrine_produto(request, id):
     )
 
 
+def imagem_vitrine_produto_galeria(request, id):
+
+    imagem = get_object_or_404(
+        ProdutoImagem,
+        id=id,
+        produto__ativo=True
+    )
+
+    return HttpResponse(
+        bytes(imagem.conteudo),
+        content_type=imagem.tipo or 'application/octet-stream'
+    )
+
+
+def detalhe_vitrine_produto(request, id):
+
+    produto = get_object_or_404(Produto, id=id, ativo=True)
+    imagens = list(produto.imagens.all())
+
+    return render(
+        request,
+        'bazar/detalhe.html',
+        {
+            'item': produto,
+            'tipo_item': 'produto',
+            'etiqueta': produto.categoria,
+            'imagens': imagens,
+            'imagem_capa_url': 'imagem_vitrine_produto',
+            'imagem_galeria_url': 'imagem_vitrine_produto_galeria',
+            'mostra_preco': True,
+        }
+    )
+
+
 def imagem_vitrine_servico(request, id):
 
     servico = get_object_or_404(Servico, id=id, ativo=True)
@@ -1621,4 +1677,54 @@ def imagem_vitrine_servico(request, id):
     return HttpResponse(
         bytes(servico.imagem_conteudo),
         content_type=servico.imagem_tipo or 'application/octet-stream'
+    )
+
+
+@login_required
+@require_POST
+def excluir_imagem_servico(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    imagem = get_object_or_404(ServicoImagem, id=id)
+    servico_id = imagem.servico_id
+    imagem.delete()
+    messages.success(request, 'Imagem excluida com sucesso.')
+
+    return redirect('editar_servico', id=servico_id)
+
+
+def imagem_vitrine_servico_galeria(request, id):
+
+    imagem = get_object_or_404(
+        ServicoImagem,
+        id=id,
+        servico__ativo=True
+    )
+
+    return HttpResponse(
+        bytes(imagem.conteudo),
+        content_type=imagem.tipo or 'application/octet-stream'
+    )
+
+
+def detalhe_vitrine_servico(request, id):
+
+    servico = get_object_or_404(Servico, id=id, ativo=True)
+    imagens = list(servico.imagens.all())
+
+    return render(
+        request,
+        'bazar/detalhe.html',
+        {
+            'item': servico,
+            'tipo_item': 'servico',
+            'etiqueta': servico.tipo,
+            'imagens': imagens,
+            'imagem_capa_url': 'imagem_vitrine_servico',
+            'imagem_galeria_url': 'imagem_vitrine_servico_galeria',
+            'mostra_preco': False,
+        }
     )

@@ -1,0 +1,95 @@
+{% extends 'inscricoes/base.html' %}
+{% load static %}
+
+{% block title %}{{ item.nome }} | Bazar EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="bazar-detail">
+    <div class="bazar-detail__top">
+        <a href="{% url 'vitrine' %}" class="bazar-detail__back">Voltar ao bazar</a>
+    </div>
+
+    <div class="bazar-detail__layout">
+        <div class="bazar-detail__gallery" data-bazar-gallery>
+            <div class="bazar-detail__main-image">
+                {% if item.tem_imagem %}
+                    <img src="{% url imagem_capa_url item.id %}" alt="{{ item.nome }}" data-bazar-main-image>
+                {% else %}
+                    <span>Sem imagem</span>
+                {% endif %}
+            </div>
+
+            {% if imagens %}
+                <div class="bazar-detail__thumbs" aria-label="Fotos cadastradas">
+                    {% for imagem in imagens %}
+                        <a
+                            href="{% url imagem_galeria_url imagem.id %}"
+                            class="{% if forloop.first %}is-active{% endif %}"
+                            data-bazar-thumb
+                        >
+                            <img src="{% url imagem_galeria_url imagem.id %}" alt="{{ item.nome }} - foto {{ forloop.counter }}">
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <article class="bazar-detail__info">
+            <span class="vitrine-card-categoria">{{ etiqueta }}</span>
+            <h1>{{ item.nome }}</h1>
+
+            {% if mostra_preco %}
+                <p class="bazar-detail__price">
+                    <img src="{% static 'assets/icons/produto.svg' %}" alt="">
+                    {{ item.preco_formatado }}
+                </p>
+            {% else %}
+                <p class="bazar-detail__service">
+                    <img src="{% static 'assets/icons/servico.svg' %}" alt="">
+                    Valor sob consulta
+                </p>
+            {% endif %}
+
+            <div class="bazar-detail__description">
+                <h2>Descrição</h2>
+                <p>{{ item.descricao }}</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<script>
+    (() => {
+        const galleries = document.querySelectorAll('[data-bazar-gallery]');
+
+        galleries.forEach((gallery) => {
+            const mainImage = gallery.querySelector('[data-bazar-main-image]');
+            const thumbs = gallery.querySelectorAll('[data-bazar-thumb]');
+
+            if (!mainImage || !thumbs.length) {
+                return;
+            }
+
+            thumbs.forEach((thumb) => {
+                thumb.addEventListener('click', (event) => {
+                    event.preventDefault();
+
+                    const thumbImage = thumb.querySelector('img');
+
+                    if (!thumbImage) {
+                        return;
+                    }
+
+                    mainImage.src = thumb.href;
+                    mainImage.alt = thumbImage.alt;
+
+                    thumbs.forEach((item) => item.classList.remove('is-active'));
+                    thumb.classList.add('is-active');
+                });
+            });
+        });
+    })();
+</script>
+
+{% endblock %}

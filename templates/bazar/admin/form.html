@@ -16,20 +16,84 @@
             <a href="{% url back_url %}" class="btn btn-outline-secondary">Voltar</a>
         </div>
 
-        <div class="bazar-form-layout">
-            {% if item and item.tem_imagem %}
-                <aside class="bazar-form-preview">
-                    <span>Imagem atual</span>
-                    <img src="{% url imagem_url item.id %}" alt="{{ item.nome }}">
-                </aside>
-            {% endif %}
+        <div class="bazar-form-layout" data-bazar-upload>
+            <aside class="bazar-form-preview">
+                <div class="bazar-current-images__header">
+                    <span>Imagens atuais</span>
+
+                    <label class="bazar-image-add" for="{{ form.imagem.id_for_label }}" title="Adicionar imagens">
+                        <span aria-hidden="true">+</span>
+                        <span class="visually-hidden">Adicionar imagens</span>
+                    </label>
+                </div>
+
+                {% if item %}
+                    {% if imagens %}
+                        <div class="bazar-current-images">
+                            {% for imagem in imagens %}
+                                <article class="bazar-current-image">
+                                    <img src="{% url imagem_galeria_url imagem.id %}" alt="{{ imagem.nome }}">
+
+                                    <div>
+                                        <strong title="{{ imagem.nome }}">{{ imagem.nome }}</strong>
+                                        <form method="post" action="{% url excluir_imagem_url imagem.id %}" onsubmit="return confirm('Deseja excluir esta imagem?');">
+                                            {% csrf_token %}
+                                            <button type="submit">Excluir</button>
+                                        </form>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="bazar-current-images__empty">Nenhuma imagem cadastrada.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="bazar-current-images__empty">Nenhuma imagem cadastrada.</p>
+                {% endif %}
+
+                <div class="bazar-selected-images" data-bazar-selected hidden>
+                    <span>Arquivos para adicionar</span>
+                    <div class="bazar-selected-images__list" data-bazar-selected-list></div>
+                </div>
+
+                {% if form.imagem.errors %}
+                    <div class="form-error-message">
+                        {{ form.imagem.errors }}
+                    </div>
+                {% endif %}
+            </aside>
 
             <div class="surface-card p-4 p-lg-5">
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
+                    {{ form.imagem }}
+
                     <div class="form-stack">
-                        {% include 'inscricoes/_inscricao_form_fields.html' %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            {% if field.name != 'imagem' %}
+                                <div class="form-field">
+                                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+
+                                    {% if field.help_text %}
+                                        <div class="form-hint">{{ field.help_text }}</div>
+                                    {% endif %}
+
+                                    {% if field.errors %}
+                                        <div class="form-error-message">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-4">{{ texto_botao }}</button>
@@ -38,5 +102,62 @@
         </div>
     </div>
 </section>
+
+<script>
+    (() => {
+        const uploadArea = document.querySelector('[data-bazar-upload]');
+
+        if (!uploadArea || typeof DataTransfer === 'undefined') {
+            return;
+        }
+
+        const input = uploadArea.querySelector('.bazar-file-input');
+        const selectedBox = uploadArea.querySelector('[data-bazar-selected]');
+        const selectedList = uploadArea.querySelector('[data-bazar-selected-list]');
+        let selectedFiles = [];
+
+        if (!input || !selectedBox || !selectedList) {
+            return;
+        }
+
+        const syncInputFiles = () => {
+            const transfer = new DataTransfer();
+            selectedFiles.forEach((file) => transfer.items.add(file));
+            input.files = transfer.files;
+        };
+
+        const renderSelectedFiles = () => {
+            selectedList.innerHTML = '';
+            selectedBox.hidden = selectedFiles.length === 0;
+
+            selectedFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'bazar-selected-image';
+
+                const name = document.createElement('strong');
+                name.textContent = file.name;
+                name.title = file.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.textContent = 'Excluir';
+                removeButton.addEventListener('click', () => {
+                    selectedFiles = selectedFiles.filter((_, fileIndex) => fileIndex !== index);
+                    syncInputFiles();
+                    renderSelectedFiles();
+                });
+
+                item.append(name, removeButton);
+                selectedList.appendChild(item);
+            });
+        };
+
+        input.addEventListener('change', () => {
+            selectedFiles = [...selectedFiles, ...Array.from(input.files)];
+            syncInputFiles();
+            renderSelectedFiles();
+        });
+    })();
+</script>
 
 {% endblock %}

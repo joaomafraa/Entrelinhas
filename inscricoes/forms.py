@@ -493,7 +493,7 @@ class BazarItemForm(forms.ModelForm):
         required=False,
         widget=MultipleFileInput(
             attrs={
-                'class': 'form-control',
+                'class': 'bazar-file-input',
                 'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
                 'multiple': True,
             }

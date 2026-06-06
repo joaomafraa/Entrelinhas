@@ -5,6 +5,10 @@ from inscricoes.views import (
     admin_redirect,
     cadastro,
     home,
+    detalhe_vitrine_produto,
+    detalhe_vitrine_servico,
+    imagem_vitrine_produto_galeria,
+    imagem_vitrine_servico_galeria,
     imagem_vitrine_produto,
     imagem_vitrine_servico,
     login_plataforma,
@@ -57,9 +61,33 @@ urlpatterns = [
     ),
 
     path(
+        'bazar/produto/<int:id>/',
+        detalhe_vitrine_produto,
+        name='detalhe_vitrine_produto'
+    ),
+
+    path(
+        'bazar/produto/foto/<int:id>/',
+        imagem_vitrine_produto_galeria,
+        name='imagem_vitrine_produto_galeria'
+    ),
+
+    path(
         'bazar/servico/<int:id>/imagem/',
         imagem_vitrine_servico,
         name='imagem_vitrine_servico'
+    ),
+
+    path(
+        'bazar/servico/<int:id>/',
+        detalhe_vitrine_servico,
+        name='detalhe_vitrine_servico'
+    ),
+
+    path(
+        'bazar/servico/foto/<int:id>/',
+        imagem_vitrine_servico_galeria,
+        name='imagem_vitrine_servico_galeria'
     ),
 
     path(
