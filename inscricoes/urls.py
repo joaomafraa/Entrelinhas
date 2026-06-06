@@ -33,6 +33,9 @@ from .views import (
     liberar_certificado,
     upload_certificado,
     baixar_certificado,
+    vitrine,
+    imagem_vitrine_produto,
+    imagem_vitrine_servico,
 )
 
 urlpatterns = [
@@ -233,5 +236,23 @@ urlpatterns = [
         'certificado/baixar/',
         baixar_certificado,
         name='baixar_certificado'
+    ),
+
+    path(
+        'vitrine/',
+        vitrine,
+        name='vitrine'
+    ),
+
+    path(
+        'vitrine/produto/<int:id>/imagem/',
+        imagem_vitrine_produto,
+        name='imagem_vitrine_produto'
+    ),
+
+    path(
+        'vitrine/servico/<int:id>/imagem/',
+        imagem_vitrine_servico,
+        name='imagem_vitrine_servico'
     ),
 ]

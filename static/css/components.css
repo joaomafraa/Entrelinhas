@@ -1590,3 +1590,170 @@ footer,
 .student-profile-field--wide {
     grid-column: 1 / -1;
 }
+
+/* ── Vitrine ── */
+
+.vitrine-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.vitrine-header {
+    margin-bottom: 2rem;
+}
+
+.vitrine-titulo {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.vitrine-subtitulo {
+    margin-top: 0.25rem;
+    color: var(--color-text-muted, #666);
+}
+
+.vitrine-filtros {
+    background: var(--color-surface, #f9f9f9);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.vitrine-filtros form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 150px;
+}
+
+.filtro-grupo label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.filtro-grupo select,
+.filtro-grupo input[type="number"] {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.filtro-acoes {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+}
+
+.filtro-acoes button {
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.filtro-acoes a {
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+.vitrine-secao {
+    margin-bottom: 2.5rem;
+}
+
+.vitrine-secao-titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border, #eee);
+}
+
+.vitrine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.vitrine-card {
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s;
+}
+
+.vitrine-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.vitrine-card-imagem img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.vitrine-card-sem-imagem {
+    width: 100%;
+    height: 200px;
+    background: var(--color-surface, #f0f0f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted, #aaa);
+    font-size: 0.85rem;
+}
+
+.vitrine-card-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.vitrine-card-categoria {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted, #888);
+}
+
+.vitrine-card-nome {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.vitrine-card-descricao {
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #666);
+    line-height: 1.5;
+}
+
+.vitrine-card-preco {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 0.25rem;
+}
+
+.vitrine-vazia {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-text-muted, #888);
+}
+
+.vitrine-vazia a {
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: underline;
+}
