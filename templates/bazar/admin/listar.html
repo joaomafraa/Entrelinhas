@@ -56,7 +56,14 @@
                             <div class="bazar-card__actions">
                                 <a href="{% url editar_url item.id %}" class="bazar-edit-button">Editar</a>
 
-                                <form method="post" action="{% url excluir_url item.id %}" onsubmit="return confirm('Deseja excluir este item?');">
+                                <form
+                                    method="post"
+                                    action="{% url excluir_url item.id %}"
+                                    data-confirm-delete
+                                    data-confirm-title="Excluir {{ item.nome }}"
+                                    data-confirm-text="Deseja excluir este item? Esta acao nao podera ser desfeita."
+                                    data-confirm-button="Sim, excluir"
+                                >
                                     {% csrf_token %}
                                     <button type="submit" class="bazar-delete-button" aria-label="Excluir {{ item.nome }}" title="Excluir">
                                         <img src="{% static 'assets/icons/excluir_vermelho_claro.svg' %}" alt="">

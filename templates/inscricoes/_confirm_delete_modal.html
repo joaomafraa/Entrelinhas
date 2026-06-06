@@ -1,0 +1,31 @@
+<div
+    class="modal fade admin-confirm-modal"
+    id="adminConfirmDeleteModal"
+    tabindex="-1"
+    aria-labelledby="adminConfirmDeleteTitle"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span class="section-label">Confirmacao</span>
+                    <h2 class="modal-title" id="adminConfirmDeleteTitle">Confirmar exclusao</h2>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <div class="modal-body">
+                <p id="adminConfirmDeleteText">
+                    Esta acao nao podera ser desfeita.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-confirm-delete-submit>Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>

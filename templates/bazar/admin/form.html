@@ -36,7 +36,14 @@
 
                                     <div>
                                         <strong title="{{ imagem.nome }}">{{ imagem.nome }}</strong>
-                                        <form method="post" action="{% url excluir_imagem_url imagem.id %}" onsubmit="return confirm('Deseja excluir esta imagem?');">
+                                        <form
+                                            method="post"
+                                            action="{% url excluir_imagem_url imagem.id %}"
+                                            data-confirm-delete
+                                            data-confirm-title="Excluir imagem"
+                                            data-confirm-text="Deseja excluir esta imagem? Esta acao nao podera ser desfeita."
+                                            data-confirm-button="Sim, excluir"
+                                        >
                                             {% csrf_token %}
                                             <button type="submit">Excluir</button>
                                         </form>
