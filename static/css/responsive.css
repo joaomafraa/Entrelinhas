@@ -206,6 +206,18 @@
         width: 100%;
     }
 
+    .bazar-detail {
+        padding: 2rem 1rem;
+    }
+
+    .bazar-detail__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .bazar-detail__info {
+        padding: 1.5rem;
+    }
+
     .bazar-grid,
     .bazar-form-layout {
         grid-template-columns: 1fr;
@@ -257,5 +269,9 @@
 
     .vitrine-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bazar-detail__layout {
+        grid-template-columns: 1fr;
     }
 }
