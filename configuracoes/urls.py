@@ -1,7 +1,16 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from inscricoes.views import admin_redirect, cadastro, home, login_plataforma, sair
+from inscricoes.views import (
+    admin_redirect,
+    cadastro,
+    home,
+    imagem_vitrine_produto,
+    imagem_vitrine_servico,
+    login_plataforma,
+    sair,
+    vitrine,
+)
 
 
 urlpatterns = [
@@ -33,6 +42,24 @@ urlpatterns = [
         'cadastro/',
         cadastro,
         name='cadastro'
+    ),
+
+    path(
+        'bazar/',
+        vitrine,
+        name='vitrine'
+    ),
+
+    path(
+        'bazar/produto/<int:id>/imagem/',
+        imagem_vitrine_produto,
+        name='imagem_vitrine_produto'
+    ),
+
+    path(
+        'bazar/servico/<int:id>/imagem/',
+        imagem_vitrine_servico,
+        name='imagem_vitrine_servico'
     ),
 
     path(

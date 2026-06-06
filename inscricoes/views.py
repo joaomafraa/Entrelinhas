@@ -286,7 +286,7 @@ def listar_produtos(request):
 
     return render(
         request,
-        'inscricoes/listar_bazar.html',
+        'bazar/admin/listar.html',
         {
             'current_admin_page': 'produtos',
             'titulo': 'Produtos',
@@ -340,7 +340,7 @@ def criar_produto(request):
 
     return render(
         request,
-        'inscricoes/form_bazar.html',
+        'bazar/admin/form.html',
         {
             'current_admin_page': 'produtos',
             'titulo': 'Novo produto',
@@ -387,7 +387,7 @@ def editar_produto(request, id):
 
     return render(
         request,
-        'inscricoes/form_bazar.html',
+        'bazar/admin/form.html',
         {
             'current_admin_page': 'produtos',
             'titulo': 'Editar produto',
@@ -461,7 +461,7 @@ def listar_servicos(request):
 
     return render(
         request,
-        'inscricoes/listar_bazar.html',
+        'bazar/admin/listar.html',
         {
             'current_admin_page': 'servicos',
             'titulo': 'Servicos',
@@ -515,7 +515,7 @@ def criar_servico(request):
 
     return render(
         request,
-        'inscricoes/form_bazar.html',
+        'bazar/admin/form.html',
         {
             'current_admin_page': 'servicos',
             'titulo': 'Novo servico',
@@ -562,7 +562,7 @@ def editar_servico(request, id):
 
     return render(
         request,
-        'inscricoes/form_bazar.html',
+        'bazar/admin/form.html',
         {
             'current_admin_page': 'servicos',
             'titulo': 'Editar servico',
@@ -634,7 +634,7 @@ def listar_certificados(request):
 
     return render(
         request,
-        'inscricoes/certificados.html',
+        'certificados/admin/listar.html',
         {
             'current_admin_page': 'certificados',
             'inscricoes': page_obj.object_list,
@@ -1484,7 +1484,6 @@ def registrar_presenca(request, id):
     )
 
 
-@login_required
 def vitrine(request):
 
     produtos = Produto.objects.filter(ativo=True)
@@ -1530,7 +1529,7 @@ def vitrine(request):
 
     return render(
         request,
-        'inscricoes/vitrine.html',
+        'bazar/vitrine.html',
         {
             'produtos': produtos,
             'servicos': servicos,
@@ -1545,7 +1544,6 @@ def vitrine(request):
     )
 
 
-@login_required
 def imagem_vitrine_produto(request, id):
 
     produto = get_object_or_404(Produto, id=id, ativo=True)
@@ -1569,7 +1567,6 @@ def imagem_vitrine_produto(request, id):
     )
 
 
-@login_required
 def imagem_vitrine_servico(request, id):
 
     servico = get_object_or_404(Servico, id=id, ativo=True)
