@@ -113,7 +113,6 @@ class ServicoAdmin(admin.ModelAdmin):
     list_display = (
         'nome',
         'tipo',
-        'preco',
         'ativo',
         'data_criacao',
     )
@@ -130,4 +129,8 @@ class ServicoAdmin(admin.ModelAdmin):
 
     inlines = (
         ServicoImagemInline,
+    )
+
+    exclude = (
+        'preco',
     )

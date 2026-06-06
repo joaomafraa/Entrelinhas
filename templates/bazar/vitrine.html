@@ -1,42 +1,68 @@
 {% extends 'inscricoes/base.html' %}
 {% load static %}
 
-{% block title %}Vitrine — Entrelinhas{% endblock %}
+{% block title %}Bazar | EntreLinhas{% endblock %}
 
 {% block content %}
-<div class="vitrine-container">
 
-    <header class="vitrine-header">
-        <h1 class="vitrine-titulo">Bazar</h1>
-        <p class="vitrine-subtitulo">Produtos e serviços disponíveis</p>
-    </header>
+<section class="vitrine-hero">
+    <div class="vitrine-hero__inner">
+        <div class="vitrine-hero__copy">
+            <span class="vitrine-badge">Bazar solidário</span>
+            <h1>Cada peça é uma história.</h1>
+            <p>Produtos artesanais feitos pela ONG. 100% da renda é revertida para o projeto.</p>
+        </div>
 
-    <section class="vitrine-filtros">
-        <form method="get">
+        <form method="get" action="{% url 'vitrine' %}" class="vitrine-search">
+            {% if filtros.tipo %}
+                <input type="hidden" name="tipo" value="{{ filtros.tipo }}">
+            {% endif %}
+            {% if filtros.preco_max %}
+                <input type="hidden" name="preco_max" value="{{ filtros.preco_max }}">
+            {% endif %}
 
-            <div class="filtro-grupo">
-                <label for="tipo">Exibir</label>
-                <select name="tipo" id="tipo">
-                    <option value="" {% if not filtros.tipo %}selected{% endif %}>Tudo</option>
-                    <option value="produto" {% if filtros.tipo == 'produto' %}selected{% endif %}>Só produtos</option>
-                    <option value="servico" {% if filtros.tipo == 'servico' %}selected{% endif %}>Só serviços</option>
-                </select>
-            </div>
+            <label class="visually-hidden" for="vitrine-q">Buscar produto ou serviço</label>
+            <span class="vitrine-search__icon" aria-hidden="true"></span>
+            <input
+                id="vitrine-q"
+                type="search"
+                name="q"
+                placeholder="Buscar produto ou serviço..."
+                value="{{ filtros.q }}"
+            >
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+</section>
 
-            <div class="filtro-grupo">
-                <label for="categoria">Categoria</label>
-                <select name="categoria" id="categoria">
-                    <option value="">Todas</option>
-                    {% for cat in categorias %}
-                    <option value="{{ cat }}" {% if filtros.categoria == cat %}selected{% endif %}>
-                        {{ cat }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
+<section class="vitrine-content">
+    <aside class="vitrine-categorias" aria-label="Categorias do bazar">
+        <h2>Categorias</h2>
 
-            <div class="filtro-grupo">
-                <label for="preco_max">Preço até</label>
+        <a
+            href="{% url 'vitrine' %}?tipo=produto{% if filtros.q %}&q={{ filtros.q|urlencode }}{% endif %}{% if filtros.preco_max %}&preco_max={{ filtros.preco_max|urlencode }}{% endif %}"
+            class="vitrine-categoria-link {% if filtros.tipo == 'produto' %}vitrine-categoria-link--active{% endif %}"
+        >
+            Produtos
+        </a>
+
+        <a
+            href="{% url 'vitrine' %}?tipo=servico{% if filtros.q %}&q={{ filtros.q|urlencode }}{% endif %}"
+            class="vitrine-categoria-link {% if filtros.tipo == 'servico' %}vitrine-categoria-link--active{% endif %}"
+        >
+            Serviços
+        </a>
+
+        <form method="get" action="{% url 'vitrine' %}" class="vitrine-side-filter">
+            {% if filtros.q %}
+                <input type="hidden" name="q" value="{{ filtros.q }}">
+            {% endif %}
+            {% if filtros.tipo %}
+                <input type="hidden" name="tipo" value="{{ filtros.tipo }}">
+            {% endif %}
+
+            <label for="preco_max">Preço até</label>
+            <div>
                 <input
                     type="number"
                     name="preco_max"
@@ -46,93 +72,91 @@
                     placeholder="R$ 0,00"
                     value="{{ filtros.preco_max }}"
                 >
-            </div>
-
-            <div class="filtro-acoes">
                 <button type="submit">Filtrar</button>
-                {% if filtros.categoria or filtros.preco_max or filtros.tipo %}
-                <a href="{% url 'vitrine' %}">Limpar filtros</a>
-                {% endif %}
             </div>
-
         </form>
-    </section>
 
-    {% if sem_resultados %}
-    <div class="vitrine-vazia">
-        <p>Nenhum item encontrado com os filtros selecionados.</p>
-        <a href="{% url 'vitrine' %}">Ver todos os itens</a>
+        {% if filtros.q or filtros.preco_max or filtros.tipo %}
+            <a href="{% url 'vitrine' %}" class="vitrine-limpar">Limpar filtros</a>
+        {% endif %}
+    </aside>
+
+    <div class="vitrine-listagem">
+        <div class="vitrine-listagem__header">
+            <span>{{ contador }}</span>
+        </div>
+
+        {% if sem_resultados %}
+            <div class="vitrine-vazia">
+                <p>Nenhum item encontrado com os filtros selecionados.</p>
+                <a href="{% url 'vitrine' %}">Ver todos os itens</a>
+            </div>
+        {% else %}
+            <section class="vitrine-secao">
+                <div class="vitrine-grid">
+                    {% for item in itens_vitrine %}
+                        <article class="vitrine-card">
+                            <div class="vitrine-card-imagem">
+                                {% if item.objeto.tem_imagem %}
+                                    <img
+                                        src="{% url item.imagem_url item.objeto.id %}"
+                                        alt="{{ item.objeto.nome }}"
+                                    >
+                                {% else %}
+                                    <div class="vitrine-card-sem-imagem">
+                                        <span>Sem imagem</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="vitrine-card-info">
+                                <span class="vitrine-card-categoria">{{ item.etiqueta }}</span>
+                                <h3 class="vitrine-card-nome">{{ item.objeto.nome }}</h3>
+                                <p class="vitrine-card-descricao">{{ item.objeto.descricao|truncatechars:110 }}</p>
+                                {% if item.mostrar_preco %}
+                                    <p class="vitrine-card-preco">
+                                        <img src="{% static 'assets/icons/produto.svg' %}" alt="">
+                                        {{ item.objeto.preco_formatado }}
+                                    </p>
+                                {% else %}
+                                    <span class="vitrine-card-servico">
+                                        <img src="{% static 'assets/icons/servico.svg' %}" alt="">
+                                        Valor sob consulta
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="vitrine-pagination" aria-label="Páginas da vitrine">
+                    {% if page_obj.has_previous %}
+                        <a href="?{% if querystring_sem_page %}{{ querystring_sem_page }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a>
+                    {% else %}
+                        <span class="vitrine-pagination__disabled">Anterior</span>
+                    {% endif %}
+
+                    <div class="vitrine-pagination__pages">
+                        {% for numero in page_obj.paginator.page_range %}
+                            {% if numero == page_obj.number %}
+                                <span class="vitrine-pagination__active">{{ numero }}</span>
+                            {% else %}
+                                <a href="?{% if querystring_sem_page %}{{ querystring_sem_page }}&{% endif %}page={{ numero }}">{{ numero }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if page_obj.has_next %}
+                        <a href="?{% if querystring_sem_page %}{{ querystring_sem_page }}&{% endif %}page={{ page_obj.next_page_number }}">Próxima</a>
+                    {% else %}
+                        <span class="vitrine-pagination__disabled">Próxima</span>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        {% endif %}
     </div>
+</section>
 
-    {% else %}
-
-    {% if produtos %}
-    <section class="vitrine-secao">
-        <h2 class="vitrine-secao-titulo">Produtos</h2>
-        <div class="vitrine-grid">
-            {% for produto in produtos %}
-            <article class="vitrine-card">
-
-                <div class="vitrine-card-imagem">
-                    {% if produto.tem_imagem %}
-                    <img
-                        src="{% url 'imagem_vitrine_produto' produto.id %}"
-                        alt="{{ produto.nome }}"
-                    >
-                    {% else %}
-                    <div class="vitrine-card-sem-imagem">
-                        <span>Sem imagem</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="vitrine-card-info">
-                    <span class="vitrine-card-categoria">{{ produto.categoria }}</span>
-                    <h3 class="vitrine-card-nome">{{ produto.nome }}</h3>
-                    <p class="vitrine-card-descricao">{{ produto.descricao }}</p>
-                    <p class="vitrine-card-preco">{{ produto.preco_formatado }}</p>
-                </div>
-
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    {% if servicos %}
-    <section class="vitrine-secao">
-        <h2 class="vitrine-secao-titulo">Serviços</h2>
-        <div class="vitrine-grid">
-            {% for servico in servicos %}
-            <article class="vitrine-card">
-
-                <div class="vitrine-card-imagem">
-                    {% if servico.tem_imagem %}
-                    <img
-                        src="{% url 'imagem_vitrine_servico' servico.id %}"
-                        alt="{{ servico.nome }}"
-                    >
-                    {% else %}
-                    <div class="vitrine-card-sem-imagem">
-                        <span>Sem imagem</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="vitrine-card-info">
-                    <span class="vitrine-card-categoria">{{ servico.tipo }}</span>
-                    <h3 class="vitrine-card-nome">{{ servico.nome }}</h3>
-                    <p class="vitrine-card-descricao">{{ servico.descricao }}</p>
-                    <p class="vitrine-card-preco">{{ servico.preco_formatado }}</p>
-                </div>
-
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    {% endif %}
-
-</div>
 {% endblock %}

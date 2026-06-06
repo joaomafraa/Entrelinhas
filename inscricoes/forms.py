@@ -581,21 +581,18 @@ class ServicoForm(BazarItemForm):
         fields = [
             'nome',
             'descricao',
-            'preco',
             'tipo',
             'ativo',
         ]
         labels = {
             'nome': 'Nome',
             'descricao': 'Descricao',
-            'preco': 'Valor',
             'tipo': 'Tipo de servico',
             'ativo': 'Ativo',
         }
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Ajuste de roupa'}),
             'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Descreva o servico'}),
-            'preco': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0.01'}),
             'tipo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Costura'}),
             'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

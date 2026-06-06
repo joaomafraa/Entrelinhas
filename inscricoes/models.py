@@ -285,7 +285,7 @@ class Servico(models.Model):
 
     nome = models.CharField(max_length=120)
     descricao = models.TextField()
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     tipo = models.CharField(max_length=80)
     imagem_nome = models.CharField(max_length=255, blank=True)
     imagem_tipo = models.CharField(max_length=100, blank=True)

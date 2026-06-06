@@ -48,7 +48,9 @@
                             </div>
 
                             <h2>{{ item.nome }}</h2>
-                            <strong class="bazar-card__price">{{ item.preco_formatado }}</strong>
+                            {% if item.mostrar_preco_bazar %}
+                                <strong class="bazar-card__price">{{ item.preco_formatado }}</strong>
+                            {% endif %}
                             <p>{{ item.descricao|truncatechars:96 }}</p>
 
                             <div class="bazar-card__actions">

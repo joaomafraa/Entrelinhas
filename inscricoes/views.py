@@ -283,6 +283,7 @@ def listar_produtos(request):
     for produto in page_obj.object_list:
 
         produto.etiqueta_bazar = produto.categoria
+        produto.mostrar_preco_bazar = True
 
     return render(
         request,
@@ -458,6 +459,7 @@ def listar_servicos(request):
     for servico in page_obj.object_list:
 
         servico.etiqueta_bazar = servico.tipo
+        servico.mostrar_preco_bazar = False
 
     return render(
         request,
@@ -519,7 +521,7 @@ def criar_servico(request):
         {
             'current_admin_page': 'servicos',
             'titulo': 'Novo servico',
-            'descricao': 'Cadastre nome, descricao, valor, tipo e imagem do servico.',
+            'descricao': 'Cadastre nome, descricao, tipo e imagem do servico.',
             'form': form,
             'back_url': 'listar_servicos',
             'texto_botao': 'Salvar servico',
@@ -1489,18 +1491,26 @@ def vitrine(request):
     produtos = Produto.objects.filter(ativo=True)
     servicos = Servico.objects.filter(ativo=True)
 
-    categoria = request.GET.get('categoria', '').strip()
+    q = request.GET.get('q', '').strip()
     preco_max = request.GET.get('preco_max', '').strip()
     tipo = request.GET.get('tipo', '')
 
-    if categoria:
-        produtos = produtos.filter(categoria__icontains=categoria)
-        servicos = servicos.filter(tipo__icontains=categoria)
+    if q:
+
+        produtos = produtos.filter(
+            Q(nome__icontains=q)
+            | Q(descricao__icontains=q)
+            | Q(categoria__icontains=q)
+        )
+        servicos = servicos.filter(
+            Q(nome__icontains=q)
+            | Q(descricao__icontains=q)
+            | Q(tipo__icontains=q)
+        )
 
     if preco_max:
         try:
             produtos = produtos.filter(preco__lte=float(preco_max))
-            servicos = servicos.filter(preco__lte=float(preco_max))
         except ValueError:
             pass
 
@@ -1509,23 +1519,41 @@ def vitrine(request):
     elif tipo == 'servico':
         produtos = produtos.none()
 
-    categorias_produtos = (
-        Produto.objects.filter(ativo=True)
-        .values_list('categoria', flat=True)
-        .distinct()
-        .order_by('categoria')
-    )
-
-    categorias_servicos = (
-        Servico.objects.filter(ativo=True)
-        .values_list('tipo', flat=True)
-        .distinct()
-        .order_by('tipo')
-    )
-
-    categorias = sorted(set(list(categorias_produtos) + list(categorias_servicos)))
-
     sem_resultados = not produtos.exists() and not servicos.exists()
+    total_produtos = produtos.count()
+    total_servicos = servicos.count()
+    total_itens = total_produtos + total_servicos
+    itens_vitrine = [
+        {
+            'objeto': produto,
+            'tipo': 'produto',
+            'etiqueta': produto.categoria,
+            'imagem_url': 'imagem_vitrine_produto',
+            'mostrar_preco': True,
+        }
+        for produto in produtos
+    ] + [
+        {
+            'objeto': servico,
+            'tipo': 'servico',
+            'etiqueta': servico.tipo,
+            'imagem_url': 'imagem_vitrine_servico',
+            'mostrar_preco': False,
+        }
+        for servico in servicos
+    ]
+    paginator = Paginator(itens_vitrine, 6)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    query_params = request.GET.copy()
+    query_params.pop('page', None)
+    querystring_sem_page = query_params.urlencode()
+
+    if tipo == 'produto':
+        contador = f'{total_produtos} produto' + ('' if total_produtos == 1 else 's')
+    elif tipo == 'servico':
+        contador = f'{total_servicos} serviço' + ('' if total_servicos == 1 else 's')
+    else:
+        contador = '1 item encontrado' if total_itens == 1 else f'{total_itens} itens encontrados'
 
     return render(
         request,
@@ -1533,10 +1561,16 @@ def vitrine(request):
         {
             'produtos': produtos,
             'servicos': servicos,
-            'categorias': categorias,
+            'itens_vitrine': page_obj.object_list,
+            'page_obj': page_obj,
+            'querystring_sem_page': querystring_sem_page,
             'sem_resultados': sem_resultados,
+            'total_produtos': total_produtos,
+            'total_servicos': total_servicos,
+            'total_itens': total_itens,
+            'contador': contador,
             'filtros': {
-                'categoria': categoria,
+                'q': q,
                 'preco_max': preco_max,
                 'tipo': tipo,
             },
