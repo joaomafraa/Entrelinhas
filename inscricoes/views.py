@@ -1482,3 +1482,112 @@ def registrar_presenca(request, id):
             'current_admin_page': 'aulas',
         }
     )
+
+
+@login_required
+def vitrine(request):
+
+    produtos = Produto.objects.filter(ativo=True)
+    servicos = Servico.objects.filter(ativo=True)
+
+    categoria = request.GET.get('categoria', '').strip()
+    preco_max = request.GET.get('preco_max', '').strip()
+    tipo = request.GET.get('tipo', '')
+
+    if categoria:
+        produtos = produtos.filter(categoria__icontains=categoria)
+        servicos = servicos.filter(tipo__icontains=categoria)
+
+    if preco_max:
+        try:
+            produtos = produtos.filter(preco__lte=float(preco_max))
+            servicos = servicos.filter(preco__lte=float(preco_max))
+        except ValueError:
+            pass
+
+    if tipo == 'produto':
+        servicos = servicos.none()
+    elif tipo == 'servico':
+        produtos = produtos.none()
+
+    categorias_produtos = (
+        Produto.objects.filter(ativo=True)
+        .values_list('categoria', flat=True)
+        .distinct()
+        .order_by('categoria')
+    )
+
+    categorias_servicos = (
+        Servico.objects.filter(ativo=True)
+        .values_list('tipo', flat=True)
+        .distinct()
+        .order_by('tipo')
+    )
+
+    categorias = sorted(set(list(categorias_produtos) + list(categorias_servicos)))
+
+    sem_resultados = not produtos.exists() and not servicos.exists()
+
+    return render(
+        request,
+        'inscricoes/vitrine.html',
+        {
+            'produtos': produtos,
+            'servicos': servicos,
+            'categorias': categorias,
+            'sem_resultados': sem_resultados,
+            'filtros': {
+                'categoria': categoria,
+                'preco_max': preco_max,
+                'tipo': tipo,
+            },
+        }
+    )
+
+
+@login_required
+def imagem_vitrine_produto(request, id):
+
+    produto = get_object_or_404(Produto, id=id, ativo=True)
+
+    if not produto.tem_imagem:
+
+        return HttpResponse(status=404)
+
+    imagem = produto.imagem_capa
+
+    if imagem:
+
+        return HttpResponse(
+            bytes(imagem.conteudo),
+            content_type=imagem.tipo or 'application/octet-stream'
+        )
+
+    return HttpResponse(
+        bytes(produto.imagem_conteudo),
+        content_type=produto.imagem_tipo or 'application/octet-stream'
+    )
+
+
+@login_required
+def imagem_vitrine_servico(request, id):
+
+    servico = get_object_or_404(Servico, id=id, ativo=True)
+
+    if not servico.tem_imagem:
+
+        return HttpResponse(status=404)
+
+    imagem = servico.imagem_capa
+
+    if imagem:
+
+        return HttpResponse(
+            bytes(imagem.conteudo),
+            content_type=imagem.tipo or 'application/octet-stream'
+        )
+
+    return HttpResponse(
+        bytes(servico.imagem_conteudo),
+        content_type=servico.imagem_tipo or 'application/octet-stream'
+    )

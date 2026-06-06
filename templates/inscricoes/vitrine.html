@@ -1,0 +1,138 @@
+{% extends 'inscricoes/student_base.html' %}
+{% load static %}
+
+{% block title %}Vitrine — Entrelinhas{% endblock %}
+
+{% block content %}
+<div class="vitrine-container">
+
+    <header class="vitrine-header">
+        <h1 class="vitrine-titulo">Bazar</h1>
+        <p class="vitrine-subtitulo">Produtos e serviços disponíveis</p>
+    </header>
+
+    <section class="vitrine-filtros">
+        <form method="get">
+
+            <div class="filtro-grupo">
+                <label for="tipo">Exibir</label>
+                <select name="tipo" id="tipo">
+                    <option value="" {% if not filtros.tipo %}selected{% endif %}>Tudo</option>
+                    <option value="produto" {% if filtros.tipo == 'produto' %}selected{% endif %}>Só produtos</option>
+                    <option value="servico" {% if filtros.tipo == 'servico' %}selected{% endif %}>Só serviços</option>
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="categoria">Categoria</label>
+                <select name="categoria" id="categoria">
+                    <option value="">Todas</option>
+                    {% for cat in categorias %}
+                    <option value="{{ cat }}" {% if filtros.categoria == cat %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filtro-grupo">
+                <label for="preco_max">Preço até</label>
+                <input
+                    type="number"
+                    name="preco_max"
+                    id="preco_max"
+                    min="0"
+                    step="0.01"
+                    placeholder="R$ 0,00"
+                    value="{{ filtros.preco_max }}"
+                >
+            </div>
+
+            <div class="filtro-acoes">
+                <button type="submit">Filtrar</button>
+                {% if filtros.categoria or filtros.preco_max or filtros.tipo %}
+                <a href="{% url 'vitrine' %}">Limpar filtros</a>
+                {% endif %}
+            </div>
+
+        </form>
+    </section>
+
+    {% if sem_resultados %}
+    <div class="vitrine-vazia">
+        <p>Nenhum item encontrado com os filtros selecionados.</p>
+        <a href="{% url 'vitrine' %}">Ver todos os itens</a>
+    </div>
+
+    {% else %}
+
+    {% if produtos %}
+    <section class="vitrine-secao">
+        <h2 class="vitrine-secao-titulo">Produtos</h2>
+        <div class="vitrine-grid">
+            {% for produto in produtos %}
+            <article class="vitrine-card">
+
+                <div class="vitrine-card-imagem">
+                    {% if produto.tem_imagem %}
+                    <img
+                        src="{% url 'imagem_vitrine_produto' produto.id %}"
+                        alt="{{ produto.nome }}"
+                    >
+                    {% else %}
+                    <div class="vitrine-card-sem-imagem">
+                        <span>Sem imagem</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="vitrine-card-info">
+                    <span class="vitrine-card-categoria">{{ produto.categoria }}</span>
+                    <h3 class="vitrine-card-nome">{{ produto.nome }}</h3>
+                    <p class="vitrine-card-descricao">{{ produto.descricao }}</p>
+                    <p class="vitrine-card-preco">{{ produto.preco_formatado }}</p>
+                </div>
+
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if servicos %}
+    <section class="vitrine-secao">
+        <h2 class="vitrine-secao-titulo">Serviços</h2>
+        <div class="vitrine-grid">
+            {% for servico in servicos %}
+            <article class="vitrine-card">
+
+                <div class="vitrine-card-imagem">
+                    {% if servico.tem_imagem %}
+                    <img
+                        src="{% url 'imagem_vitrine_servico' servico.id %}"
+                        alt="{{ servico.nome }}"
+                    >
+                    {% else %}
+                    <div class="vitrine-card-sem-imagem">
+                        <span>Sem imagem</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="vitrine-card-info">
+                    <span class="vitrine-card-categoria">{{ servico.tipo }}</span>
+                    <h3 class="vitrine-card-nome">{{ servico.nome }}</h3>
+                    <p class="vitrine-card-descricao">{{ servico.descricao }}</p>
+                    <p class="vitrine-card-preco">{{ servico.preco_formatado }}</p>
+                </div>
+
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}
