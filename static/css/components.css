@@ -1073,6 +1073,156 @@ footer,
     margin: 0 0 0.4rem;
 }
 
+.admin-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.admin-kpi-card,
+.admin-dashboard-panel {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-kpi-card {
+    min-height: 178px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.65rem;
+}
+
+.admin-kpi-card__label {
+    color: #2f3154;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.admin-kpi-card strong {
+    color: #050505;
+    font-size: 2.55rem;
+    line-height: 1;
+}
+
+.admin-kpi-card__trend {
+    color: var(--muted-foreground);
+    font-size: 0.98rem;
+    line-height: 1.35;
+}
+
+.admin-kpi-card__trend::before {
+    content: "->";
+    margin-right: 0.35rem;
+    font-weight: 800;
+}
+
+.admin-kpi-card__trend--positive {
+    color: #2f7a4f;
+}
+
+.admin-kpi-card__trend--neutral {
+    color: var(--muted-foreground);
+}
+
+.admin-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+}
+
+.admin-dashboard-panel {
+    min-width: 0;
+    padding: 1.5rem;
+}
+
+.admin-dashboard-panel--wide {
+    grid-column: 1 / -1;
+}
+
+.admin-dashboard-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.admin-dashboard-panel h2 {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+}
+
+.admin-status-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+}
+
+.admin-status-list article {
+    min-height: 92px;
+    display: grid;
+    align-content: center;
+    gap: 0.35rem;
+    padding: 1rem;
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.admin-status-list span,
+.admin-mini-list span {
+    color: var(--muted-foreground);
+}
+
+.admin-status-list strong {
+    color: var(--foreground);
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.admin-mini-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.admin-mini-list article {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.admin-mini-list article:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.admin-mini-list strong,
+.admin-mini-list span {
+    display: block;
+}
+
+.admin-mini-list strong {
+    color: var(--foreground);
+}
+
+.admin-mini-list small {
+    flex: 0 0 auto;
+    color: var(--muted-foreground);
+    font-weight: 700;
+}
+
 .bazar-list-toolbar {
     display: flex;
     align-items: center;

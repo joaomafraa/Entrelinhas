@@ -160,6 +160,18 @@
         grid-template-columns: 1fr;
     }
 
+    .admin-kpi-grid,
+    .admin-dashboard-grid,
+    .admin-status-list {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard-panel__header,
+    .admin-mini-list article {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
     .vitrine-hero__inner,
     .vitrine-content,
     .vitrine-grid {
@@ -273,6 +285,14 @@
 
     .admin-stat-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-dashboard-grid {
+        grid-template-columns: 1fr;
     }
 
     .bazar-grid {

@@ -1,6 +1,6 @@
 import calendar
 import mimetypes
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -26,7 +26,16 @@ from .forms import (
     SolicitacaoContatoForm,
     normalizar_cpf,
 )
-from .models import Aula, Inscricao, Presenca, Produto, ProdutoImagem, Servico, ServicoImagem
+from .models import (
+    Aula,
+    Inscricao,
+    Presenca,
+    Produto,
+    ProdutoImagem,
+    Servico,
+    ServicoImagem,
+    SolicitacaoContato,
+)
 
 
 MESES = [
@@ -293,7 +302,72 @@ def dashboard_admin(request):
 
         return redirect('listar_inscricoes')
 
+    hoje = timezone.localdate()
+    inicio_mes_atual = hoje.replace(day=1)
+
+    if inicio_mes_atual.month == 1:
+
+        inicio_mes_anterior = inicio_mes_atual.replace(
+            year=inicio_mes_atual.year - 1,
+            month=12
+        )
+
+    else:
+
+        inicio_mes_anterior = inicio_mes_atual.replace(
+            month=inicio_mes_atual.month - 1
+        )
+
     total_inscricoes = Inscricao.objects.count()
+    inscricoes_mes_atual = Inscricao.objects.filter(
+        data_criacao__date__gte=inicio_mes_atual
+    ).count()
+    inscricoes_mes_anterior = Inscricao.objects.filter(
+        data_criacao__date__gte=inicio_mes_anterior,
+        data_criacao__date__lt=inicio_mes_atual
+    ).count()
+    alunas_ativas = Inscricao.objects.filter(
+        ativa=True,
+        status='aprovada'
+    ).count()
+    produtos_ativos = Produto.objects.filter(ativo=True).count()
+    servicos_ativos = Servico.objects.filter(ativo=True).count()
+    itens_bazar = produtos_ativos + servicos_ativos
+    itens_bazar_semana = (
+        Produto.objects.filter(
+            ativo=True,
+            data_criacao__date__gte=hoje - timedelta(days=7)
+        ).count()
+        + Servico.objects.filter(
+            ativo=True,
+            data_criacao__date__gte=hoje - timedelta(days=7)
+        ).count()
+    )
+    solicitacoes_novas = SolicitacaoContato.objects.filter(
+        status='nova'
+    ).count()
+    proximas_aulas = Aula.objects.filter(
+        data__gte=hoje
+    ).order_by('data', 'horario')[:3]
+    solicitacoes_recentes = SolicitacaoContato.objects.select_related().order_by(
+        '-criada_em'
+    )[:3]
+
+    if inscricoes_mes_anterior:
+
+        variacao_inscricoes = round(
+            (
+                (inscricoes_mes_atual - inscricoes_mes_anterior)
+                / inscricoes_mes_anterior
+            ) * 100
+        )
+        inscricoes_auxiliar = f'{variacao_inscricoes:+d}% vs. mes passado'
+        inscricoes_auxiliar_estado = 'positive' if variacao_inscricoes >= 0 else 'neutral'
+
+    else:
+
+        inscricoes_auxiliar = 'Sem base no mes passado'
+        inscricoes_auxiliar_estado = 'neutral'
 
     return render(
         request,
@@ -305,8 +379,17 @@ def dashboard_admin(request):
             'total_aprovadas': Inscricao.objects.filter(status='aprovada').count(),
             'total_recusadas': Inscricao.objects.filter(status='recusada').count(),
             'total_aulas': Aula.objects.count(),
-            'total_produtos': Produto.objects.count(),
-            'total_servicos': Servico.objects.count(),
+            'inscricoes_mes_atual': inscricoes_mes_atual,
+            'inscricoes_auxiliar': inscricoes_auxiliar,
+            'inscricoes_auxiliar_estado': inscricoes_auxiliar_estado,
+            'alunas_ativas': alunas_ativas,
+            'produtos_ativos': produtos_ativos,
+            'servicos_ativos': servicos_ativos,
+            'itens_bazar': itens_bazar,
+            'itens_bazar_semana': itens_bazar_semana,
+            'solicitacoes_novas': solicitacoes_novas,
+            'proximas_aulas': proximas_aulas,
+            'solicitacoes_recentes': solicitacoes_recentes,
         }
     )
 

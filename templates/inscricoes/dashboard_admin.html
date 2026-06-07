@@ -18,75 +18,125 @@
         </div>
     </div>
 
-    <div class="admin-stat-grid">
-        <article class="admin-stat-card">
-            <span>Total de inscricoes</span>
-            <strong>{{ total_inscricoes }}</strong>
+    <div class="admin-kpi-grid">
+        <article class="admin-kpi-card">
+            <span class="admin-kpi-card__label">Inscricoes novas</span>
+            <strong>{{ inscricoes_mes_atual }}</strong>
+            <small class="admin-kpi-card__trend admin-kpi-card__trend--{{ inscricoes_auxiliar_estado }}">
+                {{ inscricoes_auxiliar }}
+            </small>
         </article>
 
-        <article class="admin-stat-card">
-            <span>Pendentes</span>
-            <strong>{{ total_pendentes }}</strong>
+        <article class="admin-kpi-card">
+            <span class="admin-kpi-card__label">Alunas ativas</span>
+            <strong>{{ alunas_ativas }}</strong>
+            <small class="admin-kpi-card__trend admin-kpi-card__trend--positive">
+                {{ total_aprovadas }} matriculas aprovadas
+            </small>
         </article>
 
-        <article class="admin-stat-card">
-            <span>Aprovadas</span>
-            <strong>{{ total_aprovadas }}</strong>
+        <article class="admin-kpi-card">
+            <span class="admin-kpi-card__label">Itens no bazar</span>
+            <strong>{{ itens_bazar }}</strong>
+            <small class="admin-kpi-card__trend {% if itens_bazar_semana %}admin-kpi-card__trend--positive{% else %}admin-kpi-card__trend--neutral{% endif %}">
+                +{{ itens_bazar_semana }} esta semana
+            </small>
         </article>
 
-        <article class="admin-stat-card">
-            <span>Recusadas</span>
-            <strong>{{ total_recusadas }}</strong>
-        </article>
-
-        <article class="admin-stat-card">
-            <span>Aulas cadastradas</span>
-            <strong>{{ total_aulas }}</strong>
-        </article>
-
-        <article class="admin-stat-card">
-            <span>Produtos cadastrados</span>
-            <strong>{{ total_produtos }}</strong>
-        </article>
-
-        <article class="admin-stat-card">
-            <span>Servicos cadastrados</span>
-            <strong>{{ total_servicos }}</strong>
+        <article class="admin-kpi-card">
+            <span class="admin-kpi-card__label">Solicitacoes</span>
+            <strong>{{ solicitacoes_novas }}</strong>
+            <small class="admin-kpi-card__trend {% if solicitacoes_novas %}admin-kpi-card__trend--positive{% else %}admin-kpi-card__trend--neutral{% endif %}">
+                {{ solicitacoes_novas }} aguardando resposta
+            </small>
         </article>
     </div>
 
-    <section class="admin-overview-panel">
-        <div>
-            <h2>Inscricoes do curso</h2>
-            <p class="text-soft mb-0">Use a area de inscricoes para buscar alunas, conferir dados e acompanhar o status de cada matricula.</p>
-        </div>
+    <div class="admin-dashboard-grid">
+        <section class="admin-dashboard-panel">
+            <div class="admin-dashboard-panel__header">
+                <div>
+                    <h2>Inscricoes do curso</h2>
+                    <p class="text-soft mb-0">Status das matriculas cadastradas.</p>
+                </div>
 
-        <a href="{% url 'listar_inscricoes' %}" class="admin-page-button">Abrir inscricoes</a>
-    </section>
+                <a href="{% url 'listar_inscricoes' %}" class="admin-page-button">Abrir inscricoes</a>
+            </div>
 
-    <section class="admin-overview-panel">
-        <div>
-            <h2>Aulas do curso</h2>
-            <p class="text-soft mb-0">Cadastre aulas, confira o calendario mensal e registre a presenca das alunas aprovadas.</p>
-        </div>
+            <div class="admin-status-list">
+                <article>
+                    <span>Pendentes</span>
+                    <strong>{{ total_pendentes }}</strong>
+                </article>
 
-        <div class="cluster justify-content-end">
-            <a href="{% url 'calendario_aulas' %}" class="admin-page-button">Ver calendario</a>
-            <a href="{% url 'criar_aula' %}" class="admin-page-button">Nova aula</a>
-        </div>
-    </section>
+                <article>
+                    <span>Aprovadas</span>
+                    <strong>{{ total_aprovadas }}</strong>
+                </article>
 
-    <section class="admin-overview-panel">
-        <div>
-            <h2>Produtos e servicos</h2>
-            <p class="text-soft mb-0">Cadastre itens do bazar com imagem, valor, descricao, etiqueta e status de exibicao.</p>
-        </div>
+                <article>
+                    <span>Recusadas</span>
+                    <strong>{{ total_recusadas }}</strong>
+                </article>
+            </div>
+        </section>
 
-        <div class="cluster justify-content-end">
-            <a href="{% url 'listar_produtos' %}" class="admin-page-button">Abrir produtos</a>
-            <a href="{% url 'listar_servicos' %}" class="admin-page-button">Abrir servicos</a>
-        </div>
-    </section>
+        <section class="admin-dashboard-panel">
+            <div class="admin-dashboard-panel__header">
+                <div>
+                    <h2>Operacao da semana</h2>
+                    <p class="text-soft mb-0">{{ total_aulas }} aula(s) cadastrada(s).</p>
+                </div>
+
+                <div class="cluster justify-content-end">
+                    <a href="{% url 'calendario_aulas' %}" class="admin-page-button">Calendario</a>
+                    <a href="{% url 'criar_aula' %}" class="admin-page-button">Nova aula</a>
+                </div>
+            </div>
+
+            <div class="admin-mini-list">
+                {% for aula in proximas_aulas %}
+                    <article>
+                        <div>
+                            <strong>{{ aula.topico|default:"Aula sem topico" }}</strong>
+                            <span>{{ aula.data|date:"d/m/Y" }} as {{ aula.horario|time:"H:i" }}</span>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="text-soft mb-0">Nenhuma aula futura cadastrada.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="admin-dashboard-panel admin-dashboard-panel--wide">
+            <div class="admin-dashboard-panel__header">
+                <div>
+                    <h2>Solicitacoes recentes</h2>
+                    <p class="text-soft mb-0">Doacoes e parcerias recebidas pelo site.</p>
+                </div>
+
+                <div class="cluster justify-content-end">
+                    <a href="{% url 'listar_produtos' %}" class="admin-page-button">Produtos</a>
+                    <a href="{% url 'listar_servicos' %}" class="admin-page-button">Servicos</a>
+                </div>
+            </div>
+
+            <div class="admin-mini-list admin-mini-list--contacts">
+                {% for solicitacao in solicitacoes_recentes %}
+                    <article>
+                        <div>
+                            <strong>{{ solicitacao.nome }}</strong>
+                            <span>{{ solicitacao.get_tipo_display }} - {{ solicitacao.email }}</span>
+                        </div>
+
+                        <small>{{ solicitacao.get_status_display }}</small>
+                    </article>
+                {% empty %}
+                    <p class="text-soft mb-0">Nenhuma solicitacao recebida ainda.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
 </section>
 
 {% endblock %}
