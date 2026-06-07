@@ -51,6 +51,12 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Node / Cypress
+node_modules/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
 # Translations
 *.mo
 *.pot
