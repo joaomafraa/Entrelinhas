@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils import timezone
 
-from .models import Aula, Inscricao, Produto, Servico
+from .models import Aula, Inscricao, Produto, Servico, SolicitacaoContato
 
 
 User = get_user_model()
@@ -596,3 +596,92 @@ class ServicoForm(BazarItemForm):
             'tipo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Costura'}),
             'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+
+class SolicitacaoContatoForm(forms.ModelForm):
+
+    class Meta:
+
+        model = SolicitacaoContato
+        fields = [
+            'tipo',
+            'nome',
+            'email',
+            'telefone',
+            'mensagem',
+        ]
+        labels = {
+            'tipo': 'Tipo de solicitacao',
+            'nome': 'Nome completo',
+            'email': 'E-mail',
+            'telefone': 'Telefone',
+            'mensagem': 'Mensagem',
+        }
+        widgets = {
+            'tipo': forms.Select(attrs={'class': 'form-select form-select-lg'}),
+            'nome': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Digite seu nome'
+                }
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'voce@exemplo.com',
+                    'autocomplete': 'email'
+                }
+            ),
+            'telefone': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'DDD + telefone',
+                    'inputmode': 'numeric',
+                    'autocomplete': 'tel'
+                }
+            ),
+            'mensagem': forms.Textarea(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'rows': 5,
+                    'placeholder': 'Conte como deseja apoiar ou colaborar'
+                }
+            ),
+        }
+        error_messages = {
+            'tipo': {
+                'required': 'Escolha doacao ou parceria.',
+                'invalid_choice': 'Escolha uma opcao valida.',
+            },
+            'nome': {
+                'required': 'Informe seu nome.',
+            },
+            'email': {
+                'required': 'Informe seu e-mail.',
+                'invalid': 'Informe um e-mail valido.',
+            },
+            'telefone': {
+                'required': 'Informe seu telefone.',
+            },
+            'mensagem': {
+                'required': 'Informe sua mensagem.',
+            },
+        }
+
+    def clean_telefone(self):
+
+        telefone = self.cleaned_data['telefone'].strip()
+
+        caracteres_permitidos = set('0123456789 ()-+')
+
+        if any(caractere not in caracteres_permitidos for caractere in telefone):
+
+            raise forms.ValidationError('O telefone deve conter apenas numeros.')
+
+        telefone_normalizado = normalizar_telefone(telefone)
+
+        if len(telefone_normalizado) < 10 or len(telefone_normalizado) > 11:
+
+            raise forms.ValidationError('Informe um telefone valido com DDD.')
+
+        return telefone_normalizado

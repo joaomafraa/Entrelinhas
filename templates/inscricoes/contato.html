@@ -1,0 +1,60 @@
+{% extends 'inscricoes/base.html' %}
+
+{% block title %}Contato | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="contact-hero">
+    <div class="container">
+        <div class="contact-layout">
+            <article class="contact-copy">
+                <span class="section-label">Apoie o projeto</span>
+                <h1>Envie uma solicitacao de doacao ou parceria.</h1>
+                <p>
+                    Conte como voce deseja colaborar com a ONG. A equipe administrativa
+                    recebera sua mensagem e fara o retorno pelos dados informados.
+                </p>
+
+                <div class="contact-options">
+                    <div>
+                        <strong>Doacao</strong>
+                        <span>Apoie materiais, estrutura ou continuidade das aulas.</span>
+                    </div>
+                    <div>
+                        <strong>Parceria</strong>
+                        <span>Proponha colaboracoes, servicos, espacos ou oportunidades.</span>
+                    </div>
+                </div>
+            </article>
+
+            <div class="surface-card contact-form-card">
+                <form method="POST" class="form-stack">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="form-field">
+                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="form-error-message">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Enviar solicitacao</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -23,6 +23,7 @@ from .forms import (
     InscricaoForm,
     LoginForm,
     ServicoForm,
+    SolicitacaoContatoForm,
     normalizar_cpf,
 )
 from .models import Aula, Inscricao, Presenca, Produto, ProdutoImagem, Servico, ServicoImagem
@@ -161,6 +162,47 @@ def home(request):
     return render(
         request,
         'inscricoes/home.html'
+    )
+
+
+def contato(request):
+
+    tipo_inicial = request.GET.get('tipo')
+
+    if tipo_inicial not in {'doacao', 'parceria'}:
+
+        tipo_inicial = 'doacao'
+
+    if request.method == 'POST':
+
+        form = SolicitacaoContatoForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+            messages.success(
+                request,
+                'Solicitacao enviada com sucesso. Nossa equipe entrara em contato.'
+            )
+
+            return redirect('contato')
+
+        messages.warning(
+            request,
+            'Nao foi possivel enviar sua solicitacao. Revise os campos destacados.'
+        )
+
+    else:
+
+        form = SolicitacaoContatoForm(initial={'tipo': tipo_inicial})
+
+    return render(
+        request,
+        'inscricoes/contato.html',
+        {
+            'form': form,
+            'tipo_inicial': tipo_inicial,
+        }
     )
 
 

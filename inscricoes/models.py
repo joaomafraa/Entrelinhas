@@ -334,3 +334,55 @@ class ServicoImagem(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class SolicitacaoContato(models.Model):
+
+    TIPO = (
+        ('doacao', 'Doacao'),
+        ('parceria', 'Parceria'),
+    )
+
+    STATUS = (
+        ('nova', 'Nova'),
+        ('em_analise', 'Em analise'),
+        ('respondida', 'Respondida'),
+        ('arquivada', 'Arquivada'),
+    )
+
+    tipo = models.CharField(
+        max_length=20,
+        choices=TIPO
+    )
+
+    nome = models.CharField(
+        max_length=120
+    )
+
+    email = models.EmailField()
+
+    telefone = models.CharField(
+        max_length=20
+    )
+
+    mensagem = models.TextField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS,
+        default='nova'
+    )
+
+    criada_em = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    atualizada_em = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        ordering = ['-criada_em']
+
+    def __str__(self):
+        return f'{self.get_tipo_display()} - {self.nome}'

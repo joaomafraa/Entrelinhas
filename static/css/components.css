@@ -2554,3 +2554,70 @@ footer,
     color: var(--muted-foreground);
     line-height: 1.7;
 }
+
+.contact-hero {
+    padding: 4rem 0;
+    background:
+        linear-gradient(90deg, rgba(139, 92, 246, 0.08), rgba(255, 255, 255, 0.82)),
+        var(--background);
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(22rem, 0.75fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.contact-copy {
+    display: grid;
+    gap: 1.25rem;
+    padding: 2rem 0;
+}
+
+.contact-copy h1 {
+    max-width: 720px;
+    margin: 0;
+    color: var(--foreground);
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    line-height: 1;
+}
+
+.contact-copy p {
+    max-width: 640px;
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 1.15rem;
+    line-height: 1.7;
+}
+
+.contact-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 720px;
+}
+
+.contact-options div {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-options strong {
+    color: var(--foreground);
+}
+
+.contact-options span {
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.contact-form-card {
+    padding: 2rem;
+}

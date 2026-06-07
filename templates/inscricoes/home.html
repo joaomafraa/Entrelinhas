@@ -22,7 +22,7 @@
                             Quero me inscrever <span class="ms-2">&rarr;</span>
                         </a>
                         <a href="{% url 'vitrine' %}" class="btn btn-outline-secondary btn-lg px-4">Visitar o bazar</a>
-                        <a href="#doar" class="btn btn-ghost btn-lg px-2">&hearts; Doar</a>
+                        <a href="{% url 'contato' %}?tipo=doacao" class="btn btn-ghost btn-lg px-2">&hearts; Doar</a>
                     </div>
 
                     <div class="border-top pt-4 mt-4">
@@ -198,8 +198,8 @@
                 <p class="mb-0">R$ 30 cobrem o material de uma aluna por um mês inteiro.</p>
             </div>
             <div class="donation-banner__actions">
-                <a href="#doar" class="btn donation-banner__primary px-5">Quero doar</a>
-                <a href="{% url 'criar_inscricao' %}" class="btn donation-banner__outline px-5">Seja parceiro</a>
+                <a href="{% url 'contato' %}?tipo=doacao" class="btn donation-banner__primary px-5">Quero doar</a>
+                <a href="{% url 'contato' %}?tipo=parceria" class="btn donation-banner__outline px-5">Seja parceiro</a>
             </div>
         </div>
     </div>

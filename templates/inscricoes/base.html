@@ -58,6 +58,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}#sobre">Sobre</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'contato' %}active{% endif %}" href="{% url 'contato' %}">Apoiar</a>
+                    </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard_aluna' %}">Área da Aluna</a>

@@ -218,6 +218,23 @@
         padding: 1.5rem;
     }
 
+    .contact-hero {
+        padding: 2rem 0;
+    }
+
+    .contact-layout,
+    .contact-options {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-copy {
+        padding: 1rem 0 0;
+    }
+
+    .contact-form-card {
+        padding: 1.5rem;
+    }
+
     .bazar-grid,
     .bazar-form-layout {
         grid-template-columns: 1fr;
@@ -272,6 +289,10 @@
     }
 
     .bazar-detail__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-layout {
         grid-template-columns: 1fr;
     }
 }

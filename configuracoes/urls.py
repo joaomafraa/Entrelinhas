@@ -4,6 +4,7 @@ from django.urls import path, include
 from inscricoes.views import (
     admin_redirect,
     cadastro,
+    contato,
     home,
     detalhe_vitrine_produto,
     detalhe_vitrine_servico,
@@ -46,6 +47,12 @@ urlpatterns = [
         'cadastro/',
         cadastro,
         name='cadastro'
+    ),
+
+    path(
+        'contato/',
+        contato,
+        name='contato'
     ),
 
     path(

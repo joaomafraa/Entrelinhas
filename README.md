@@ -34,7 +34,7 @@ A proposta é unir aprendizado, organização e geração de renda dentro de uma
 ### 3. Bazar Online
 - Cadastro de produtos e serviços
 - Vitrine com filtros
-- Gestão de vendas, doações e parcerias
+- Gestão de doações e parcerias
 
 ---
 
@@ -272,11 +272,6 @@ Esta funcionalidade permite que o administrador cadastre produtos e serviços no
 	- Quando informo descrição, tipo de serviço e valor
 	- Então o serviço deve ser salvo corretamente
 
-- Cenário 4: Validação de dados inválidos
-	- Dado que preencho dados inválidos ou incompletos
-	- Quando tento cadastrar
-	- Então devo receber mensagem de erro
-
 </details>
 
 <details>
@@ -309,25 +304,20 @@ A vitrine deve destacar produtos e serviços selecionados, exibindo-os em uma á
 	- Quando a lista é atualizada
 	- Então devo ver uma mensagem informativa
 
-- Cenário 4: Navegação entre produtos
-	- Dado que existem vários produtos
-	- Quando navego pela vitrine
-	- Então devo conseguir visualizar diferentes itens
-
 </details>
 
 <details>
-<summary>H3 • Gerenciamento de vendas/doação</summary>
+<summary>H3 • Gerenciamento de doações e parcerias</summary>
 
 **História de Usuário**
 
 Como administrador  
-Quero visualizar e gerenciar vendas, doações e formulários recebidos  
+Quero visualizar e gerenciar doações, parcerias e formulários recebidos  
 Para acompanhar quem entrou em contato e organizar as solicitações
 
 **Descrição**
 
-Esta funcionalidade permite que o administrador visualize e gerencie informações relacionadas a vendas, doações e parcerias. A interface deve exibir os usuários que entraram em contato por meio de formulários, possibilitando o acompanhamento das solicitações e a organização dos dados recebidos.
+Esta funcionalidade permite que o administrador visualize e gerencie informações relacionadas a doações e parcerias. A interface deve exibir os usuários que entraram em contato por meio de formulários, possibilitando o acompanhamento das solicitações e a organização dos dados recebidos.
 
 **Critérios de Aceitação (BDD)**
 
@@ -345,11 +335,6 @@ Esta funcionalidade permite que o administrador visualize e gerencie informaçõ
 	- Dado que estou na lista de contatos
 	- Quando marco ou organizo uma solicitação
 	- Então o status deve ser atualizado corretamente
-
-- Cenário 4: Nenhum contato registrado
-	- Dado que não existem formulários enviados
-	- Quando acesso a área
-	- Então devo visualizar uma mensagem informativa
 
 </details>
 
@@ -383,11 +368,6 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 	- Dado que seleciono a opção de parceria
 	- Quando preencho meus dados e proposta
 	- Então a solicitação deve ser enviada para análise
-
-- Cenário 4: Validação de dados
-	- Dado que deixo campos obrigatórios vazios ou inválidos
-	- Quando tento enviar o formulário
-	- Então devo receber mensagem de erro
 
 </details>
 
@@ -807,5 +787,3 @@ Definir conforme implementação.
 ## Autor
 
 Grupo EntreLinhas
-
-aa

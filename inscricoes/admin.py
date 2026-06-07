@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Aula, Inscricao, Produto, ProdutoImagem, Servico, ServicoImagem
+from .models import (
+    Aula,
+    Inscricao,
+    Produto,
+    ProdutoImagem,
+    Servico,
+    ServicoImagem,
+    SolicitacaoContato,
+)
 
 
 @admin.register(Inscricao)
@@ -133,4 +141,35 @@ class ServicoAdmin(admin.ModelAdmin):
 
     exclude = (
         'preco',
+    )
+
+
+@admin.register(SolicitacaoContato)
+class SolicitacaoContatoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'nome',
+        'tipo',
+        'email',
+        'telefone',
+        'status',
+        'criada_em',
+    )
+
+    search_fields = (
+        'nome',
+        'email',
+        'telefone',
+        'mensagem',
+    )
+
+    list_filter = (
+        'tipo',
+        'status',
+        'criada_em',
+    )
+
+    readonly_fields = (
+        'criada_em',
+        'atualizada_em',
     )
