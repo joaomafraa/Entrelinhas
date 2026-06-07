@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "cy:run": "node tools/run_cypress.js",
+    "cy:open": "node tools/run_cypress.js --open",
+    "cy:open:slow": "node tools/run_cypress.js --open --slow",
+    "cy:run:slow": "node tools/run_cypress.js --slow"
+  },
   "devDependencies": {
     "cypress": "^15.16.0"
   }

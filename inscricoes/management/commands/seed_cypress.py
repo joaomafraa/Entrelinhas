@@ -24,6 +24,7 @@ class Command(BaseCommand):
         emails = [
             'cypress-admin@example.com',
             'cypress-aluna@example.com',
+            'cypress-edicao@example.com',
             'cypress-nova@example.com',
         ]
 
@@ -48,6 +49,13 @@ class Command(BaseCommand):
             first_name='Aluna',
             last_name='Cypress',
         )
+        aluna_edicao = User.objects.create_user(
+            username='cypress-edicao@example.com',
+            email='cypress-edicao@example.com',
+            password='cypress12345',
+            first_name='Edicao',
+            last_name='Cypress',
+        )
 
         inscricao = Inscricao.objects.create(
             user=aluna,
@@ -64,6 +72,17 @@ class Command(BaseCommand):
             certificado_nome_arquivo='certificado-cypress.pdf',
             certificado_tipo_arquivo='application/pdf',
             certificado_conteudo=b'%PDF-1.4 cypress',
+        )
+        Inscricao.objects.create(
+            user=aluna_edicao,
+            nome='Edicao Cypress',
+            email='cypress-edicao@example.com',
+            cpf='39053344705',
+            data_nascimento='2001-03-04',
+            telefone='11912345678',
+            disponibilidade='tarde',
+            status='pendente',
+            observacoes='Matricula usada para teste de edicao.',
         )
 
         aula = Aula.objects.create(

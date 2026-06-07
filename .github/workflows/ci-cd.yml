@@ -13,8 +13,8 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
-  tests:
-    name: Testes Django
+  django-tests:
+    name: Unit and integration tests
     runs-on: ubuntu-latest
 
     env:
@@ -48,13 +48,96 @@ jobs:
       - name: Rodar testes
         run: python manage.py test tests --verbosity 2
 
+  build-validation:
+    name: Build validation
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DEBUG: "True"
+      ALLOWED_HOSTS: "127.0.0.1,localhost,testserver"
+      CSRF_TRUSTED_ORIGINS: "http://localhost"
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Instalar dependencias Python
+        run: pip install -r requirements.txt
+
+      - name: Instalar dependencias Node
+        run: npm ci
+
       - name: Checar arquivos estaticos
         run: python manage.py collectstatic --noinput
+
+  cypress-e2e:
+    name: Cypress end-to-end tests
+    runs-on: ubuntu-latest
+    needs:
+      - django-tests
+      - build-validation
+
+    env:
+      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DEBUG: "True"
+      ALLOWED_HOSTS: "127.0.0.1,localhost,testserver"
+      CSRF_TRUSTED_ORIGINS: "http://localhost"
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Instalar dependencias Python
+        run: pip install -r requirements.txt
+
+      - name: Instalar dependencias Node
+        run: npm ci
+
+      - name: Rodar Cypress
+        run: npm run cy:run
+
+      - name: Publicar artefatos do Cypress
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/screenshots
+            cypress/videos
+          if-no-files-found: ignore
 
   deploy:
     name: Deploy Render
     runs-on: ubuntu-latest
-    needs: tests
+    needs:
+      - django-tests
+      - build-validation
+      - cypress-e2e
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     env:
       RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

@@ -19,7 +19,10 @@ Cypress.Commands.add('seedCypress', () => {
 
 Cypress.Commands.add('login', (email, senha = 'cypress12345') => {
   cy.visit('/login/');
-  cy.get('input[name="email"]').clear().type(email);
-  cy.get('input[name="senha"]').clear().type(senha);
+  cy.get('input[name="email"]').clear();
+  cy.get('input[name="email"]').type(email);
+  cy.get('input[name="senha"]').clear();
+  cy.get('input[name="senha"]').type(senha);
   cy.contains('button', 'Entrar').first().click();
+  cy.location('pathname', { timeout: 10000 }).should('not.eq', '/login/');
 });

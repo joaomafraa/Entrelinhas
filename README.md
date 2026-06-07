@@ -501,40 +501,71 @@ O projeto usa GitHub Actions em `.github/workflows/ci-cd.yml`.
 
 ### CI
 
-Em push ou pull request para `main`, o workflow executa:
+Em push ou pull request para `main`, o workflow executa quatro etapas:
+
+- Unit and integration tests
+- Build validation
+- Cypress end-to-end tests
+- Deploy Render, apenas em push para `main`
+
+Os testes Django rodam com:
 
 ```bash
 python manage.py check
 python manage.py makemigrations --check --dry-run
 python manage.py migrate --noinput
 python manage.py test tests --verbosity 2
+```
+
+A validacao de build roda:
+
+```bash
 python manage.py collectstatic --noinput
+npm ci
 ```
 
 Os testes ficam na pasta `tests/`, fora do app `inscricoes`.
 
-### Screencast com Cypress
+### Cypress
 
-Os testes visuais ficam em `cypress/e2e/inscricoes/` e nao rodam no CI por padrao.
-O Cypress nao fica instalado no projeto; instale localmente do jeito que preferir antes de rodar.
+Os testes E2E ficam em `cypress/e2e/inscricoes/` e rodam no CI antes do deploy.
 
-Em um terminal, suba o Django:
+Instale as dependencias Node antes da primeira execucao:
 
 ```powershell
-$env:SECRET_KEY="django-insecure-local-test-key"
-python manage.py runserver
+npm ci
 ```
 
-Em outro terminal, abra o Cypress devagar para screencast:
+Para rodar a suite Cypress igual ao CI:
 
 ```powershell
-cypress open --env screencast=true,stepDelay=1500
+npm run cy:run
 ```
 
-Para rodar sem a interface visual:
+Esse comando prepara o ambiente automaticamente: aplica migrations, executa `collectstatic`, sobe o Django em `http://127.0.0.1:8000` e roda o Cypress.
+
+Para abrir a interface visual:
 
 ```powershell
-cypress run
+npm run cy:open
+```
+
+Para abrir a interface visual mais devagar, util para acompanhar os passos:
+
+```powershell
+npm run cy:open:slow
+```
+
+Para rodar apenas um spec:
+
+```powershell
+node tools/run_cypress.js --spec cypress/e2e/inscricoes/epico1/inscricao_gerenciamento_matricula.cy.js
+```
+
+Para abrir apenas um spec na interface lenta:
+
+```powershell
+node tools/run_cypress.js --open --slow --spec cypress/e2e/inscricoes/epico1/inscricao_gerenciamento_matricula.cy.js
 ```
 
 ### CD

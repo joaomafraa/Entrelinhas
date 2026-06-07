@@ -13,7 +13,8 @@ describe('Epico 1 - Inscricao, gerenciamento e matricula', () => {
     cy.step();
 
     cy.url().should('include', '/inscricao/');
-    cy.get('input[name="nome"]').clear().type('Nova Cypress');
+    cy.get('input[name="nome"]').clear();
+    cy.get('input[name="nome"]').type('Nova Cypress');
     cy.get('input[name="cpf"]').type('11144477735');
     cy.get('input[name="data_nascimento"]').type('2001-02-03');
     cy.get('input[name="telefone"]').type('11911112222');
@@ -33,20 +34,25 @@ describe('Epico 1 - Inscricao, gerenciamento e matricula', () => {
     cy.contains('Costurando Sonhos').should('be.visible');
     cy.step();
 
-    cy.contains('Ver').click();
+    cy.contains('tr', 'Aluna Cypress').within(() => {
+      cy.contains('a', 'Ver').click();
+    });
     cy.contains('Aluna Cypress').should('be.visible');
     cy.contains('cypress-aluna@example.com').should('be.visible');
   });
 
   it('aluna edita a propria matricula', () => {
-    cy.login('cypress-aluna@example.com');
+    cy.login('cypress-edicao@example.com');
     cy.visit('/inscricao/inscricoes/');
-    cy.contains('Editar').click();
-    cy.get('input[name="telefone"]').clear().type('11988887777');
-    cy.get('textarea[name="observacoes"]').clear().type('Atualizacao feita pelo Cypress.');
+    cy.contains('Edicao Cypress').should('be.visible');
+    cy.contains('a', 'Editar').click();
+    cy.get('input[name="telefone"]').clear();
+    cy.get('input[name="telefone"]').type('11988887777');
+    cy.get('textarea[name="observacoes"]').clear();
+    cy.get('textarea[name="observacoes"]').type('Atualizacao feita pelo Cypress.');
     cy.contains('button', 'Salvar').click();
     cy.step();
 
-    cy.contains('Aluna Cypress').should('be.visible');
+    cy.contains('Edicao Cypress').should('be.visible');
   });
 });
