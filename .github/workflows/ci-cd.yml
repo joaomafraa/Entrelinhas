@@ -1,0 +1,66 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Testes Django
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DEBUG: "True"
+      ALLOWED_HOSTS: "127.0.0.1,localhost,testserver"
+      CSRF_TRUSTED_ORIGINS: "http://localhost"
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Checar projeto
+        run: python manage.py check
+
+      - name: Checar migracoes
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Aplicar migracoes no banco de teste
+        run: python manage.py migrate --noinput
+
+      - name: Rodar testes
+        run: python manage.py test tests --verbosity 2
+
+      - name: Checar arquivos estaticos
+        run: python manage.py collectstatic --noinput
+
+  deploy:
+    name: Deploy Render
+    runs-on: ubuntu-latest
+    needs: tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+    steps:
+      - name: Acionar deploy hook do Render
+        if: env.RENDER_DEPLOY_HOOK_URL != ''
+        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
+
+      - name: Avisar quando deploy hook nao estiver configurado
+        if: env.RENDER_DEPLOY_HOOK_URL == ''
+        run: echo "RENDER_DEPLOY_HOOK_URL nao configurado. O deploy automatico do Render pode continuar pelo auto-deploy."

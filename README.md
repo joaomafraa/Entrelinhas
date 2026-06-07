@@ -493,6 +493,100 @@ http://127.0.0.1:8000/admin
 
 </details>
 
+## CI/CD
+<details>
+<summary>GitHub Actions e Render</summary>
+
+O projeto usa GitHub Actions em `.github/workflows/ci-cd.yml`.
+
+### CI
+
+Em push ou pull request para `main`, o workflow executa:
+
+```bash
+python manage.py check
+python manage.py makemigrations --check --dry-run
+python manage.py migrate --noinput
+python manage.py test tests --verbosity 2
+python manage.py collectstatic --noinput
+```
+
+Os testes ficam na pasta `tests/`, fora do app `inscricoes`.
+
+### Screencast com Cypress
+
+Os testes visuais ficam em `cypress/e2e/inscricoes/` e nao rodam no CI por padrao.
+O Cypress nao fica instalado no projeto; instale localmente do jeito que preferir antes de rodar.
+
+Em um terminal, suba o Django:
+
+```powershell
+$env:SECRET_KEY="django-insecure-local-test-key"
+python manage.py runserver
+```
+
+Em outro terminal, abra o Cypress devagar para screencast:
+
+```powershell
+cypress open --env screencast=true,stepDelay=1500
+```
+
+Para rodar sem a interface visual:
+
+```powershell
+cypress run
+```
+
+### CD
+
+Depois que os testes passam em push para `main`, o workflow aciona o deploy do Render usando o secret:
+
+```text
+RENDER_DEPLOY_HOOK_URL
+```
+
+Se esse secret não estiver configurado, o workflow apenas avisa. O auto deploy padrão do Render pode continuar funcionando normalmente.
+
+### Secrets no GitHub Actions
+
+Configure em `Settings > Secrets and variables > Actions`:
+
+```text
+DJANGO_SECRET_KEY
+RENDER_DEPLOY_HOOK_URL
+```
+
+`DJANGO_SECRET_KEY` é usado somente no CI. Não coloque a chave real no código.
+
+### Variáveis no Render
+
+Configure em `Environment`:
+
+```text
+SECRET_KEY
+DEBUG=False
+ALLOWED_HOSTS=seu-app.onrender.com,.onrender.com
+CSRF_TRUSTED_ORIGINS=https://seu-app.onrender.com
+DATABASE_URL=postgresql://...
+DJANGO_SUPERUSER_EMAIL=admin@entrelinhas.com
+DJANGO_SUPERUSER_PASSWORD=sua-senha
+DJANGO_SUPERUSER_NAME=Nome Admin
+```
+
+Build command:
+
+```bash
+bash build.sh
+```
+
+Start command:
+
+```bash
+gunicorn configuracoes.wsgi:application
+```
+
+</details>
+
 ## Estrutura do Projeto
 <details>
 <summary>Estrutura</summary>
