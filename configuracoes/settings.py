@@ -75,6 +75,8 @@ WHATSAPP_CONTATO = ''.join(
     if caractere.isdigit()
 )
 
+PIX_CHAVE_ONG = os.environ.get('PIX_CHAVE_ONG', '').strip()
+
 
 # Application definition
 

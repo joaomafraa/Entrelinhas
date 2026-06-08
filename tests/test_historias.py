@@ -540,11 +540,11 @@ class Epico3BazarTests(TestCase):
         response = self.client.post(
             reverse('contato'),
             {
-                'tipo': 'doacao',
+                'tipo': 'parceria',
                 'nome': 'Maria Teste',
                 'email': 'maria@example.com',
                 'telefone': '(11) 90000-0000',
-                'mensagem': 'Quero apoiar o projeto com materiais.',
+                'mensagem': 'Quero propor uma parceria.',
             }
         )
 
@@ -553,7 +553,7 @@ class Epico3BazarTests(TestCase):
 
     def test_epico3_h4_solicitacao_de_doacao(self):
 
-        self.client.post(
+        response = self.client.post(
             reverse('contato'),
             {
                 'tipo': 'doacao',
@@ -564,6 +564,7 @@ class Epico3BazarTests(TestCase):
             }
         )
 
+        self.assertRedirects(response, reverse('contato'))
         self.assertEqual(
             SolicitacaoContato.objects.get(email='doadora@example.com').tipo,
             'doacao'
@@ -592,7 +593,7 @@ class Epico3BazarTests(TestCase):
         response = self.client.post(
             reverse('contato'),
             {
-                'tipo': 'doacao',
+                'tipo': 'parceria',
                 'nome': '',
                 'email': 'email-invalido',
                 'telefone': '123',

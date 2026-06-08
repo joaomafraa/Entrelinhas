@@ -235,7 +235,8 @@
     }
 
     .contact-layout,
-    .contact-options {
+    .contact-options,
+    .pix-copy {
         grid-template-columns: 1fr;
     }
 

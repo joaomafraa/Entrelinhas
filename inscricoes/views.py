@@ -233,6 +233,7 @@ def contato(request):
         {
             'form': form,
             'tipo_inicial': tipo_inicial,
+            'pix_chave_ong': settings.PIX_CHAVE_ONG,
         }
     )
 

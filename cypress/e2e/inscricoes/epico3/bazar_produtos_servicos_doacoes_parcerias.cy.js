@@ -140,12 +140,12 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
     it('H4 Cenario 1 - registra solicitacao com dados corretos', () => {
       const email = `solicitacao-${sufixo()}@example.com`;
 
-      cy.visit('/contato/');
+      cy.visit('/contato/?tipo=parceria');
       cy.preencherContato({
-        tipo: 'doacao',
+        tipo: 'parceria',
         nome: 'Solicitante Cypress',
         email,
-        mensagem: 'Quero apoiar o projeto com materiais.',
+        mensagem: 'Quero propor uma parceria com dados validos.',
       });
       cy.contains('button', 'Enviar solicitacao').click();
 
@@ -153,10 +153,15 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
       cy.conclusao('solicitacao com dados validos e registrada com sucesso');
     });
 
-    it('H4 Cenario 2 - envia solicitacao de doacao para analise', () => {
+    it('H4 Cenario 2 - exibe PIX e envia solicitacao de doacao', () => {
       const email = `doacao-${sufixo()}@example.com`;
 
       cy.visit('/contato/?tipo=doacao');
+
+      cy.contains('Doacao via PIX').should('be.visible');
+      cy.get('input[data-pix-value]').should('have.value', 'pix-cypress@entrelinhas.org');
+      cy.contains('button', 'Copiar PIX').should('be.enabled').click();
+      cy.contains('[data-pix-feedback]', /PIX copiado|Chave selecionada/).should('be.visible');
       cy.get('select[name="tipo"]').should('have.value', 'doacao');
       cy.preencherContato({
         tipo: 'doacao',
@@ -167,7 +172,7 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
       cy.contains('button', 'Enviar solicitacao').click();
 
       cy.contains('Solicitacao enviada com sucesso.').should('be.visible');
-      cy.conclusao('solicitacao de doacao e enviada para analise');
+      cy.conclusao('doacao exibe PIX da ONG e tambem registra a solicitacao para analise');
     });
 
     it('H4 Cenario 3 - envia solicitacao de parceria para analise', () => {

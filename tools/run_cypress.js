@@ -16,6 +16,7 @@ const env = {
   DEBUG: process.env.DEBUG || 'True',
   ALLOWED_HOSTS: process.env.ALLOWED_HOSTS || '127.0.0.1,localhost,testserver',
   CSRF_TRUSTED_ORIGINS: process.env.CSRF_TRUSTED_ORIGINS || 'http://localhost',
+  PIX_CHAVE_ONG: process.env.PIX_CHAVE_ONG || 'pix-cypress@entrelinhas.org',
 };
 const cypressEnv = { ...env };
 

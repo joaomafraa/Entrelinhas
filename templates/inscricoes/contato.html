@@ -16,19 +16,53 @@
                 </p>
 
                 <div class="contact-options">
-                    <div>
+                    <a href="{% url 'contato' %}?tipo=doacao" class="contact-option {% if tipo_inicial == 'doacao' %}contact-option--active{% endif %}">
                         <strong>Doacao</strong>
                         <span>Apoie materiais, estrutura ou continuidade das aulas.</span>
-                    </div>
-                    <div>
+                    </a>
+                    <a href="{% url 'contato' %}?tipo=parceria" class="contact-option {% if tipo_inicial == 'parceria' %}contact-option--active{% endif %}">
                         <strong>Parceria</strong>
                         <span>Proponha colaboracoes, servicos, espacos ou oportunidades.</span>
-                    </div>
+                    </a>
                 </div>
             </article>
 
             <div class="surface-card contact-form-card">
-                <form method="POST" class="form-stack">
+                {% if tipo_inicial == 'doacao' %}
+                    <section class="pix-donation" data-pix-donation>
+                        <span class="section-label">Doacao via PIX</span>
+                        <h2>Doe diretamente para a ONG</h2>
+                        <p>
+                            Use a chave PIX abaixo para apoiar materiais, estrutura e continuidade das aulas.
+                        </p>
+
+                        {% if pix_chave_ong %}
+                            <label class="form-label" for="pix-chave-ong">Chave PIX da ONG</label>
+                            <div class="pix-copy">
+                                <input
+                                    id="pix-chave-ong"
+                                    type="text"
+                                    class="form-control form-control-lg"
+                                    value="{{ pix_chave_ong }}"
+                                    readonly
+                                    data-pix-value
+                                >
+                                <button type="button" class="btn btn-primary" data-pix-copy>
+                                    Copiar PIX
+                                </button>
+                            </div>
+                            <div class="form-hint" data-pix-feedback aria-live="polite">
+                                Copie a chave e cole no aplicativo do seu banco.
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning mb-0">
+                                PIX ainda nao configurado.
+                            </div>
+                        {% endif %}
+                    </section>
+                {% endif %}
+
+                <form method="POST" class="form-stack {% if tipo_inicial == 'doacao' %}contact-form--with-pix{% endif %}">
                     {% csrf_token %}
 
                     {% if form.non_field_errors %}
@@ -56,5 +90,44 @@
         </div>
     </div>
 </section>
+
+<script>
+    (() => {
+        const pixBox = document.querySelector('[data-pix-donation]');
+
+        if (!pixBox) {
+            return;
+        }
+
+        const input = pixBox.querySelector('[data-pix-value]');
+        const copyButton = pixBox.querySelector('[data-pix-copy]');
+        const feedback = pixBox.querySelector('[data-pix-feedback]');
+
+        if (!input || !copyButton) {
+            return;
+        }
+
+        copyButton.addEventListener('click', async () => {
+            try {
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(input.value);
+                } else {
+                    input.select();
+                    document.execCommand('copy');
+                }
+
+                if (feedback) {
+                    feedback.textContent = 'PIX copiado.';
+                }
+            } catch (error) {
+                input.select();
+
+                if (feedback) {
+                    feedback.textContent = 'Chave selecionada. Copie usando Ctrl+C.';
+                }
+            }
+        });
+    })();
+</script>
 
 {% endblock %}

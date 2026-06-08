@@ -389,9 +389,13 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 Os produtos podem receber um numero de WhatsApp no cadastro ou edicao. Na vitrine, o detalhe do item monta automaticamente um link `wa.me` com uma mensagem pronta informando o produto de interesse, o valor e o link da pagina. Se o produto nao tiver numero, o sistema usa `WHATSAPP_CONTATO`; se nenhum numero estiver configurado, o botao fica desativado para nao levar o usuario a um contato invalido.
 
+### PIX para doacoes
+
+Na pagina Apoiar, a opcao de doacao mostra a chave PIX da ONG junto do formulario de solicitacao. A chave vem da variavel `PIX_CHAVE_ONG` e pode ser copiada por um botao; futuramente esse valor podera ser cadastrado pelo dashboard administrativo.
+
 ### JavaScript
 
-O JavaScript foi usado de forma pontual para melhorar interacoes da interface: confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
+O JavaScript foi usado de forma pontual para melhorar interacoes da interface: copiar a chave PIX, confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
 
 ---
 
