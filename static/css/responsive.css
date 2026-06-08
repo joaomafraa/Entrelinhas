@@ -226,6 +226,10 @@
         grid-template-columns: 1fr;
     }
 
+    .bazar-detail__main-image {
+        min-height: auto;
+    }
+
     .bazar-detail__info {
         padding: 1.5rem;
     }
