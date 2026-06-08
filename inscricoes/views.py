@@ -1,5 +1,6 @@
 import calendar
 import json
+import logging
 import mimetypes
 from datetime import date, timedelta
 from urllib.parse import quote
@@ -42,6 +43,8 @@ from .models import (
     SolicitacaoContato,
 )
 
+
+logger = logging.getLogger(__name__)
 
 MESES = [
     '',
@@ -277,6 +280,7 @@ def _resposta_groq(mensagens):
         headers={
             'Authorization': f'Bearer {settings.GROQ_API_KEY}',
             'Content-Type': 'application/json',
+            'User-Agent': 'EntreLinhas/1.0',
         },
         method='POST',
     )
@@ -341,15 +345,39 @@ def chat_suporte(request):
 
         resposta = _resposta_groq(mensagens_groq)
 
-    except (HTTPError, URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError):
+    except HTTPError as erro:
+
+        corpo = erro.read().decode('utf-8', errors='ignore')[:500]
+        logger.warning('Erro HTTP na Groq: status=%s body=%s', erro.code, corpo)
+        payload_erro = {
+            'error': (
+                'A Lia nao conseguiu responder agora. '
+                'Tente novamente em alguns instantes.'
+            )
+        }
+
+        if settings.DEBUG:
+
+            payload_erro['debug'] = f'Groq HTTP {erro.code}: {corpo}'
+
+        return JsonResponse(payload_erro, status=502)
+
+    except (URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError) as erro:
+
+        logger.warning('Erro ao chamar Groq: %s', erro)
+        payload_erro = {
+            'error': (
+                'A Lia nao conseguiu responder agora. '
+                'Tente novamente em alguns instantes.'
+            )
+        }
+
+        if settings.DEBUG:
+
+            payload_erro['debug'] = str(erro)
 
         return JsonResponse(
-            {
-                'error': (
-                    'A Lia nao conseguiu responder agora. '
-                    'Tente novamente em alguns instantes.'
-                )
-            },
+            payload_erro,
             status=502
         )
 

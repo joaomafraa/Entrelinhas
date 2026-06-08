@@ -393,9 +393,13 @@ Os produtos podem receber um numero de WhatsApp no cadastro ou edicao. Na vitrin
 
 Na pagina Apoiar, a opcao de doacao mostra a chave PIX da ONG junto do formulario de solicitacao. A chave vem da variavel `PIX_CHAVE_ONG` e pode ser copiada por um botao; futuramente esse valor podera ser cadastrado pelo dashboard administrativo.
 
+### Chatbot Lia com Groq
+
+A Lia e um chatbot de suporte exibido nas paginas publicas e na Area da Aluna. A integracao usa a rota `POST /api/chat/`, que envia as mensagens para a Groq com um contexto da EntreLinhas e retorna uma resposta em JSON, sem streaming. A configuracao e feita por variaveis de ambiente: `GROQ_API_KEY`, `GROQ_MODEL` e `GROQ_API_URL`.
+
 ### JavaScript
 
-O JavaScript foi usado de forma pontual para melhorar interacoes da interface: copiar a chave PIX, confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
+O JavaScript foi usado de forma pontual para melhorar interacoes da interface: copiar a chave PIX, abrir e controlar o chatbot Lia, manter o historico do suporte em `sessionStorage`, confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
 
 ---
 

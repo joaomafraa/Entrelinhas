@@ -15,9 +15,24 @@
     };
 
     const saudacoes = {
-        public: 'Ola! Eu sou a Lia. Posso ajudar com inscricoes, cursos, bazar, doacoes e parcerias.',
-        student: 'Ola! Eu sou a Lia. Posso ajudar com frequencia, proximas aulas, certificado e dados da sua matricula.',
+        public: 'Olá! Sou a **Lia**, assistente da EntreLinhas. 💜\n\nPosso te ajudar com dúvidas sobre **cursos**, **inscrições** ou o **bazar solidário**. Como posso te ajudar hoje?',
+        student: 'Olá! Sou a **Lia**, assistente da EntreLinhas. 💜\n\nPosso te ajudar com dúvidas sobre **cursos**, **inscrições**, **frequência**, **certificados** ou o **bazar solidário**. Como posso te ajudar hoje?',
     };
+
+    function escaparHtml(texto) {
+        return texto
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function renderizarMarkdownSeguro(texto) {
+        return escaparHtml(texto)
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
+    }
 
     function csrfToken(chat) {
         const tokenInput = chat.querySelector('input[name="csrfmiddlewaretoken"]');
@@ -91,7 +106,7 @@
                 linha.className = `support-chat__message support-chat__message--${mensagem.role}`;
 
                 const bolha = document.createElement('p');
-                bolha.textContent = mensagem.content;
+                bolha.innerHTML = renderizarMarkdownSeguro(mensagem.content);
                 linha.appendChild(bolha);
                 messagesEl.appendChild(linha);
             });
