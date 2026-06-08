@@ -202,7 +202,97 @@ def home(request):
     )
 
 
-def _prompt_lia(contexto):
+def _formatar_aula_lia(aula):
+
+    topico = f' - {aula.topico}' if aula.topico else ''
+
+    return f'{aula.data:%d/%m/%Y} as {aula.horario:%H:%M}{topico}'
+
+
+def _contexto_aluna_lia(user):
+
+    if not user.is_authenticated:
+
+        return 'Nenhuma aluna logada foi identificada.'
+
+    inscricao = _inscricao_aprovada_do_usuario(user)
+
+    if not inscricao:
+
+        return (
+            'A pessoa esta logada, mas nao ha matricula aprovada vinculada. '
+            'Oriente a verificar inscricoes ou falar com a equipe.'
+        )
+
+    total_aulas_registradas = Presenca.objects.filter(inscricao=inscricao).count()
+    presencas_confirmadas = Presenca.objects.filter(
+        inscricao=inscricao,
+        presente=True
+    ).count()
+    frequencia = inscricao.frequencia_percentual
+    hoje = timezone.localdate()
+    proximas_aulas = Aula.objects.filter(
+        data__gte=hoje
+    ).order_by('data', 'horario')[:3]
+
+    if proximas_aulas:
+
+        aulas_texto = '; '.join(_formatar_aula_lia(aula) for aula in proximas_aulas)
+
+    else:
+
+        aulas_texto = 'Nenhuma aula futura cadastrada no momento.'
+
+    certificado_status = 'liberado para download' if inscricao.certificado_disponivel else 'ainda nao liberado'
+
+    return '\n'.join([
+        'Contexto real da aluna logada:',
+        f'- Nome: {inscricao.nome}',
+        f'- Status da matricula: {inscricao.get_status_display()}',
+        f'- Matricula ativa: {"sim" if inscricao.ativa else "nao"}',
+        f'- Tipo de curso informado na inscricao: {inscricao.tipo_curso}',
+        f'- Frequencia: {presencas_confirmadas} presencas em {total_aulas_registradas} aulas registradas ({frequencia}%).',
+        f'- Proximas aulas cadastradas: {aulas_texto}',
+        f'- Curso concluido: {"sim" if inscricao.concluiu_curso() else "nao"}',
+        f'- Certificado: {certificado_status}.',
+    ])
+
+
+def _resumo_item_lia(item, tipo):
+
+    nome = item.nome
+    categoria = getattr(item, 'categoria', '') or getattr(item, 'tipo', '')
+    preco = getattr(item, 'preco_formatado', None)
+
+    if preco:
+
+        return f'{nome} ({categoria}, {preco})'
+
+    return f'{nome} ({tipo}: {categoria})'
+
+
+def _contexto_publico_lia():
+
+    produtos = Produto.objects.filter(ativo=True).order_by('-data_criacao')
+    servicos = Servico.objects.filter(ativo=True).order_by('-data_criacao')
+    produtos_lista = list(produtos[:5])
+    servicos_lista = list(servicos[:5])
+    pix_configurado = bool(settings.PIX_CHAVE_ONG)
+    whatsapp_configurado = bool(settings.WHATSAPP_CONTATO)
+
+    return '\n'.join([
+        'Contexto publico real da plataforma:',
+        f'- Produtos ativos no bazar: {produtos.count()}.',
+        f'- Exemplos de produtos ativos: {", ".join(_resumo_item_lia(produto, "produto") for produto in produtos_lista) if produtos_lista else "nenhum produto ativo no momento"}.',
+        f'- Servicos ativos no bazar: {servicos.count()}.',
+        f'- Exemplos de servicos ativos: {", ".join(_resumo_item_lia(servico, "servico") for servico in servicos_lista) if servicos_lista else "nenhum servico ativo no momento"}.',
+        '- Formas de apoio: doacao via PIX quando configurado, parceria pelo formulario Apoiar e interesse por itens do bazar via WhatsApp quando configurado.',
+        f'- Chave PIX para doacoes: {settings.PIX_CHAVE_ONG if pix_configurado else "PIX ainda nao configurado"}.',
+        f'- WhatsApp de contato geral: {"disponivel" if whatsapp_configurado else "nao configurado"}.',
+    ])
+
+
+def _prompt_lia(contexto, request=None):
 
     instrucoes = [
         'Voce e Lia, assistente virtual da ONG EntreLinhas.',
@@ -222,12 +312,18 @@ def _prompt_lia(contexto):
             'Para alteracao de dados, oriente a procurar a opcao de matricula/dados cadastrais ou contato com a equipe quando necessario.',
         ])
 
+        if request:
+
+            instrucoes.append(_contexto_aluna_lia(request.user))
+
     else:
 
         instrucoes.extend([
             'A conversa acontece no site publico.',
             'Para visitantes, ajude com inscricao, gratuidade, cursos, bazar, doacao e parceria.',
         ])
+
+        instrucoes.append(_contexto_publico_lia())
 
     return '\n'.join(instrucoes)
 
@@ -336,7 +432,7 @@ def chat_suporte(request):
     mensagens_groq = [
         {
             'role': 'system',
-            'content': _prompt_lia(contexto),
+            'content': _prompt_lia(contexto, request),
         },
         *mensagens_chat,
     ]
