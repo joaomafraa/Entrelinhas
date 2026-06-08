@@ -21,11 +21,16 @@ const cypressEnv = { ...env };
 
 delete cypressEnv.ELECTRON_RUN_AS_NODE;
 
-function waitForServer(url, attempts = 40) {
+function waitForServer(url, isServerRunning, attempts = 40) {
   return new Promise((resolve, reject) => {
     let currentAttempt = 0;
 
     function check() {
+      if (!isServerRunning()) {
+        reject(new Error('Django server stopped before it became ready.'));
+        return;
+      }
+
       currentAttempt += 1;
 
       const request = http.get(url, (response) => {
@@ -81,6 +86,13 @@ async function main() {
   );
 
   const stopServer = () => {
+    if (process.platform === 'win32' && server.pid) {
+      spawnSync('taskkill', ['/PID', String(server.pid), '/T', '/F'], {
+        stdio: 'ignore',
+      });
+      return;
+    }
+
     if (!server.killed) {
       server.kill();
     }
@@ -97,13 +109,13 @@ async function main() {
   });
 
   try {
-    await waitForServer(`${baseUrl}/`);
+    await waitForServer(`${baseUrl}/`, () => server.exitCode === null);
     console.log('Django server is ready.');
 
     const cypressArgs = [mode, '--config', `baseUrl=${baseUrl}`];
 
     if (slow) {
-      cypressArgs.push('--env', 'screencast=true,stepDelay=1800');
+      cypressArgs.push('--env', 'screencast=true,stepDelay=1800,typeDelay=55');
     }
 
     if (spec) {

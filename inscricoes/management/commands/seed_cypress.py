@@ -25,6 +25,8 @@ class Command(BaseCommand):
             'cypress-admin@example.com',
             'cypress-aluna@example.com',
             'cypress-edicao@example.com',
+            'cypress-sem-certificado@example.com',
+            'cypress-sem-matricula@example.com',
             'cypress-nova@example.com',
         ]
 
@@ -56,6 +58,20 @@ class Command(BaseCommand):
             first_name='Edicao',
             last_name='Cypress',
         )
+        aluna_sem_certificado = User.objects.create_user(
+            username='cypress-sem-certificado@example.com',
+            email='cypress-sem-certificado@example.com',
+            password='cypress12345',
+            first_name='Sem Certificado',
+            last_name='Cypress',
+        )
+        User.objects.create_user(
+            username='cypress-sem-matricula@example.com',
+            email='cypress-sem-matricula@example.com',
+            password='cypress12345',
+            first_name='Sem Matricula',
+            last_name='Cypress',
+        )
 
         inscricao = Inscricao.objects.create(
             user=aluna,
@@ -84,6 +100,19 @@ class Command(BaseCommand):
             status='pendente',
             observacoes='Matricula usada para teste de edicao.',
         )
+        Inscricao.objects.create(
+            user=aluna_sem_certificado,
+            nome='Sem Certificado Cypress',
+            email='cypress-sem-certificado@example.com',
+            cpf='12681249761',
+            data_nascimento='1999-05-06',
+            telefone='11955554444',
+            disponibilidade='noite',
+            status='aprovada',
+            curso_concluido=False,
+            certificado_liberado=False,
+            observacoes='Matricula aprovada sem certificado liberado.',
+        )
 
         aula = Aula.objects.create(
             data=timezone.localdate() + timedelta(days=7),
@@ -101,6 +130,7 @@ class Command(BaseCommand):
             descricao='Produto artesanal para teste Cypress.',
             preco='79.90',
             categoria='Bolsas',
+            whatsapp_contato='5581999999999',
             ativo=True
         )
         ProdutoImagem.objects.create(

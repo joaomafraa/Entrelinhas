@@ -376,6 +376,13 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 ---
 
+
+
+
+
+
+
+
 ## Protótipos
 
 O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario
@@ -555,6 +562,8 @@ Para abrir a interface visual mais devagar, util para acompanhar os passos:
 ```powershell
 npm run cy:open:slow
 ```
+
+No modo lento, o Cypress reduz a velocidade de digitacao, pausa apos preenchimentos e resultados importantes, e registra uma conclusao ao fim de cada cenario.
 
 Para rodar apenas um spec:
 
