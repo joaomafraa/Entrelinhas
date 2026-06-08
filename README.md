@@ -383,6 +383,18 @@ Esta funcionalidade permite que usuários preencham um formulário de contato pa
 
 
 
+## Funcionalidades extras
+
+### WhatsApp no bazar
+
+Os produtos podem receber um numero de WhatsApp no cadastro ou edicao. Na vitrine, o detalhe do item monta automaticamente um link `wa.me` com uma mensagem pronta informando o produto de interesse, o valor e o link da pagina. Se o produto nao tiver numero, o sistema usa `WHATSAPP_CONTATO`; se nenhum numero estiver configurado, o botao fica desativado para nao levar o usuario a um contato invalido.
+
+### JavaScript
+
+O JavaScript foi usado de forma pontual para melhorar interacoes da interface: confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
+
+---
+
 ## Protótipos
 
 O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario

@@ -30,8 +30,8 @@ class Command(BaseCommand):
             'cypress-nova@example.com',
         ]
 
-        User.objects.filter(email__in=emails).delete()
-        Inscricao.objects.filter(email__in=emails).delete()
+        User.objects.filter(email__icontains='cypress').delete()
+        Inscricao.objects.filter(email__icontains='cypress').delete()
         SolicitacaoContato.objects.filter(email__icontains='cypress').delete()
         Produto.objects.filter(nome__icontains='Cypress').delete()
         Servico.objects.filter(nome__icontains='Cypress').delete()
