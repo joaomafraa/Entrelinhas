@@ -3072,6 +3072,7 @@ footer,
 .support-chat__composer textarea {
     min-height: 2.75rem;
     max-height: 7.5rem;
+    overflow: hidden;
     resize: none;
     border: 1px solid var(--border);
     border-radius: 0.85rem;

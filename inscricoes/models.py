@@ -137,13 +137,17 @@ class Inscricao(models.Model):
     @property
     def frequencia_percentual(self):
 
-        total_aulas = self.presenca_set.count()
+        total_aulas = Aula.objects.filter(
+            data__lte=timezone.localdate()
+        ).count()
 
         if total_aulas == 0:
 
             return 0
 
-        presencas_confirmadas = self.presenca_set.filter(
+        presencas_confirmadas = Presenca.objects.filter(
+            inscricao=self,
+            aula__data__lte=timezone.localdate(),
             presente=True
         ).count()
 

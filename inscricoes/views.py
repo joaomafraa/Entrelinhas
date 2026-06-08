@@ -224,9 +224,12 @@ def _contexto_aluna_lia(user):
             'Oriente a verificar inscricoes ou falar com a equipe.'
         )
 
-    total_aulas_registradas = Presenca.objects.filter(inscricao=inscricao).count()
+    total_aulas_registradas = Aula.objects.filter(
+        data__lte=timezone.localdate()
+    ).count()
     presencas_confirmadas = Presenca.objects.filter(
         inscricao=inscricao,
+        aula__data__lte=timezone.localdate(),
         presente=True
     ).count()
     frequencia = inscricao.frequencia_percentual
@@ -244,16 +247,18 @@ def _contexto_aluna_lia(user):
         aulas_texto = 'Nenhuma aula futura cadastrada no momento.'
 
     certificado_status = 'liberado para download' if inscricao.certificado_disponivel else 'ainda nao liberado'
+    curso_concluido_lia = inscricao.certificado_disponivel
 
     return '\n'.join([
         'Contexto real da aluna logada:',
         f'- Nome: {inscricao.nome}',
         f'- Status da matricula: {inscricao.get_status_display()}',
         f'- Matricula ativa: {"sim" if inscricao.ativa else "nao"}',
-        f'- Tipo de curso informado na inscricao: {inscricao.tipo_curso}',
+        '- Curso: Costurando Sonhos.',
+        f'- Disponibilidade informada: {inscricao.get_disponibilidade_display()}',
         f'- Frequencia: {presencas_confirmadas} presencas em {total_aulas_registradas} aulas registradas ({frequencia}%).',
         f'- Proximas aulas cadastradas: {aulas_texto}',
-        f'- Curso concluido: {"sim" if inscricao.concluiu_curso() else "nao"}',
+        f'- Curso concluido: {"sim" if curso_concluido_lia else "nao"}',
         f'- Certificado: {certificado_status}.',
     ])
 
@@ -1123,13 +1128,14 @@ def dashboard_aluna(request):
         aba_ativa = 'visao-geral'
 
     hoje = date.today()
+    aulas_passadas = Aula.objects.filter(data__lte=hoje)
     presencas = Presenca.objects.filter(
         inscricao=inscricao,
         aula__data__lte=hoje
     )
-    aulas_registradas = presencas.count()
+    aulas_registradas = aulas_passadas.count()
     presencas_confirmadas = presencas.filter(presente=True).count()
-    faltas = presencas.filter(presente=False).count()
+    faltas = max(aulas_registradas - presencas_confirmadas, 0)
     frequencia = round((presencas_confirmadas / aulas_registradas) * 100) if aulas_registradas else 0
 
     contexto = {
@@ -1139,7 +1145,7 @@ def dashboard_aluna(request):
         'presencas_confirmadas': presencas_confirmadas,
         'faltas': faltas,
         'frequencia': frequencia,
-        'curso_concluido': inscricao.concluiu_curso(),
+        'curso_concluido': inscricao.certificado_disponivel,
     }
 
     if aba_ativa == 'visao-geral':
@@ -1175,7 +1181,7 @@ def dashboard_aluna(request):
 
                             status_do_dia = 'presenca'
 
-                    elif presenca is False:
+                    elif presenca is False or aula.data <= hoje:
 
                         aula.status_frequencia = 'falta'
                         status_do_dia = 'falta'

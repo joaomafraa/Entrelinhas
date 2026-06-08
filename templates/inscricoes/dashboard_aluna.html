@@ -225,11 +225,9 @@
             <div>
                 <h2>Status do certificado</h2>
                 {% if inscricao.certificado_disponivel %}
-                    <p class="text-soft mb-0">Seu certificado ja esta disponivel para download.</p>
-                {% elif curso_concluido %}
-                    <p class="text-soft mb-0">Voce concluiu o curso. Aguarde a liberacao do certificado.</p>
+                    <p class="text-soft mb-0">Voce concluiu o curso e seu certificado ja esta disponivel para download.</p>
                 {% else %}
-                    <p class="text-soft mb-0">O certificado ficara disponivel apos a conclusao do curso.</p>
+                    <p class="text-soft mb-0">O certificado ficara disponivel quando a equipe postar o arquivo.</p>
                 {% endif %}
             </div>
 
