@@ -2686,6 +2686,53 @@ footer,
     display: block;
 }
 
+.bazar-detail__contact {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.bazar-detail__contact small {
+    color: var(--muted-foreground);
+    line-height: 1.45;
+}
+
+.bazar-whatsapp-button {
+    width: max-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.75rem 1.1rem;
+    color: #ffffff;
+    background: #2f7a4f;
+    border: 1px solid #2f7a4f;
+    border-radius: var(--radius);
+    font-weight: 800;
+    box-shadow: var(--shadow-sm);
+    transition: background var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+}
+
+.bazar-whatsapp-button:hover,
+.bazar-whatsapp-button:focus {
+    color: #ffffff;
+    background: #24633f;
+    border-color: #24633f;
+    transform: translateY(-1px);
+}
+
+.bazar-whatsapp-button--disabled,
+.bazar-whatsapp-button--disabled:hover,
+.bazar-whatsapp-button--disabled:focus {
+    color: var(--muted-foreground);
+    background: var(--muted);
+    border-color: var(--border);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .bazar-detail__description {
     display: grid;
     gap: 0.5rem;

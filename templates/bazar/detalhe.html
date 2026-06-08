@@ -51,6 +51,30 @@
                 </p>
             {% endif %}
 
+            <div class="bazar-detail__contact">
+                {% if whatsapp_disponivel %}
+                    <a
+                        href="{{ whatsapp_url }}"
+                        class="bazar-whatsapp-button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Tenho interesse
+                    </a>
+                {% else %}
+                    <button class="bazar-whatsapp-button bazar-whatsapp-button--disabled" type="button" disabled>
+                        Tenho interesse
+                    </button>
+                {% endif %}
+                <small>
+                    {% if whatsapp_disponivel %}
+                        Abre o WhatsApp com uma mensagem pronta sobre este item.
+                    {% else %}
+                        WhatsApp de contato ainda nao configurado.
+                    {% endif %}
+                </small>
+            </div>
+
             <div class="bazar-detail__description">
                 <h2>Descrição</h2>
                 <p>{{ item.descricao }}</p>

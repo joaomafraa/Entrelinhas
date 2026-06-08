@@ -69,6 +69,13 @@ if RENDER_EXTERNAL_HOSTNAME:
         CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 
+WHATSAPP_CONTATO = ''.join(
+    caractere
+    for caractere in os.environ.get('WHATSAPP_CONTATO', '')
+    if caractere.isdigit()
+)
+
+
 # Application definition
 
 INSTALLED_APPS = [

@@ -1,7 +1,9 @@
 import calendar
 import mimetypes
 from datetime import date, timedelta
+from urllib.parse import quote
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -164,6 +166,26 @@ def _salvar_imagens_bazar(item, imagens, imagem_model, campo_item):
                 'ordem': indice,
             }
         )
+
+
+def _whatsapp_interesse_url(request, item, tipo_item, mostra_preco):
+
+    whatsapp_contato = getattr(item, 'whatsapp_contato', '') or settings.WHATSAPP_CONTATO
+
+    if not whatsapp_contato:
+
+        return ''
+
+    tipo_label = 'produto' if tipo_item == 'produto' else 'servico'
+    valor_label = item.preco_formatado if mostra_preco else 'valor sob consulta'
+    item_url = request.build_absolute_uri()
+    mensagem = (
+        f'Ola, tenho interesse no {tipo_label} "{item.nome}" '
+        f'({valor_label}) que vi no bazar EntreLinhas. '
+        f'Pode me passar mais informacoes? {item_url}'
+    )
+
+    return f'https://wa.me/{whatsapp_contato}?text={quote(mensagem)}'
 
 
 def home(request):
@@ -1778,6 +1800,13 @@ def detalhe_vitrine_produto(request, id):
             'imagem_capa_url': 'imagem_vitrine_produto',
             'imagem_galeria_url': 'imagem_vitrine_produto_galeria',
             'mostra_preco': True,
+            'whatsapp_url': _whatsapp_interesse_url(
+                request,
+                produto,
+                'produto',
+                True
+            ),
+            'whatsapp_disponivel': bool(produto.whatsapp_contato or settings.WHATSAPP_CONTATO),
         }
     )
 
@@ -1851,5 +1880,12 @@ def detalhe_vitrine_servico(request, id):
             'imagem_capa_url': 'imagem_vitrine_servico',
             'imagem_galeria_url': 'imagem_vitrine_servico_galeria',
             'mostra_preco': False,
+            'whatsapp_url': _whatsapp_interesse_url(
+                request,
+                servico,
+                'servico',
+                False
+            ),
+            'whatsapp_disponivel': bool(settings.WHATSAPP_CONTATO),
         }
     )

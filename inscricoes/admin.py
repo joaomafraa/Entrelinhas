@@ -81,6 +81,7 @@ class ProdutoAdmin(admin.ModelAdmin):
         'nome',
         'categoria',
         'preco',
+        'whatsapp_contato',
         'ativo',
         'data_criacao',
     )
@@ -88,6 +89,7 @@ class ProdutoAdmin(admin.ModelAdmin):
     search_fields = (
         'nome',
         'categoria',
+        'whatsapp_contato',
     )
 
     list_filter = (
