@@ -110,9 +110,10 @@ describe('Epico 2 - Aulas, presenca, certificados e area da aluna', () => {
       cy.visit('/inscricao/area-aluna/?aba=certificados');
 
       cy.contains('Status do certificado').should('be.visible');
-      cy.contains('O certificado ficara disponivel apos a conclusao do curso.').should('be.visible');
+      cy.contains('O certificado ficara disponivel quando a equipe postar o arquivo.').should('be.visible');
+      cy.contains('Voce concluiu o curso').should('not.exist');
       cy.contains('Baixar certificado').should('not.exist');
-      cy.conclusao('aluna sem criterio concluido nao consegue baixar certificado');
+      cy.conclusao('aluna sem certificado postado nao consegue baixar certificado');
     });
   });
 
