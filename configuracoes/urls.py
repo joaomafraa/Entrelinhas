@@ -4,6 +4,7 @@ from django.urls import path, include
 from inscricoes.views import (
     admin_redirect,
     cadastro,
+    chat_suporte,
     contato,
     home,
     detalhe_vitrine_produto,
@@ -53,6 +54,12 @@ urlpatterns = [
         'contato/',
         contato,
         name='contato'
+    ),
+
+    path(
+        'api/chat/',
+        chat_suporte,
+        name='chat_suporte'
     ),
 
     path(

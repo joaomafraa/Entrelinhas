@@ -1,0 +1,62 @@
+{% load static %}
+
+<section
+    class="support-chat"
+    data-support-chat
+    data-chat-context="{{ support_chat_context|default:'public' }}"
+    data-chat-url="{% url 'chat_suporte' %}"
+>
+    <span class="support-chat__csrf" data-chat-csrf hidden>{% csrf_token %}</span>
+
+    <button
+        class="support-chat__toggle"
+        type="button"
+        data-chat-toggle
+        aria-label="Abrir chat de suporte"
+        aria-expanded="false"
+    >
+        <img
+            src="{% static 'assets/icons/support-chat.svg' %}"
+            alt=""
+            data-chat-icon-open
+        >
+        <img
+            src="{% static 'assets/icons/support-close.svg' %}"
+            alt=""
+            data-chat-icon-close
+            hidden
+        >
+    </button>
+
+    <div
+        class="support-chat__panel"
+        data-chat-panel
+        role="dialog"
+        aria-label="Lia - Suporte"
+        hidden
+    >
+        <header class="support-chat__header">
+            <div>
+                <strong>Lia - Suporte</strong>
+                <span>EntreLinhas</span>
+            </div>
+        </header>
+
+        <div class="support-chat__messages" data-chat-messages></div>
+
+        <div class="support-chat__suggestions" data-chat-suggestions></div>
+
+        <p class="support-chat__error" data-chat-error hidden></p>
+
+        <form class="support-chat__composer" data-chat-form>
+            <textarea
+                data-chat-input
+                rows="1"
+                maxlength="1000"
+                placeholder="Escreva sua duvida..."
+                aria-label="Mensagem para Lia"
+            ></textarea>
+            <button type="submit" data-chat-send>Enviar</button>
+        </form>
+    </div>
+</section>

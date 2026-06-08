@@ -273,6 +273,37 @@
     .student-profile-field--wide {
         grid-column: auto;
     }
+
+    .support-chat {
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    .support-chat__toggle {
+        width: 3.55rem;
+        height: 3.55rem;
+    }
+
+    .support-chat__toggle img {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    .support-chat__panel {
+        right: -0.25rem;
+        bottom: 4.5rem;
+        width: calc(100vw - 1.5rem);
+        max-height: calc(100vh - 6rem);
+        grid-template-rows: auto minmax(14rem, 1fr) auto auto auto;
+    }
+
+    .support-chat__composer {
+        grid-template-columns: 1fr;
+    }
+
+    .support-chat__composer button {
+        width: 100%;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1199.98px) {

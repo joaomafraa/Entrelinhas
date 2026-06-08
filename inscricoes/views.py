@@ -1,7 +1,10 @@
 import calendar
+import json
 import mimetypes
 from datetime import date, timedelta
 from urllib.parse import quote
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from django.conf import settings
 from django.contrib import messages
@@ -9,7 +12,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -194,6 +197,163 @@ def home(request):
         request,
         'inscricoes/home.html'
     )
+
+
+def _prompt_lia(contexto):
+
+    instrucoes = [
+        'Voce e Lia, assistente virtual da ONG EntreLinhas.',
+        'Responda em portugues do Brasil, com tom acolhedor, simples e objetivo.',
+        'Ajude com inscricoes, cursos gratuitos, area da aluna, frequencia, certificados, bazar solidario, doacoes e parcerias.',
+        'Nao invente datas, precos, vagas ou regras. Quando nao souber, oriente a pessoa a usar os canais oficiais ou o formulario de apoio.',
+        'Nao solicite dados sensiveis como CPF completo, senha ou dados bancarios.',
+        'A EntreLinhas oferece cursos profissionalizantes gratuitos e usa o bazar solidario para apoiar a ONG.',
+        'A inscricao pode ser feita pelo site; alunas aprovadas acessam a area da aluna para acompanhar aulas, frequencia e certificados.',
+    ]
+
+    if contexto == 'student':
+
+        instrucoes.extend([
+            'A conversa acontece na area da aluna.',
+            'Explique como a aluna pode consultar informacoes dentro da plataforma, sem pedir dados pessoais.',
+            'Para alteracao de dados, oriente a procurar a opcao de matricula/dados cadastrais ou contato com a equipe quando necessario.',
+        ])
+
+    else:
+
+        instrucoes.extend([
+            'A conversa acontece no site publico.',
+            'Para visitantes, ajude com inscricao, gratuidade, cursos, bazar, doacao e parceria.',
+        ])
+
+    return '\n'.join(instrucoes)
+
+
+def _mensagens_lia(payload_mensagens):
+
+    mensagens = []
+
+    if not isinstance(payload_mensagens, list):
+
+        return mensagens
+
+    for mensagem in payload_mensagens[-12:]:
+
+        if not isinstance(mensagem, dict):
+
+            continue
+
+        papel = mensagem.get('role')
+        conteudo = mensagem.get('content')
+
+        if papel not in {'user', 'assistant'} or not isinstance(conteudo, str):
+
+            continue
+
+        conteudo = conteudo.strip()
+
+        if conteudo:
+
+            mensagens.append({
+                'role': papel,
+                'content': conteudo[:1200],
+            })
+
+    return mensagens
+
+
+def _resposta_groq(mensagens):
+
+    payload = {
+        'model': settings.GROQ_MODEL,
+        'messages': mensagens,
+        'temperature': 0.5,
+        'max_tokens': 500,
+    }
+
+    requisicao = Request(
+        settings.GROQ_API_URL,
+        data=json.dumps(payload).encode('utf-8'),
+        headers={
+            'Authorization': f'Bearer {settings.GROQ_API_KEY}',
+            'Content-Type': 'application/json',
+        },
+        method='POST',
+    )
+
+    with urlopen(requisicao, timeout=30) as resposta:
+
+        dados = json.loads(resposta.read().decode('utf-8'))
+
+    return dados['choices'][0]['message']['content'].strip()
+
+
+@require_POST
+def chat_suporte(request):
+
+    try:
+
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+
+    except json.JSONDecodeError:
+
+        return JsonResponse(
+            {'error': 'Nao consegui ler sua mensagem. Tente enviar novamente.'},
+            status=400
+        )
+
+    contexto = payload.get('context')
+
+    if contexto not in {'public', 'student'}:
+
+        contexto = 'public'
+
+    mensagens_chat = _mensagens_lia(payload.get('messages'))
+
+    if not mensagens_chat or mensagens_chat[-1]['role'] != 'user':
+
+        return JsonResponse(
+            {'error': 'Envie uma mensagem para a Lia responder.'},
+            status=400
+        )
+
+    if not settings.GROQ_API_KEY:
+
+        return JsonResponse(
+            {
+                'error': (
+                    'Lia ainda nao esta configurada. '
+                    'Tente novamente mais tarde ou use o formulario de apoio.'
+                )
+            },
+            status=503
+        )
+
+    mensagens_groq = [
+        {
+            'role': 'system',
+            'content': _prompt_lia(contexto),
+        },
+        *mensagens_chat,
+    ]
+
+    try:
+
+        resposta = _resposta_groq(mensagens_groq)
+
+    except (HTTPError, URLError, TimeoutError, KeyError, ValueError, json.JSONDecodeError):
+
+        return JsonResponse(
+            {
+                'error': (
+                    'A Lia nao conseguiu responder agora. '
+                    'Tente novamente em alguns instantes.'
+                )
+            },
+            status=502
+        )
+
+    return JsonResponse({'reply': resposta})
 
 
 def contato(request):
