@@ -346,6 +346,7 @@ class SolicitacaoContato(models.Model):
     TIPO = (
         ('doacao', 'Doacao'),
         ('parceria', 'Parceria'),
+        ('suporte', 'Suporte'),
     )
 
     STATUS = (

@@ -600,6 +600,56 @@ footer,
     border-spacing: 0;
 }
 
+.admin-filter-bar {
+    display: grid;
+    grid-template-columns: minmax(16rem, 1fr) minmax(10rem, 0.35fr) auto auto;
+    gap: 0.85rem;
+    align-items: end;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-filter-bar label {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+}
+
+.admin-filter-bar span {
+    color: var(--muted-foreground);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.admin-filter-bar input,
+.admin-filter-bar select,
+.admin-inline-form select {
+    min-height: 2.65rem;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    color: var(--foreground);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-weight: 650;
+}
+
+.admin-inline-form {
+    margin: 0;
+}
+
+.admin-table__message {
+    max-width: 28rem;
+    color: var(--muted-foreground);
+    line-height: 1.45;
+    white-space: normal;
+}
+
 .admin-table th,
 .admin-table td {
     padding: 1rem 1.25rem;
@@ -3023,6 +3073,14 @@ footer,
     color: var(--primary-foreground);
     background: var(--primary);
     border-color: var(--primary);
+}
+
+.support-chat__message-link,
+.support-chat__error a {
+    color: var(--primary);
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
 }
 
 .support-chat__suggestions {

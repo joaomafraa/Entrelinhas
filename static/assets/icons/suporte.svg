@@ -1,0 +1,37 @@
+<svg width="24" height="24" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="suporteGradient" x1="56" y1="56" x2="208" y2="208" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A42B8"/>
+      <stop offset="1" stop-color="#27213F"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M64 132C64 84.5 92.7 56 128 56C163.3 56 192 84.5 192 132"
+    stroke="url(#suporteGradient)"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M64 132V160C64 173.3 74.7 184 88 184H96V120H88C74.7 120 64 130.7 64 144"
+    stroke="url(#suporteGradient)"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M192 132V160C192 173.3 181.3 184 168 184H160V120H168C181.3 120 192 130.7 192 144"
+    stroke="url(#suporteGradient)"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M160 184C160 197.3 149.3 208 136 208H120"
+    stroke="url(#suporteGradient)"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="112" cy="208" r="8" fill="#27213F"/>
+</svg>

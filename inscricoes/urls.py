@@ -35,6 +35,8 @@ from .views import (
     liberar_certificado,
     upload_certificado,
     baixar_certificado,
+    listar_solicitacoes,
+    atualizar_status_solicitacao,
 )
 
 urlpatterns = [
@@ -145,6 +147,18 @@ urlpatterns = [
         'certificados/',
         listar_certificados,
         name='listar_certificados'
+    ),
+
+    path(
+        'solicitacoes/',
+        listar_solicitacoes,
+        name='listar_solicitacoes'
+    ),
+
+    path(
+        'solicitacoes/<int:id>/status/',
+        atualizar_status_solicitacao,
+        name='atualizar_status_solicitacao'
     ),
 
     path(

@@ -30,6 +30,7 @@ from .forms import (
     LoginForm,
     ServicoForm,
     SolicitacaoContatoForm,
+    SuporteContatoForm,
     normalizar_cpf,
 )
 from .models import (
@@ -291,7 +292,8 @@ def _contexto_publico_lia():
         f'- Exemplos de produtos ativos: {", ".join(_resumo_item_lia(produto, "produto") for produto in produtos_lista) if produtos_lista else "nenhum produto ativo no momento"}.',
         f'- Servicos ativos no bazar: {servicos.count()}.',
         f'- Exemplos de servicos ativos: {", ".join(_resumo_item_lia(servico, "servico") for servico in servicos_lista) if servicos_lista else "nenhum servico ativo no momento"}.',
-        '- Formas de apoio: doacao via PIX quando configurado, parceria pelo formulario Apoiar e interesse por itens do bazar via WhatsApp quando configurado.',
+        '- Formas de apoio: doacao via PIX quando configurado, parceria pela pagina Apoiar e interesse por itens do bazar via WhatsApp quando configurado.',
+        '- Suporte da plataforma: use o formulario de suporte do chat; nao confunda suporte com doacao ou parceria.',
         f'- Chave PIX para doacoes: {settings.PIX_CHAVE_ONG if pix_configurado else "PIX ainda nao configurado"}.',
         f'- WhatsApp de contato geral: {"disponivel" if whatsapp_configurado else "nao configurado"}.',
     ])
@@ -303,7 +305,7 @@ def _prompt_lia(contexto, request=None):
         'Voce e Lia, assistente virtual da ONG EntreLinhas.',
         'Responda em portugues do Brasil, com tom acolhedor, simples e objetivo.',
         'Ajude com inscricoes, cursos gratuitos, area da aluna, frequencia, certificados, bazar solidario, doacoes e parcerias.',
-        'Nao invente datas, precos, vagas ou regras. Quando nao souber, oriente a pessoa a usar os canais oficiais ou o formulario de apoio.',
+        'Nao invente datas, precos, vagas ou regras. Quando nao souber ou a pessoa precisar de atendimento humano, oriente a abrir o formulario de suporte disponivel no chat.',
         'Nao solicite dados sensiveis como CPF completo, senha ou dados bancarios.',
         'A EntreLinhas oferece cursos profissionalizantes gratuitos e usa o bazar solidario para apoiar a ONG.',
         'A inscricao pode ser feita pelo site; alunas aprovadas acessam a area da aluna para acompanhar aulas, frequencia e certificados.',
@@ -428,7 +430,7 @@ def chat_suporte(request):
             {
                 'error': (
                     'Lia ainda nao esta configurada. '
-                    'Tente novamente mais tarde ou use o formulario de apoio.'
+                    'Tente novamente mais tarde ou abra o formulario de suporte.'
                 )
             },
             status=503
@@ -551,6 +553,57 @@ def login_plataforma(request):
         request,
         'inscricoes/login.html',
         {'form': form}
+    )
+
+
+def suporte(request):
+
+    initial = {}
+
+    if request.user.is_authenticated:
+
+        initial['email'] = request.user.email
+
+        inscricao = _inscricao_aprovada_do_usuario(request.user)
+
+        if inscricao:
+
+            initial['nome'] = inscricao.nome
+            initial['telefone'] = inscricao.telefone
+
+        elif request.user.get_full_name():
+
+            initial['nome'] = request.user.get_full_name()
+
+    if request.method == 'POST':
+
+        form = SuporteContatoForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+            messages.success(
+                request,
+                'Mensagem enviada ao suporte. Nossa equipe entrara em contato.'
+            )
+
+            return redirect('suporte')
+
+        messages.warning(
+            request,
+            'Nao foi possivel enviar sua mensagem. Revise os campos destacados.'
+        )
+
+    else:
+
+        form = SuporteContatoForm(initial=initial)
+
+    return render(
+        request,
+        'inscricoes/suporte.html',
+        {
+            'form': form,
+        }
     )
 
 
@@ -1105,6 +1158,96 @@ def listar_certificados(request):
             'end_index': page_obj.end_index() if paginator.count else 0,
         }
     )
+
+
+@login_required
+def listar_solicitacoes(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    status = request.GET.get('status', '').strip()
+    q = request.GET.get('q', '').strip()
+    solicitacoes = SolicitacaoContato.objects.filter(
+        tipo='suporte'
+    ).order_by('-criada_em')
+
+    status_validos = {opcao[0] for opcao in SolicitacaoContato.STATUS}
+
+    if status in status_validos:
+
+        solicitacoes = solicitacoes.filter(status=status)
+
+    else:
+
+        status = ''
+
+    if q:
+
+        solicitacoes = solicitacoes.filter(
+            Q(nome__icontains=q)
+            | Q(email__icontains=q)
+            | Q(telefone__icontains=q)
+            | Q(mensagem__icontains=q)
+        )
+
+    paginator = Paginator(solicitacoes, 8)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(
+        request,
+        'inscricoes/listar_solicitacoes.html',
+        {
+            'current_admin_page': 'solicitacoes',
+            'solicitacoes': page_obj.object_list,
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+            'status_selecionado': status,
+            'q': q,
+            'status_opcoes': SolicitacaoContato.STATUS,
+        }
+    )
+
+
+@login_required
+@require_POST
+def atualizar_status_solicitacao(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    solicitacao = get_object_or_404(
+        SolicitacaoContato,
+        id=id,
+        tipo='suporte'
+    )
+    novo_status = request.POST.get('status', '')
+    status_validos = {opcao[0] for opcao in SolicitacaoContato.STATUS}
+
+    if novo_status in status_validos:
+
+        solicitacao.status = novo_status
+        solicitacao.save(update_fields=['status', 'atualizada_em'])
+        messages.success(request, 'Status da solicitacao atualizado com sucesso.')
+
+    else:
+
+        messages.warning(request, 'Escolha um status valido para a solicitacao.')
+
+    proxima_url = request.POST.get('next') or reverse('listar_solicitacoes')
+
+    if not url_has_allowed_host_and_scheme(
+        proxima_url,
+        allowed_hosts={request.get_host()}
+    ):
+
+        proxima_url = reverse('listar_solicitacoes')
+
+    return redirect(proxima_url)
 
 
 @login_required

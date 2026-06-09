@@ -1,0 +1,107 @@
+{% extends 'inscricoes/admin_base.html' %}
+
+{% block title %}Suporte | EntreLinhas{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+    <div class="admin-page-header">
+        <div>
+            <span class="section-label">Painel administrativo</span>
+            <h1>Suporte</h1>
+            <p class="text-soft mb-0">Acompanhe as mensagens enviadas pelo formulario de suporte da plataforma.</p>
+        </div>
+    </div>
+
+    <form method="get" class="admin-filter-bar">
+        <label>
+            <span>Buscar</span>
+            <input type="search" name="q" value="{{ q }}" placeholder="Nome, email, telefone ou mensagem">
+        </label>
+
+        <label>
+            <span>Status</span>
+            <select name="status">
+                <option value="">Todos</option>
+                {% for valor, rotulo in status_opcoes %}
+                    <option value="{{ valor }}" {% if status_selecionado == valor %}selected{% endif %}>{{ rotulo }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <button type="submit" class="admin-page-button">Filtrar</button>
+
+        {% if q or status_selecionado %}
+            <a href="{% url 'listar_solicitacoes' %}" class="admin-page-button admin-page-button--muted">Limpar</a>
+        {% endif %}
+    </form>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Solicitante</th>
+                    <th>Mensagem</th>
+                    <th>Recebida em</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitacao in solicitacoes %}
+                    <tr>
+                        <td>
+                            <strong>{{ solicitacao.nome }}</strong>
+                            <span>{{ solicitacao.email }}</span>
+                            <span>{{ solicitacao.telefone }}</span>
+                        </td>
+                        <td class="admin-table__message">{{ solicitacao.mensagem }}</td>
+                        <td>{{ solicitacao.criada_em|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <form method="post" action="{% url 'atualizar_status_solicitacao' solicitacao.id %}" class="admin-inline-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <select name="status" onchange="this.form.submit()">
+                                    {% for valor, rotulo in status_opcoes %}
+                                        <option value="{{ valor }}" {% if solicitacao.status == valor %}selected{% endif %}>{{ rotulo }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-soft py-4">
+                            Nenhuma mensagem de suporte encontrada.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="admin-pagination" aria-label="Paginacao">
+            <span>
+                Mostrando {{ start_index }}-{{ end_index }} de {{ total_count }}
+            </span>
+
+            <div class="admin-pagination__actions">
+                {% if page_obj.has_previous %}
+                    <a class="admin-page-button" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if status_selecionado %}&status={{ status_selecionado }}{% endif %}">Anterior</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Anterior</span>
+                {% endif %}
+
+                <span>Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                    <a class="admin-page-button" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if status_selecionado %}&status={{ status_selecionado }}{% endif %}">Proxima</a>
+                {% else %}
+                    <span class="admin-page-button admin-page-button--disabled">Proxima</span>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+</section>
+
+{% endblock %}

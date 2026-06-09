@@ -5,6 +5,7 @@
     data-support-chat
     data-chat-context="{{ support_chat_context|default:'public' }}"
     data-chat-url="{% url 'chat_suporte' %}"
+    data-support-url="{% url 'suporte' %}"
 >
     <span class="support-chat__csrf" data-chat-csrf hidden>{% csrf_token %}</span>
 

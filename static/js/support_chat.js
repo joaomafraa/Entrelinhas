@@ -28,10 +28,19 @@
             .replace(/'/g, '&#039;');
     }
 
-    function renderizarMarkdownSeguro(texto) {
-        return escaparHtml(texto)
+    function renderizarMarkdownSeguro(texto, supportUrl) {
+        let html = escaparHtml(texto)
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\n/g, '<br>');
+
+        if (supportUrl) {
+            html = html.replace(
+                /formulario de suporte/gi,
+                `<a href="${supportUrl}" class="support-chat__message-link">formulario de suporte</a>`
+            );
+        }
+
+        return html;
     }
 
     function csrfToken(chat) {
@@ -81,6 +90,7 @@
         const contexto = chat.dataset.chatContext === 'student' ? 'student' : 'public';
         const chaveHistorico = `lia-chat-${contexto}`;
         const url = chat.dataset.chatUrl;
+        const supportUrl = chat.dataset.supportUrl;
         const toggle = chat.querySelector('[data-chat-toggle]');
         const iconOpen = chat.querySelector('[data-chat-icon-open]');
         const iconClose = chat.querySelector('[data-chat-icon-close]');
@@ -106,7 +116,7 @@
                 linha.className = `support-chat__message support-chat__message--${mensagem.role}`;
 
                 const bolha = document.createElement('p');
-                bolha.innerHTML = renderizarMarkdownSeguro(mensagem.content);
+                bolha.innerHTML = renderizarMarkdownSeguro(mensagem.content, supportUrl);
                 linha.appendChild(bolha);
                 messagesEl.appendChild(linha);
             });
@@ -146,13 +156,21 @@
             }
         }
 
-        function mostrarErro(texto) {
-            errorEl.textContent = texto;
+        function mostrarErro(texto, mostrarSuporte) {
+            const textoSeguro = escaparHtml(texto);
+
+            if (mostrarSuporte && supportUrl) {
+                errorEl.innerHTML = `${textoSeguro} <a href="${supportUrl}">Abrir formulario de suporte</a>.`;
+            } else {
+                errorEl.textContent = texto;
+            }
+
             errorEl.hidden = false;
         }
 
         function limparErro() {
             errorEl.textContent = '';
+            errorEl.innerHTML = '';
             errorEl.hidden = true;
         }
 
@@ -206,7 +224,7 @@
                 definirCarregando(false);
 
                 if (!resposta.ok || dados.error) {
-                    mostrarErro(dados.error || 'Nao consegui responder agora.');
+                    mostrarErro(dados.error || 'Nao consegui responder agora.', true);
                     return;
                 }
 
@@ -218,7 +236,7 @@
                 renderizarMensagens();
             } catch (erro) {
                 definirCarregando(false);
-                mostrarErro('Nao consegui conectar com a Lia agora. Tente novamente em instantes.');
+                mostrarErro('Nao consegui conectar com a Lia agora. Tente novamente em instantes.', true);
             }
         }
 

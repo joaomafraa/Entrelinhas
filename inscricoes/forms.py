@@ -707,3 +707,62 @@ class SolicitacaoContatoForm(forms.ModelForm):
             raise forms.ValidationError('Informe um telefone valido com DDD.')
 
         return telefone_normalizado
+
+
+class SuporteContatoForm(SolicitacaoContatoForm):
+
+    class Meta(SolicitacaoContatoForm.Meta):
+
+        fields = [
+            'nome',
+            'email',
+            'telefone',
+            'mensagem',
+        ]
+        labels = {
+            'nome': 'Nome completo',
+            'email': 'E-mail',
+            'telefone': 'Telefone',
+            'mensagem': 'Mensagem para o suporte',
+        }
+        widgets = {
+            'nome': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Digite seu nome'
+                }
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'voce@exemplo.com',
+                    'autocomplete': 'email'
+                }
+            ),
+            'telefone': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'DDD + telefone',
+                    'inputmode': 'numeric',
+                    'autocomplete': 'tel'
+                }
+            ),
+            'mensagem': forms.Textarea(
+                attrs={
+                    'class': 'form-control form-control-lg',
+                    'rows': 5,
+                    'placeholder': 'Conte sua duvida ou problema com a plataforma'
+                }
+            ),
+        }
+
+    def save(self, commit=True):
+
+        solicitacao = super().save(commit=False)
+        solicitacao.tipo = 'suporte'
+
+        if commit:
+
+            solicitacao.save()
+
+        return solicitacao

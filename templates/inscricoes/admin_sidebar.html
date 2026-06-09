@@ -72,6 +72,16 @@
                 </span>
                 <span>Certificados</span>
             </a>
+
+            <a
+                href="{% url 'listar_solicitacoes' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'solicitacoes' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/suporte.svg' %}" alt="">
+                </span>
+                <span>Suporte</span>
+            </a>
         </nav>
     </div>
 

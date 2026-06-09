@@ -15,6 +15,7 @@ from inscricoes.views import (
     imagem_vitrine_servico,
     login_plataforma,
     sair,
+    suporte,
     vitrine,
 )
 
@@ -54,6 +55,12 @@ urlpatterns = [
         'contato/',
         contato,
         name='contato'
+    ),
+
+    path(
+        'suporte/',
+        suporte,
+        name='suporte'
     ),
 
     path(
