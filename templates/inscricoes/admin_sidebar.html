@@ -82,6 +82,13 @@
                 </span>
                 <span>Suporte</span>
             </a>
+
+            <a
+                href="{% url 'listar_doacoes_parcerias' %}"
+                class="admin-sidebar__link {% if current_admin_page == 'doacoes_parcerias' %}admin-sidebar__link--active{% endif %}"
+            >
+                <span>Doações e Parcerias</span>
+            </a>
         </nav>
     </div>
 
