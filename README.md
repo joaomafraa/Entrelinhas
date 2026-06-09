@@ -1,626 +1,487 @@
-# Entrelinhas
+# EntreLinhas
 
-Plataforma digital para gerenciamento de cursos de costura, acompanhamento de alunas e comercialização de produtos e serviços desenvolvidos dentro do projeto.
+Plataforma digital para inscricao em cursos de costura, acompanhamento de alunas, gestao administrativa e bazar solidario.
 
----
+## Sobre
 
-## Sobre o Projeto
+O EntreLinhas centraliza os principais fluxos da ONG em uma unica aplicacao:
 
-O Entrelinhas é uma aplicação que integra inscrição em cursos, acompanhamento presencial e um bazar online.  
-A proposta é unir aprendizado, organização e geração de renda dentro de uma única plataforma.
+- inscricao e acompanhamento de matriculas;
+- area da aluna com aulas, frequencia e certificado;
+- painel administrativo para inscricoes, aulas, certificados, suporte, produtos, servicos, doacoes e parcerias;
+- bazar publico com produtos e servicos;
+- apoio por PIX, WhatsApp e formulario de contato.
 
----
 ## Links
 
-- [Protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
-- [Documentação no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
-- [Gestão do Projeto (Jira)](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
-- [Link deploy](https://entrelinhas-e759.onrender.com)
+- [Prototipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
+- [Documentacao no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
+- [Gestao do Projeto no Jira](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
+- [Deploy](https://entrelinhas-e759.onrender.com)
 
----
 ## Funcionalidades
 
-### 1. Inscrição no Curso
-- Formulário de inscrição
-- Gerenciamento de inscrições
-- Edição e cancelamento de matrícula
+### Inscricao e matricula
 
-### 2. Plataforma de Acompanhamento
-- Registro de presença
-- Calendário de aulas
-- Certificados
-- Acesso dinâmico conforme matrícula
+- Cadastro de conta e login.
+- Formulario de inscricao com validacao de CPF, telefone e campos obrigatorios.
+- Listagem administrativa de inscricoes.
+- Edicao e cancelamento de matricula pela aluna.
+- Atualizacao de status da inscricao pelo administrador.
 
-### 3. Bazar Online
-- Cadastro de produtos e serviços
-- Vitrine com filtros
-- Gestão de doações e parcerias
+### Acompanhamento
 
----
+- Cadastro e edicao de aulas.
+- Calendario de aulas.
+- Registro de presenca.
+- Area da aluna com frequencia, proximas aulas, perfil e certificados.
+- Upload, liberacao e download de certificado.
 
-## Metodologia
+### Bazar e apoio
 
-O projeto foi estruturado com base em Scrum:
-- Épicos
-- Histórias de usuário
-- Critérios de aceitação (BDD)
+- Cadastro administrativo de produtos e servicos.
+- Upload de imagem principal e galeria.
+- Vitrine publica com busca e filtros.
+- Link de interesse via WhatsApp com mensagem pronta.
+- Pagina Apoiar com PIX e formulario de doacao/parceria.
+- Painel administrativo para suporte, doacoes e parcerias.
+- Cadastro da chave PIX pelo painel administrativo.
 
----
+## Historias de Usuario
 
-## Histórias de Usuário
-
-<details>
-<summary>Historias</summary>
-
-
-### Épico 1 • Formulário de Inscrição
+As historias foram organizadas por epico e cobertas por testes Django e Cypress.
 
 <details>
-<summary>H1 • Inscrição no curso</summary>
+<summary>Epico 1 - Inscricao e Matricula</summary>
 
-**Descrição**
+### H1 - Inscricao no curso
 
-Como aluna  
-Quero me inscrever no curso preenchendo um formulário  
-Para garantir minha participação
+Como aluna, quero me inscrever no curso preenchendo um formulario para garantir minha participacao.
 
-**BDD**
+**Cenarios BDD**
 
-- Dado que estou na página de inscrição
-- Quando preencho todos os dados obrigatórios corretamente
-- E seleciono tipo de curso e disponibilidade
-- E envio o formulário
-- Então minha inscrição deve ser registrada com sucesso
+- Cenario 1: Inscricao com dados validos
+  - Dado que estou na pagina de inscricao
+  - Quando preencho todos os dados obrigatorios corretamente
+  - E seleciono minha disponibilidade
+  - E envio o formulario
+  - Entao minha inscricao deve ser registrada com sucesso
 
-- Dado que existem campos obrigatórios inválidos ou vazios
-- Quando tento enviar o formulário
-- Então devo receber mensagens de erro
-- E a inscrição não deve ser concluída
+- Cenario 2: Campos obrigatorios vazios ou invalidos
+  - Dado que estou na pagina de inscricao
+  - Quando tento enviar o formulario com campos obrigatorios vazios ou invalidos
+  - Entao devo receber mensagens de erro
+  - E a inscricao nao deve ser concluida
 
-- Dado que informo letras em campos que devem receber números, como CPF ou telefone
-- Quando tento enviar o formulário
-- Então devo receber uma mensagem informativa indicando que o campo deve conter apenas números
-- E a inscrição não deve ser concluída
+- Cenario 3: Letras em campos numericos
+  - Dado que informo letras em campos que devem receber numeros, como CPF ou telefone
+  - Quando tento enviar o formulario
+  - Entao devo receber uma mensagem informativa indicando que o campo deve conter apenas numeros
+  - E a inscricao nao deve ser concluida
+
+### H2 - Gerenciar inscricoes
+
+Como administrador, quero visualizar as inscricoes realizadas para acompanhar e organizar as alunas do curso.
+
+**Cenarios BDD**
+
+- Cenario 1: Visualizar inscricoes existentes
+  - Dado que existem inscricoes registradas
+  - Quando o administrador acessa a lista de inscricoes
+  - Entao deve visualizar os dados das alunas cadastradas
+
+- Cenario 2: Lista sem inscricoes
+  - Dado que nao existem inscricoes cadastradas
+  - Quando o administrador acessa a lista de inscricoes
+  - Entao deve ver uma mensagem informativa
+
+- Cenario 3: Visualizar dados da inscricao
+  - Dado que existe uma inscricao registrada
+  - Quando o administrador acessa a listagem
+  - Entao deve ver nome, e-mail, telefone, CPF e status da inscricao
+
+### H3 - Gerenciar matricula
+
+Como aluna, quero editar ou cancelar minha matricula para manter meus dados atualizados ou desistir do curso.
+
+**Cenarios BDD**
+
+- Cenario 1: Editar matricula com dados validos
+  - Dado que tenho uma matricula ativa
+  - Quando acesso meus dados
+  - E realizo alteracoes validas
+  - Entao minhas informacoes devem ser atualizadas
+
+- Cenario 2: Cancelar matricula
+  - Dado que tenho uma matricula ativa
+  - Quando solicito o cancelamento
+  - E confirmo a acao
+  - Entao minha matricula deve ser cancelada
+
+- Cenario 3: Salvar dados invalidos
+  - Dado que estou editando minha matricula
+  - Quando tento salvar dados invalidos
+  - Entao devo receber mensagem de erro
+  - E meus dados nao devem ser atualizados incorretamente
 
 </details>
 
 <details>
-<summary>H2 • Gerenciar Inscrições</summary>
+<summary>Epico 2 - Acompanhamento da Aluna</summary>
 
-**Descrição**
+### H1 - Registrar presenca
 
-Como administrador  
-Quero visualizar as inscrições realizadas  
-Para gerenciar os alunos do curso
+Como administrador ou instrutor, quero registrar presenca das alunas para acompanhar a frequencia.
 
-**BDD**
+**Cenarios BDD**
 
-- Dado que existem inscrições registradas
-- Quando o administrador acessa a lista de inscrições
-- Então deve visualizar os dados das alunas cadastradas
+- Cenario 1: Registrar presenca
+  - Dado que existe uma aula cadastrada
+  - Quando o administrador marca presenca de uma aluna
+  - Entao a presenca deve ser registrada
 
-- Dado que não existem inscrições
-- Quando acessa a tela
-- Então deve ver uma mensagem informativa
+- Cenario 2: Manter status salvo
+  - Dado que a presenca ja foi registrada
+  - Quando o administrador acessa a aula novamente
+  - Entao deve ver o status de presenca salvo
 
-- Dado que acessa a lista
-- Quando visualiza uma inscrição
-- Então deve ver nome, email e informações do curso
+- Cenario 3: Registrar falta
+  - Dado que existe uma aula cadastrada
+  - Quando a aluna nao e marcada como presente
+  - Entao a aula deve aparecer como falta na area da aluna
 
-</details>
+### H2 - Gerenciar calendario de aulas
 
-<details>
-<summary>H3 • Gerenciar Matrícula</summary>
+Como administrador ou instrutor, quero cadastrar e atualizar aulas no calendario para organizar os horarios do curso.
 
-**Descrição**
+**Cenarios BDD**
 
-Como aluna  
-Quero editar ou cancelar minha matrícula  
-Para manter meus dados atualizados ou desistir do curso
+- Cenario 1: Criar aula
+  - Dado que estou no painel administrativo
+  - Quando cadastro uma aula com data, horario e topico
+  - Entao ela deve aparecer na lista e no calendario de aulas
 
-**BDD**
+- Cenario 2: Editar aula
+  - Dado que existe uma aula cadastrada
+  - Quando altero seus dados e salvo
+  - Entao o calendario deve exibir as informacoes atualizadas
 
-- Dado que tenho uma matrícula ativa
-- Quando acesso meus dados
-- E realizo alterações válidas
-- Então minhas informações devem ser atualizadas
+- Cenario 3: Dados invalidos
+  - Dado que estou cadastrando ou editando uma aula
+  - Quando informo data ou horario invalidos
+  - Entao o sistema deve impedir o salvamento e exibir erro
 
-- Dado que tenho uma matrícula ativa
-- Quando solicito cancelamento
-- E confirmo a ação
-- Então minha matrícula deve ser cancelada
+### H3 - Gerar certificado
 
-- Dado que tento salvar dados inválidos
-- Quando edito minha matrícula
-- Então devo receber mensagem de erro
+Como administrador, quero liberar certificados para que alunas concluintes comprovem participacao no curso.
 
-</details>
+**Cenarios BDD**
 
----
+- Cenario 1: Liberar certificado
+  - Dado que a aluna concluiu o curso e possui certificado cadastrado
+  - Quando o administrador libera o certificado
+  - Entao a aluna deve conseguir visualiza-lo na area da aluna
 
-### Épico 2 • Plataforma de Acompanhamento
+- Cenario 2: Certificado nao liberado
+  - Dado que a aluna ainda nao possui certificado liberado
+  - Quando acessa a area de certificados
+  - Entao o certificado nao deve estar disponivel
 
-<details>
-<summary>H1 • Registrar Presença</summary>
+- Cenario 3: Baixar certificado liberado
+  - Dado que o certificado foi liberado com arquivo valido
+  - Quando a aluna solicita o download
+  - Entao o arquivo do certificado deve ser baixado
 
-**Descrição**
+### H4 - Funcionalidade principal da aluna
 
-Como instrutor  
-Quero registrar presença das alunas  
-Para acompanhar frequência
+Como usuaria, quero ver a area mais relevante conforme minha matricula para acessar rapidamente acompanhamento, inscricao ou bazar.
 
-**BDD**
+**Cenarios BDD**
 
-- Dado que estou na aula
-- Quando marco presença de uma aluna
-- Então a presença deve ser registrada
+- Cenario 1: Aluna matriculada
+  - Dado que a usuaria esta matriculada no curso
+  - Quando realiza login no sistema
+  - Entao a area de acompanhamento deve ser exibida como funcionalidade principal
 
-- Dado que a presença já foi registrada
-- Quando acesso novamente
-- Então devo ver o status salvo
+- Cenario 2: Usuaria sem matricula
+  - Dado que a usuaria nao possui matricula
+  - Quando realiza login no sistema
+  - Entao deve ser orientada para inscricao ou bazar
 
-</details>
+- Cenario 3: Visitante nao logada
+  - Dado que a visitante nao esta logada
+  - Quando acessa a plataforma
+  - Entao deve conseguir visualizar a area publica e o bazar
 
-<details>
-<summary>H2 • Gerenciar calendário de aulas</summary>
-
-**Descrição**
-
-Como administrador/instrutor  
-Quero cadastrar e atualizar aulas no calendário  
-Para organizar os horários do curso
-
-**BDD**
-
-- Dado que estou no sistema
-- Quando cadastro uma nova aula com data e horário
-- Então ela deve aparecer no calendário
-
-- Dado que altero uma aula existente
-- Quando salvo as mudanças
-- Então o calendário deve ser atualizado
-
-- Dado que informo data ou horário inválidos
-- Quando tento salvar a aula
-- Então o sistema deve impedir o cadastro e exibir erro
+- Cenario 4: Status da matricula muda
+  - Dado que o status da matricula da usuaria foi alterado
+  - Quando a usuaria acessa novamente o sistema
+  - Entao a funcionalidade principal deve ser atualizada conforme sua situacao atual
 
 </details>
 
 <details>
-<summary>H3 • Gerar certificado</summary>
+<summary>Epico 3 - Bazar, Doacoes e Parcerias</summary>
 
-**Descrição**
+### H1 - Cadastro de produtos e servicos
 
-Como administrador  
-Quero liberar o certificado  
-Para que a aluna comprove a conclusão do curso
+Como administrador, quero cadastrar produtos e servicos no bazar para disponibilizar itens e servicos da ONG.
 
-**BDD**
+**Cenarios BDD**
 
-- Dado que a aluna concluiu o curso
-- Quando atende os critérios
-- Então o certificado deve ser liberado
+- Cenario 1: Cadastro de item no bazar
+  - Dado que sou administrador da plataforma
+  - Quando acesso a area de cadastro do bazar
+  - E preencho os dados de um produto ou servico corretamente
+  - Entao o item deve ser registrado no bazar
 
-- Dado que não concluiu
-- Quando tenta acessar
-- Então o certificado não deve estar disponível
+- Cenario 2: Cadastro de produto
+  - Dado que estou cadastrando um produto
+  - Quando informo nome, descricao, preco, categoria, imagem e WhatsApp
+  - Entao o produto deve ser salvo corretamente
 
+- Cenario 3: Cadastro de servico
+  - Dado que estou cadastrando um servico
+  - Quando informo nome, descricao, tipo, imagem e status ativo
+  - Entao o servico deve ser salvo corretamente
 
-</details>
+### H2 - Vitrine de produtos e servicos
 
-<details>
-<summary>H4 • Definir funcionalidade principal</summary>
+Como visitante, quero visualizar e filtrar produtos e servicos para encontrar itens de interesse.
 
-**Descrição**
+**Cenarios BDD**
 
-Como usuária  
-Quero ver a funcionalidade principal de acordo com minha matrícula  
-Para acessar rapidamente o que é mais relevante para mim
+- Cenario 1: Visualizar itens ativos
+  - Dado que existem produtos e servicos ativos
+  - Quando acesso a vitrine publica do bazar
+  - Entao devo visualizar os itens disponiveis
 
-**BDD**
+- Cenario 2: Filtrar itens
+  - Dado que estou na vitrine do bazar
+  - Quando aplico busca ou filtro por tipo
+  - Entao devo ver apenas os itens correspondentes
 
-- Dado que a usuária está matriculada no curso
-- Quando realiza login no sistema
-- Então a plataforma de acompanhamento deve ser exibida como funcionalidade principal
+- Cenario 3: Nenhum resultado encontrado
+  - Dado que aplico um filtro sem resultados
+  - Quando a lista e atualizada
+  - Entao devo ver uma mensagem informativa
 
-- Dado que a usuária não está matriculada
-- Quando realiza login
-- Então o bazar deve ser exibido como funcionalidade principal
+### H3 - Gerenciamento de doacoes e parcerias
 
-- Dado que a usuária não está logada
-- Quando acessa o sistema
-- Então o bazar deve ser exibido como funcionalidade principal
+Como administrador, quero visualizar e gerenciar contatos de doacoes e parcerias para acompanhar solicitacoes recebidas.
 
-- Dado que o status de matrícula muda
-- Quando a usuária acessa novamente o sistema
-- Então a funcionalidade principal deve ser atualizada
+**Cenarios BDD**
 
-</details>
+- Cenario 1: Visualizar contatos recebidos
+  - Dado que existem formularios de doacao ou parceria enviados
+  - Quando o administrador acessa a area de Doacoes e Parcerias
+  - Entao deve visualizar a lista de pessoas que entraram em contato
 
----
+- Cenario 2: Visualizar detalhes do formulario
+  - Dado que existe um contato registrado
+  - Quando o administrador consulta a lista
+  - Entao deve visualizar nome, e-mail, telefone, tipo e mensagem enviada
 
-### Épico 3 • Bazar Online
+- Cenario 3: Atualizar status da solicitacao
+  - Dado que estou na lista de contatos
+  - Quando altero o status de uma solicitacao
+  - Entao o status deve ser atualizado corretamente
 
-<details>
-<summary>H1 • Cadastro de produtos e serviços</summary>
+### H4 - Enviar solicitacao de doacao ou parceria
 
-**História de Usuário**
+Como usuario interessado, quero enviar uma solicitacao de doacao ou parceria para apoiar a ONG.
 
-Como administrador  
-Quero cadastrar produtos e serviços no bazar  
-Para disponibilizar itens com qualidade validada para venda
+**Cenarios BDD**
 
-**Descrição**
+- Cenario 1: Enviar solicitacao com sucesso
+  - Dado que estou na pagina Apoiar
+  - Quando preencho os dados corretamente
+  - E envio o formulario
+  - Entao a solicitacao deve ser registrada com sucesso
 
-Esta funcionalidade permite que o administrador cadastre produtos e serviços no bazar da plataforma, garantindo que os itens disponíveis sigam um padrão de qualidade da ONG. O cadastro deve incluir informações essenciais como nome, descrição, preço e categoria, permitindo que os itens sejam exibidos de forma organizada para os usuários.
+- Cenario 2: Solicitacao de doacao
+  - Dado que seleciono a opcao de doacao
+  - Quando visualizo a chave PIX
+  - E preencho meus dados e mensagem
+  - Entao a solicitacao deve ser enviada para analise
 
-**Cenários (BDD)**
-
-- Cenário 1: Cadastro de produto ou serviço com sucesso
-	- Dado que sou administrador da plataforma
-	- Quando acesso a área de cadastro
-	- E preencho os dados de um produto ou serviço corretamente
-	- Então o item deve ser registrado no bazar
-
-- Cenário 2: Cadastro de produto
-	- Dado que estou cadastrando um produto
-	- Quando informo nome, descrição, preço e categoria
-	- Então o produto deve ser salvo corretamente
-
-- Cenário 3: Cadastro de serviço
-	- Dado que estou cadastrando um serviço
-	- Quando informo descrição, tipo de serviço e valor
-	- Então o serviço deve ser salvo corretamente
-
-</details>
-
-<details>
-<summary>H2 • Vitrine de produtos e serviços</summary>
-
-**História de Usuário**
-
-Como usuária  
-Quero visualizar produtos e serviços em destaque e filtrar  
-Para encontrar rapidamente os melhores itens
-
-**Descrição**
-
-A vitrine deve destacar produtos e serviços selecionados, exibindo-os em uma área de destaque e permitindo que a usuária aplique filtros simples para facilitar a busca e navegação pelos itens disponíveis.
-
-**Cenários (BDD)**
-
-- Cenário 1: Visualizar produtos e serviços em destaque
-	- Dado que acesso o bazar
-	- Quando entro na vitrine de produtos
-	- Então devo visualizar os itens em destaque
-
-- Cenário 2: Filtrar produtos
-	- Dado que estou na vitrine
-	- Quando aplico filtros (categoria, preço, etc.)
-	- Então devo ver apenas os produtos correspondentes
-
-- Cenário 3: Nenhum resultado encontrado
-	- Dado que aplico um filtro sem resultados
-	- Quando a lista é atualizada
-	- Então devo ver uma mensagem informativa
+- Cenario 3: Solicitacao de parceria
+  - Dado que seleciono a opcao de parceria
+  - Quando preencho meus dados e proposta
+  - Entao a solicitacao deve ser enviada para analise
 
 </details>
 
-<details>
-<summary>H3 • Gerenciamento de doações e parcerias</summary>
-
-**História de Usuário**
-
-Como administrador  
-Quero visualizar e gerenciar doações, parcerias e formulários recebidos  
-Para acompanhar quem entrou em contato e organizar as solicitações
-
-**Descrição**
-
-Esta funcionalidade permite que o administrador visualize e gerencie informações relacionadas a doações e parcerias. A interface deve exibir os usuários que entraram em contato por meio de formulários, possibilitando o acompanhamento das solicitações e a organização dos dados recebidos.
-
-**Critérios de Aceitação (BDD)**
-
-- Cenário 1: Visualizar contatos recebidos
-	- Dado que existem formulários enviados
-	- Quando o administrador acessa a área de gerenciamento
-	- Então deve visualizar a lista de pessoas que entraram em contato
-
-- Cenário 2: Visualizar detalhes do formulário
-	- Dado que existe um contato registrado
-	- Quando seleciono um registro
-	- Então devo visualizar todas as informações enviadas no formulário
-
-- Cenário 3: Gerenciar solicitações
-	- Dado que estou na lista de contatos
-	- Quando marco ou organizo uma solicitação
-	- Então o status deve ser atualizado corretamente
-
-</details>
-
-<details>
-<summary>H4 • Enviar solicitação de doação ou parceria</summary>
-
-**História de Usuário**
-
-Como usuário interessado  
-Quero enviar uma solicitação de doação ou parceria  
-Para apoiar ou colaborar com a ONG
-
-**Descrição**
-
-Esta funcionalidade permite que usuários preencham um formulário de contato para realizar doações ou propor parcerias com a ONG. O formulário deve coletar informações básicas e a mensagem do usuário, permitindo que a administração receba e analise as solicitações.
-
-**Cenários (BDD)**
-
-- Cenário 1: Envio de solicitação com sucesso
-	- Dado que estou na página de contato
-	- Quando preencho os dados corretamente
-	- E envio o formulário
-	- Então a solicitação deve ser registrada com sucesso
-
-- Cenário 2: Solicitação de doação
-	- Dado que seleciono a opção de doação
-	- Quando preencho meus dados e mensagem
-	- Então a solicitação deve ser enviada para análise
-
-- Cenário 3: Solicitação de parceria
-	- Dado que seleciono a opção de parceria
-	- Quando preencho meus dados e proposta
-	- Então a solicitação deve ser enviada para análise
-
-</details>
-
-</details>
-
-
----
-
-
-
-
-
-
-
-
-## Funcionalidades extras
+## Funcionalidades Extras
 
 ### WhatsApp no bazar
 
-Os produtos podem receber um numero de WhatsApp no cadastro ou edicao. Na vitrine, o detalhe do item monta automaticamente um link `wa.me` com uma mensagem pronta informando o produto de interesse, o valor e o link da pagina. Se o produto nao tiver numero, o sistema usa `WHATSAPP_CONTATO`; se nenhum numero estiver configurado, o botao fica desativado para nao levar o usuario a um contato invalido.
+Produtos podem receber um numero de WhatsApp no cadastro ou edicao. Na pagina de detalhe, o sistema monta um link `wa.me` com mensagem pronta contendo o item de interesse. Se o produto nao tiver numero proprio, o sistema usa `WHATSAPP_CONTATO`; se nenhum numero estiver configurado, o botao fica desativado.
 
 ### PIX para doacoes
 
-Na pagina Apoiar, a opcao de doacao mostra a chave PIX da ONG junto do formulario de solicitacao. A chave vem da variavel `PIX_CHAVE_ONG` e pode ser copiada por um botao; futuramente esse valor podera ser cadastrado pelo dashboard administrativo.
+A pagina Apoiar mostra a chave PIX da ONG quando a opcao de doacao esta selecionada. A chave pode ser cadastrada pelo painel administrativo em `Doacoes e Parcerias`; se nao houver chave salva no banco, o sistema usa `PIX_CHAVE_ONG` como fallback.
 
-### Chatbot Lia com Groq
+### Suporte
 
-A Lia e um chatbot de suporte exibido nas paginas publicas e na Area da Aluna. A integracao usa a rota `POST /api/chat/`, que envia as mensagens para a Groq com um contexto da EntreLinhas e retorna uma resposta em JSON, sem streaming. A configuracao e feita por variaveis de ambiente: `GROQ_API_KEY`, `GROQ_MODEL` e `GROQ_API_URL`.
+A plataforma possui formulario de suporte separado de doacoes e parcerias. As mensagens de suporte aparecem no menu administrativo `Suporte`, enquanto contatos de doacao e parceria aparecem em `Doacoes e Parcerias`.
+
+### Lia - assistente de suporte
+
+A Lia e a assistente virtual da EntreLinhas. Ela aparece nas paginas publicas e na area da aluna para responder duvidas sobre cursos, inscricoes, bazar, formas de apoio e uso da plataforma. Na area da aluna, a Lia tambem pode consultar informacoes reais da matricula, como proxima aula, frequencia atual, presencas, faltas, ultimas aulas faltadas e disponibilidade do certificado.
+
+O contexto enviado para a assistente evita dados sensiveis: CPF, telefone, e-mail, senha e dados bancarios nao sao enviados. A integracao usa a rota `POST /api/chat/` e pode ser configurada por `GROQ_API_KEY`, `GROQ_MODEL` e `GROQ_API_URL`.
 
 ### JavaScript
 
-O JavaScript foi usado de forma pontual para melhorar interacoes da interface: copiar a chave PIX, abrir e controlar o chatbot Lia, manter o historico do suporte em `sessionStorage`, confirmacao visual de exclusoes administrativas, selecao em massa nas tabelas, envio automatico de status ao alterar selects e apoio ao cadastro de imagens no bazar, mostrando arquivos selecionados antes do envio.
+O JavaScript foi usado para copiar PIX, controlar interacoes do suporte, confirmar exclusoes administrativas, enviar alteracoes de status automaticamente e apoiar o cadastro de imagens no bazar.
 
----
+## Como Rodar
 
-## Protótipos
-
-O prototipo Lo-fi Foi desenvolvido no figma representando as funcionaldades das histoias de usuario
-[Acessar protótipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
-
----
-## Como rodar
-<details> 
-<summary>tutorial</summary>
-
-### Clonar Projeto
+### 1. Clonar o projeto
 
 ```bash
 git clone LINK_DO_REPOSITORIO
-```
-
-Entrar na pasta:
-
-```bash
 cd EntreLinhas
 ```
 
----
+### 2. Criar e ativar ambiente virtual
 
-### Criar Ambiente Virtual
-
-### Windows
-
-```bash
-python -m venv venv
-```
-
----
-
-### Ativar Ambiente Virtual
-
-### PowerShell
+Windows PowerShell:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-### CMD
+CMD:
 
-```bash
-venv\Scripts\activate
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
-Após ativar aparecerá:
-
-```text
-(venv)
-```
-
----
-
-### Instalar Dependências
+### 3. Instalar dependencias Python
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
+### 4. Configurar ambiente
 
-### Rodar Migrações
+Crie um arquivo `.env` a partir do `.env.example` e preencha os valores necessarios.
 
-```bash
-python manage.py makemigrations
+Variaveis principais:
+
+```text
+SECRET_KEY=
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
+WHATSAPP_CONTATO=
+PIX_CHAVE_ONG=
+GROQ_API_KEY=
+GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_API_URL=https://api.groq.com/openai/v1/chat/completions
 ```
+
+### 5. Rodar migrations
 
 ```bash
 python manage.py migrate
 ```
 
----
-
-### Criar Superusuário
+### 6. Criar superusuario
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Preencher:
-- username
-- email
-- senha
-
----
-
-### Rodar Servidor
+### 7. Subir servidor
 
 ```bash
 python manage.py runserver
 ```
 
----
-
-### Abrir Projeto
-
-Abrir no navegador:
+Acesse:
 
 ```text
 http://127.0.0.1:8000/
 ```
 
----
-
-### Abrir Painel Administrativo
+Painel administrativo da plataforma:
 
 ```text
-http://127.0.0.1:8000/admin
+http://127.0.0.1:8000/inscricao/dashboard/
 ```
 
----
+Admin nativo do Django:
 
-</details>
+```text
+http://127.0.0.1:8000/admin/
+```
 
-## CI/CD
-<details>
-<summary>GitHub Actions e Render</summary>
+## Testes
 
-O projeto usa GitHub Actions em `.github/workflows/ci-cd.yml`.
-
-### CI
-
-Em push ou pull request para `main`, o workflow executa quatro etapas:
-
-- Unit and integration tests
-- Build validation
-- Cypress end-to-end tests
-- Deploy Render, apenas em push para `main`
-
-Os testes Django rodam com:
+### Django
 
 ```bash
 python manage.py check
 python manage.py makemigrations --check --dry-run
-python manage.py migrate --noinput
 python manage.py test tests --verbosity 2
 ```
 
-A validacao de build roda:
-
-```bash
-python manage.py collectstatic --noinput
-npm ci
-```
-
-Os testes ficam na pasta `tests/`, fora do app `inscricoes`.
-
 ### Cypress
 
-Os testes E2E ficam em `cypress/e2e/inscricoes/` e rodam no CI antes do deploy.
+Instale as dependencias Node:
 
-Instale as dependencias Node antes da primeira execucao:
-
-```powershell
+```bash
 npm ci
 ```
 
-Para rodar a suite Cypress igual ao CI:
+Rodar suite E2E:
 
-```powershell
+```bash
 npm run cy:run
 ```
 
-Esse comando prepara o ambiente automaticamente: aplica migrations, executa `collectstatic`, sobe o Django em `http://127.0.0.1:8000` e roda o Cypress.
+Abrir interface visual:
 
-Para abrir a interface visual:
-
-```powershell
+```bash
 npm run cy:open
 ```
 
-Para abrir a interface visual mais devagar, util para acompanhar os passos:
+Abrir interface visual lenta:
 
-```powershell
+```bash
 npm run cy:open:slow
 ```
 
-No modo lento, o Cypress reduz a velocidade de digitacao, pausa apos preenchimentos e resultados importantes, e registra uma conclusao ao fim de cada cenario.
+Rodar um spec especifico:
 
-Para rodar apenas um spec:
-
-```powershell
-node tools/run_cypress.js --spec cypress/e2e/inscricoes/epico1/inscricao_gerenciamento_matricula.cy.js
+```bash
+node tools/run_cypress.js --spec cypress/e2e/inscricoes/epico3/bazar_produtos_servicos_doacoes_parcerias.cy.js
 ```
 
-Para abrir apenas um spec na interface lenta:
+## CI/CD
 
-```powershell
-node tools/run_cypress.js --open --slow --spec cypress/e2e/inscricoes/epico1/inscricao_gerenciamento_matricula.cy.js
-```
+O projeto usa GitHub Actions em `.github/workflows/ci-cd.yml`.
 
-### CD
+Em push ou pull request para `main`, o workflow executa:
 
-Depois que os testes passam em push para `main`, o workflow aciona o deploy do Render usando o secret:
+- Unit and integration tests;
+- Build validation;
+- Cypress end-to-end tests;
+- Deploy Render em push para `main`.
 
-```text
-RENDER_DEPLOY_HOOK_URL
-```
-
-Se esse secret não estiver configurado, o workflow apenas avisa. O auto deploy padrão do Render pode continuar funcionando normalmente.
-
-### Secrets no GitHub Actions
-
-Configure em `Settings > Secrets and variables > Actions`:
+Configure os secrets no GitHub Actions:
 
 ```text
 DJANGO_SECRET_KEY
 RENDER_DEPLOY_HOOK_URL
 ```
 
-`DJANGO_SECRET_KEY` é usado somente no CI. Não coloque a chave real no código.
-
-### Variáveis no Render
-
-Configure em `Environment`:
+Variaveis recomendadas no Render:
 
 ```text
 SECRET_KEY
@@ -631,6 +492,11 @@ DATABASE_URL=postgresql://...
 DJANGO_SUPERUSER_EMAIL=admin@entrelinhas.com
 DJANGO_SUPERUSER_PASSWORD=sua-senha
 DJANGO_SUPERUSER_NAME=Nome Admin
+WHATSAPP_CONTATO=
+PIX_CHAVE_ONG=
+GROQ_API_KEY=
+GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_API_URL=https://api.groq.com/openai/v1/chat/completions
 ```
 
 Build command:
@@ -645,298 +511,69 @@ Start command:
 gunicorn configuracoes.wsgi:application
 ```
 
-</details>
-
 ## Estrutura do Projeto
-<details>
-<summary>Estrutura</summary>
 
 ```text
 EntreLinhas/
-│
-├── manage.py
-├── requirements.txt
-├── README.md
-├── .env
-├── .gitignore
-├── Procfile
-├── runtime.txt
-├── build.sh
-├── render.yaml
-│
 ├── configuracoes/
-│   │
-│   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
 │   ├── asgi.py
-│   ├── wsgi.py
-│   ├── permissions.py
-│   └── context_processors.py
-│
-├── usuarios/
-│   │
-│   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── usuarios/
-│   │       ├── login.html
-│   │       ├── cadastro.html
-│   │       ├── perfil.html
-│   │       └── editar_perfil.html
-│   │
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── services.py
-│   ├── signals.py
-│   ├── tests.py
-│   ├── urls.py
-│   ├── validators.py
-│   └── views.py
-│
+│   └── wsgi.py
 ├── inscricoes/
-│   │
+│   ├── management/commands/
+│   │   ├── ensure_admin.py
+│   │   └── seed_cypress.py
 │   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── inscricoes/
-│   │       ├── inscricao.html
-│   │       ├── sucesso.html
-│   │       ├── listar_inscricoes.html
-│   │       ├── detalhes.html
-│   │       └── editar_matricula.html
-│   │
-│   ├── __init__.py
 │   ├── admin.py
 │   ├── apps.py
 │   ├── forms.py
 │   ├── models.py
-│   ├── services.py
-│   ├── tests.py
-│   ├── urls.py
-│   ├── validators.py
-│   └── views.py
-│
-├── acompanhamento/
-│   │
-│   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── acompanhamento/
-│   │       ├── dashboard_aluna.html
-│   │       ├── calendario.html
-│   │       ├── presencas.html
-│   │       ├── certificados.html
-│   │       └── detalhes_aula.html
-│   │
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── calendario.py
-│   ├── certificados.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── services.py
-│   ├── tests.py
 │   ├── urls.py
 │   └── views.py
-│
-├── bazar/
-│   │
-│   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── bazar/
-│   │       ├── home.html
-│   │       ├── vitrine.html
-│   │       ├── produto.html
-│   │       ├── cadastrar_produto.html
-│   │       ├── editar_produto.html
-│   │       └── filtros.html
-│   │
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── filters.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── services.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-│
-├── parcerias_doacoes/
-│   │
-│   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── parcerias_doacoes/
-│   │       ├── contato.html
-│   │       ├── parceria.html
-│   │       ├── doacao.html
-│   │       ├── listar_solicitacoes.html
-│   │       └── detalhes_solicitacao.html
-│   │
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── services.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-│
-├── dashboard/
-│   │
-│   ├── migrations/
-│   │   └── __init__.py
-│   │
-│   ├── templates/
-│   │   └── dashboard/
-│   │       ├── admin_dashboard.html
-│   │       ├── instrutor_dashboard.html
-│   │       ├── visitante_dashboard.html
-│   │       └── redirecionamento.html
-│   │
-│   ├── __init__.py
-│   ├── admin.py
-│   ├── apps.py
-│   ├── services.py
-│   ├── tests.py
-│   ├── urls.py
-│   └── views.py
-│
 ├── templates/
-│   │
-│   ├── base.html
-│   │
-│   ├── components/
-│   │   ├── navbar.html
-│   │   ├── footer.html
-│   │   ├── sidebar.html
-│   │   ├── mensagens.html
-│   │   ├── cards.html
-│   │   └── modal.html
-│   │
-│   ├── registration/
-│   │   ├── login.html
-│   │   ├── logout.html
-│   │   ├── password_reset.html
-│   │   └── password_change.html
-│   │
-│   ├── errors/
-│   │   ├── 403.html
-│   │   ├── 404.html
-│   │   └── 500.html
-│   │
-│   └── includes/
-│       ├── alerts.html
-│       ├── pagination.html
-│       └── breadcrumbs.html
-│
-├── static/
-│   │
-│   ├── css/
-│   │   ├── style.css
-│   │   ├── dashboard.css
-│   │   ├── formularios.css
-│   │   ├── bazar.css
-│   │   └── responsivo.css
-│   │
-│   ├── js/
-│   │   ├── main.js
-│   │   ├── calendario.js
-│   │   ├── filtros.js
-│   │   ├── dashboard.js
-│   │   └── modal.js
-│   │
-│   ├── img/
-│   │   ├── logo/
-│   │   ├── banners/
-│   │   ├── produtos/
-│   │   ├── usuarios/
-│   │   └── icons/
-│   │
-│   └── vendor/
-│
-├── media/
-│   │
+│   ├── bazar/
 │   ├── certificados/
-│   ├── produtos/
-│   ├── usuarios/
-│   └── documentos/
-│
-├── docs/
-│   │
-│   ├── backlog.md
-│   ├── arquitetura.md
-│   ├── casos_de_uso.md
-│   ├── regras_de_negocio.md
-│   ├── roadmap.md
-│   └── DER.png
-│
-└── tests/
-    │
-    ├── test_usuarios.py
-    ├── test_inscricoes.py
-    ├── test_acompanhamento.py
-    ├── test_bazar.py
-    ├── test_dashboard.py
-    └── test_parcerias.py 
+│   └── inscricoes/
+├── static/
+│   ├── assets/icons/
+│   ├── css/
+│   └── js/
+├── tests/
+│   └── test_historias.py
+├── cypress/
+│   ├── e2e/inscricoes/
+│   └── support/
+├── tools/
+│   └── run_cypress.js
+├── .github/workflows/
+│   └── ci-cd.yml
+├── build.sh
+├── manage.py
+├── package.json
+├── requirements.txt
+└── README.md
 ```
-</details>
-
-
----
-## Entregas
-
-<details>
-<summary>Entrega</summary>
-
-<!-- escrever aqui -->
-
-### semana 1
-<details>
-<summary>Detalhes</summary>
-
-
-- implementacao do epico de inscricao do curso com suas funcionalidades
-
-### Quadro do backlog
-![backlog](assets/backlog_semana_1.png)
-
-### sprint
-![quadro](assets/semana%201_quadro%20do%20jira.png)
-</details>
-
-
-<!-- final da parte de entregas  -->
-</details>
-
-
-## Objetivo
-
-- Facilitar o ingresso no curso  
-- Melhorar o acompanhamento das alunas  
-- Organizar a gestão do projeto  
-- Permitir geração de renda para a ong através do bazar  
-
----
 
 ## Tecnologias
 
-Definir conforme implementação.
+- Python 3
+- Django 6
+- SQLite em desenvolvimento
+- PostgreSQL no deploy via `DATABASE_URL`
+- WhiteNoise para arquivos estaticos
+- Gunicorn como servidor WSGI em producao
+- Render para deploy
+- GitHub Actions para CI/CD
+- HTML, CSS e JavaScript
+- Bootstrap 5
+- Cypress para testes E2E
+- Node.js e npm para automacao dos testes Cypress
+- Groq API para suporte virtual configuravel
 
----
+## Contribuicao
+
+Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Autor
 
