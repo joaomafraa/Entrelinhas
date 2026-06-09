@@ -223,6 +223,17 @@ def _formatar_aula_lia(aula):
     return f'{aula.data:%d/%m/%Y} as {aula.horario:%H:%M}{topico}'
 
 
+def _formatar_lista_aulas_lia(aulas, vazio):
+
+    aulas = list(aulas)
+
+    if not aulas:
+
+        return vazio
+
+    return '; '.join(_formatar_aula_lia(aula) for aula in aulas)
+
+
 def _contexto_aluna_lia(user):
 
     if not user.is_authenticated:
@@ -238,29 +249,54 @@ def _contexto_aluna_lia(user):
             'Oriente a verificar inscricoes ou falar com a equipe.'
         )
 
-    total_aulas_registradas = Aula.objects.filter(
-        data__lte=timezone.localdate()
-    ).count()
+    hoje = timezone.localdate()
+    aulas_passadas = Aula.objects.filter(
+        data__lte=hoje
+    ).order_by('data', 'horario')
     presencas_confirmadas = Presenca.objects.filter(
         inscricao=inscricao,
-        aula__data__lte=timezone.localdate(),
+        aula__data__lte=hoje,
         presente=True
     ).count()
-    frequencia = inscricao.frequencia_percentual
-    hoje = timezone.localdate()
-    proximas_aulas = Aula.objects.filter(
+    aulas_registradas = aulas_passadas.count()
+    faltas = max(aulas_registradas - presencas_confirmadas, 0)
+    frequencia = round((presencas_confirmadas / aulas_registradas) * 100) if aulas_registradas else 0
+    presencas_por_aula = {
+        presenca.aula_id: presenca.presente
+        for presenca in Presenca.objects.filter(
+            inscricao=inscricao,
+            aula__data__lte=hoje
+        )
+    }
+    aulas_com_falta = [
+        aula
+        for aula in aulas_passadas
+        if presencas_por_aula.get(aula.id) is not True
+    ]
+    proximas_aulas = list(Aula.objects.filter(
         data__gte=hoje
-    ).order_by('data', 'horario')[:3]
-
-    if proximas_aulas:
-
-        aulas_texto = '; '.join(_formatar_aula_lia(aula) for aula in proximas_aulas)
-
-    else:
-
-        aulas_texto = 'Nenhuma aula futura cadastrada no momento.'
+    ).order_by('data', 'horario')[:3])
+    proxima_aula = proximas_aulas[0] if proximas_aulas else None
+    proxima_aula_texto = (
+        _formatar_aula_lia(proxima_aula)
+        if proxima_aula
+        else 'Nenhuma aula futura cadastrada no momento.'
+    )
+    aulas_texto = _formatar_lista_aulas_lia(
+        proximas_aulas,
+        'Nenhuma aula futura cadastrada no momento.'
+    )
+    faltas_texto = _formatar_lista_aulas_lia(
+        list(reversed(aulas_com_falta))[:5],
+        'Nenhuma falta registrada.'
+    )
 
     certificado_status = 'liberado para download' if inscricao.certificado_disponivel else 'ainda nao liberado'
+    certificado_arquivo = (
+        inscricao.certificado_nome_arquivo
+        if inscricao.certificado_disponivel and inscricao.certificado_nome_arquivo
+        else 'nenhum arquivo disponivel'
+    )
     curso_concluido_lia = inscricao.certificado_disponivel
 
     return '\n'.join([
@@ -270,10 +306,16 @@ def _contexto_aluna_lia(user):
         f'- Matricula ativa: {"sim" if inscricao.ativa else "nao"}',
         '- Curso: Costurando Sonhos.',
         f'- Disponibilidade informada: {inscricao.get_disponibilidade_display()}',
-        f'- Frequencia: {presencas_confirmadas} presencas em {total_aulas_registradas} aulas registradas ({frequencia}%).',
+        f'- Frequencia atual: {frequencia}%.',
+        f'- Total de aulas passadas: {aulas_registradas}.',
+        f'- Presencas confirmadas: {presencas_confirmadas}.',
+        f'- Faltas: {faltas}.',
+        f'- Proxima aula mais proxima: {proxima_aula_texto}',
         f'- Proximas aulas cadastradas: {aulas_texto}',
+        f'- Ultimas aulas com falta: {faltas_texto}',
         f'- Curso concluido: {"sim" if curso_concluido_lia else "nao"}',
         f'- Certificado: {certificado_status}.',
+        f'- Arquivo do certificado: {certificado_arquivo}.',
     ])
 
 
@@ -330,6 +372,10 @@ def _prompt_lia(contexto, request=None):
 
         instrucoes.extend([
             'A conversa acontece na area da aluna.',
+            'Quando a aluna perguntar sobre proxima aula, frequencia, faltas ou certificado, responda diretamente usando apenas o contexto real da aluna.',
+            'Se nao houver proxima aula, falta ou certificado cadastrado no contexto, diga isso claramente e nao invente informacoes.',
+            'Para perguntas sobre aulas faltadas, use a lista "Ultimas aulas com falta" e informe que a lista e limitada as ultimas 5 faltas quando houver mais registros.',
+            'Para certificado, diga que esta disponivel somente quando o contexto informar "liberado para download".',
             'Explique como a aluna pode consultar informacoes dentro da plataforma, sem pedir dados pessoais.',
             'Para alteracao de dados, oriente a procurar a opcao de matricula/dados cadastrais ou contato com a equipe quando necessario.',
         ])
