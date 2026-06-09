@@ -2,7 +2,14 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils import timezone
 
-from .models import Aula, Inscricao, Produto, Servico, SolicitacaoContato
+from .models import (
+    Aula,
+    ConfiguracaoSistema,
+    Inscricao,
+    Produto,
+    Servico,
+    SolicitacaoContato,
+)
 
 
 User = get_user_model()
@@ -766,3 +773,27 @@ class SuporteContatoForm(SolicitacaoContatoForm):
             solicitacao.save()
 
         return solicitacao
+
+
+class ConfiguracaoPixForm(forms.ModelForm):
+
+    class Meta:
+
+        model = ConfiguracaoSistema
+        fields = ['pix_chave_ong']
+        labels = {
+            'pix_chave_ong': 'Chave PIX da ONG',
+        }
+        widgets = {
+            'pix_chave_ong': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 4,
+                    'placeholder': 'E-mail, CPF, telefone, chave aleatoria ou codigo copia e cola'
+                }
+            ),
+        }
+
+    def clean_pix_chave_ong(self):
+
+        return self.cleaned_data['pix_chave_ong'].strip()

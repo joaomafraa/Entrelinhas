@@ -87,7 +87,10 @@
                 href="{% url 'listar_doacoes_parcerias' %}"
                 class="admin-sidebar__link {% if current_admin_page == 'doacoes_parcerias' %}admin-sidebar__link--active{% endif %}"
             >
-                <span>Doações e Parcerias</span>
+                <span class="admin-sidebar__icon" aria-hidden="true">
+                    <img src="{% static 'assets/icons/apoio.svg' %}" alt="">
+                </span>
+                <span>Doacoes e Parcerias</span>
             </a>
         </nav>
     </div>

@@ -23,6 +23,7 @@ from django.views.decorators.http import require_POST
 from .forms import (
     AdminInscricaoForm,
     AulaForm,
+    ConfiguracaoPixForm,
     ProdutoForm,
     CadastroForm,
     CertificadoUploadForm,
@@ -35,6 +36,7 @@ from .forms import (
 )
 from .models import (
     Aula,
+    ConfiguracaoSistema,
     Inscricao,
     Presenca,
     Produto,
@@ -85,6 +87,17 @@ def _inscricao_aprovada_do_usuario(user):
         filtros,
         status='aprovada'
     ).order_by('-data_criacao').first()
+
+
+def _chave_pix_ong():
+
+    configuracao = ConfiguracaoSistema.objects.first()
+
+    if configuracao:
+
+        return configuracao.pix_chave_ong.strip()
+
+    return settings.PIX_CHAVE_ONG
 
 
 def _parametros_calendario(request):
@@ -283,7 +296,8 @@ def _contexto_publico_lia():
     servicos = Servico.objects.filter(ativo=True).order_by('-data_criacao')
     produtos_lista = list(produtos[:5])
     servicos_lista = list(servicos[:5])
-    pix_configurado = bool(settings.PIX_CHAVE_ONG)
+    chave_pix_ong = _chave_pix_ong()
+    pix_configurado = bool(chave_pix_ong)
     whatsapp_configurado = bool(settings.WHATSAPP_CONTATO)
 
     return '\n'.join([
@@ -294,7 +308,7 @@ def _contexto_publico_lia():
         f'- Exemplos de servicos ativos: {", ".join(_resumo_item_lia(servico, "servico") for servico in servicos_lista) if servicos_lista else "nenhum servico ativo no momento"}.',
         '- Formas de apoio: doacao via PIX quando configurado, parceria pela pagina Apoiar e interesse por itens do bazar via WhatsApp quando configurado.',
         '- Suporte da plataforma: use o formulario de suporte do chat; nao confunda suporte com doacao ou parceria.',
-        f'- Chave PIX para doacoes: {settings.PIX_CHAVE_ONG if pix_configurado else "PIX ainda nao configurado"}.',
+        f'- Chave PIX para doacoes: {chave_pix_ong if pix_configurado else "PIX ainda nao configurado"}.',
         f'- WhatsApp de contato geral: {"disponivel" if whatsapp_configurado else "nao configurado"}.',
     ])
 
@@ -525,7 +539,7 @@ def contato(request):
         {
             'form': form,
             'tipo_inicial': tipo_inicial,
-            'pix_chave_ong': settings.PIX_CHAVE_ONG,
+            'pix_chave_ong': _chave_pix_ong(),
         }
     )
 
@@ -710,14 +724,15 @@ def dashboard_admin(request):
         ).count()
     )
     solicitacoes_novas = SolicitacaoContato.objects.filter(
+        tipo__in=['doacao', 'parceria'],
         status='nova'
     ).count()
     proximas_aulas = Aula.objects.filter(
         data__gte=hoje
     ).order_by('data', 'horario')[:3]
-    solicitacoes_recentes = SolicitacaoContato.objects.select_related().order_by(
-        '-criada_em'
-    )[:3]
+    solicitacoes_recentes = SolicitacaoContato.objects.filter(
+        tipo__in=['doacao', 'parceria']
+    ).order_by('-criada_em')[:3]
 
     if inscricoes_mes_anterior:
 
@@ -2371,6 +2386,19 @@ def listar_doacoes_parcerias(request):
 
     paginator = Paginator(solicitacoes, 8)
     page_obj = paginator.get_page(request.GET.get('page'))
+    configuracao = ConfiguracaoSistema.objects.first()
+
+    if configuracao:
+
+        pix_form = ConfiguracaoPixForm(instance=configuracao)
+        pix_chave_configurada = bool(configuracao.pix_chave_ong.strip())
+
+    else:
+
+        pix_form = ConfiguracaoPixForm(
+            initial={'pix_chave_ong': settings.PIX_CHAVE_ONG}
+        )
+        pix_chave_configurada = bool(settings.PIX_CHAVE_ONG)
 
     return render(
         request,
@@ -2389,8 +2417,33 @@ def listar_doacoes_parcerias(request):
             'total_doacoes': total_doacoes,
             'total_parcerias': total_parcerias,
             'total_novas': total_novas,
+            'pix_form': pix_form,
+            'pix_chave_configurada': pix_chave_configurada,
         }
     )
+
+
+@login_required
+@require_POST
+def atualizar_chave_pix(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    configuracao = ConfiguracaoSistema.carregar()
+    form = ConfiguracaoPixForm(request.POST, instance=configuracao)
+
+    if form.is_valid():
+
+        form.save()
+        messages.success(request, 'Chave PIX atualizada com sucesso.')
+
+    else:
+
+        messages.warning(request, 'Nao foi possivel salvar a chave PIX.')
+
+    return redirect('listar_doacoes_parcerias')
 
 
 @login_required

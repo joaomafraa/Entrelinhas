@@ -103,35 +103,42 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
   describe('H3 - Gerenciamento de doacoes e parcerias', () => {
     it('H3 Cenario 1 - administrador visualiza lista de contatos recebidos', () => {
       cy.login('cypress-admin@example.com');
-      cy.visit('/django-admin/inscricoes/solicitacaocontato/');
+      cy.visit('/inscricao/doacoes-parcerias/');
 
+      cy.contains('h1', 'Doacoes e Parcerias').should('be.visible');
       cy.contains('Contato Cypress').should('be.visible');
       cy.contains('contato-cypress@example.com').should('be.visible');
-      cy.conclusao('administrador visualiza solicitacoes recebidas no Django Admin');
+      cy.contains('Doacao').should('be.visible');
+      cy.conclusao('administrador visualiza solicitacoes recebidas no painel da plataforma');
     });
 
     it('H3 Cenario 2 - administrador visualiza detalhe do formulario enviado', () => {
       cy.login('cypress-admin@example.com');
-      cy.visit('/django-admin/inscricoes/solicitacaocontato/');
-      cy.contains('a', 'Contato Cypress').click();
+      cy.visit('/inscricao/doacoes-parcerias/?q=Contato%20Cypress');
 
-      cy.get('input[name="nome"]').should('have.value', 'Contato Cypress');
-      cy.get('input[name="email"]').should('have.value', 'contato-cypress@example.com');
-      cy.get('textarea[name="mensagem"]').should('contain.value', 'Contato criado para teste Cypress.');
-      cy.conclusao('detalhe administrativo exibe as informacoes enviadas no formulario');
+      cy.contains('tr', 'Contato Cypress').within(() => {
+        cy.contains('contato-cypress@example.com').should('be.visible');
+        cy.contains('11900000000').should('be.visible');
+        cy.contains('Contato criado para teste Cypress.').should('be.visible');
+        cy.contains('Doacao').should('be.visible');
+      });
+      cy.conclusao('painel administrativo exibe as informacoes enviadas no formulario');
     });
 
     it('H3 Cenario 3 - administrador atualiza status da solicitacao', () => {
       cy.login('cypress-admin@example.com');
-      cy.visit('/django-admin/inscricoes/solicitacaocontato/');
-      cy.contains('a', 'Contato Cypress').click();
-      cy.get('select[name="status"]').select('em_analise');
-      cy.step();
-      cy.get('input[name="_save"]').click();
+      cy.visit('/inscricao/doacoes-parcerias/?q=Contato%20Cypress');
 
-      cy.visit('/django-admin/inscricoes/solicitacaocontato/');
-      cy.contains('a', 'Contato Cypress').click();
-      cy.get('select[name="status"]').should('have.value', 'em_analise');
+      cy.contains('tr', 'Contato Cypress').within(() => {
+        cy.get('select[name="status"]').select('em_analise');
+      });
+      cy.step();
+
+      cy.contains('Status atualizado com sucesso.').should('be.visible');
+      cy.visit('/inscricao/doacoes-parcerias/?q=Contato%20Cypress');
+      cy.contains('tr', 'Contato Cypress').within(() => {
+        cy.get('select[name="status"]').should('have.value', 'em_analise');
+      });
       cy.conclusao('status da solicitacao e atualizado corretamente');
     });
   });

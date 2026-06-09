@@ -1,0 +1,15 @@
+<svg width="24" height="24" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="apoioGradient" x1="40" y1="36" x2="216" y2="208" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A42B8"/>
+      <stop offset="1" stop-color="#27213F"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M128 208C128 208 40 156 40 92C40 61 65 36 96 36C115 36 124 44 128 56C132 44 141 36 160 36C191 36 216 61 216 92C216 156 128 208 128 208Z"
+    stroke="url(#apoioGradient)"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

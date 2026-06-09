@@ -392,3 +392,34 @@ class SolicitacaoContato(models.Model):
 
     def __str__(self):
         return f'{self.get_tipo_display()} - {self.nome}'
+
+
+class ConfiguracaoSistema(models.Model):
+
+    pix_chave_ong = models.TextField(
+        'Chave PIX da ONG',
+        blank=True,
+        help_text='Aceita e-mail, CPF, telefone, chave aleatoria ou copia e cola.'
+    )
+
+    atualizada_em = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        verbose_name = 'Configuracao do sistema'
+        verbose_name_plural = 'Configuracoes do sistema'
+
+    def save(self, *args, **kwargs):
+
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def carregar(cls):
+
+        configuracao, _ = cls.objects.get_or_create(pk=1)
+        return configuracao
+
+    def __str__(self):
+        return 'Configuracoes da EntreLinhas'
