@@ -37,6 +37,8 @@ from .views import (
     baixar_certificado,
     listar_solicitacoes,
     atualizar_status_solicitacao,
+    listar_doacoes_parcerias,
+    atualizar_status_doacao_parceria,
 )
 
 urlpatterns = [
@@ -261,6 +263,18 @@ urlpatterns = [
         'certificado/baixar/',
         baixar_certificado,
         name='baixar_certificado'
+    ),
+    
+    path(
+        'doacoes-parcerias/',
+        listar_doacoes_parcerias,
+        name='listar_doacoes_parcerias'
+    ),
+    
+    path(
+        'doacoes-parcerias/<int:id>/status/',
+        atualizar_status_doacao_parceria,
+        name='atualizar_status_doacao_parceria'
     ),
 
 ]
