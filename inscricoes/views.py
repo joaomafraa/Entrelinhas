@@ -2324,3 +2324,104 @@ def detalhe_vitrine_servico(request, id):
             'whatsapp_disponivel': bool(settings.WHATSAPP_CONTATO),
         }
     )
+
+
+@login_required
+def listar_doacoes_parcerias(request):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    tipo = request.GET.get('tipo', '').strip()
+    status = request.GET.get('status', '').strip()
+    q = request.GET.get('q', '').strip()
+
+    solicitacoes = SolicitacaoContato.objects.filter(
+        tipo__in=['doacao', 'parceria']
+    ).order_by('-criada_em')
+
+    tipos_validos = {'doacao', 'parceria'}
+    status_validos = {opcao[0] for opcao in SolicitacaoContato.STATUS}
+
+    if tipo in tipos_validos:
+        solicitacoes = solicitacoes.filter(tipo=tipo)
+    else:
+        tipo = ''
+
+    if status in status_validos:
+        solicitacoes = solicitacoes.filter(status=status)
+    else:
+        status = ''
+
+    if q:
+        solicitacoes = solicitacoes.filter(
+            Q(nome__icontains=q)
+            | Q(email__icontains=q)
+            | Q(telefone__icontains=q)
+            | Q(mensagem__icontains=q)
+        )
+
+    total_doacoes = SolicitacaoContato.objects.filter(tipo='doacao').count()
+    total_parcerias = SolicitacaoContato.objects.filter(tipo='parceria').count()
+    total_novas = SolicitacaoContato.objects.filter(
+        tipo__in=['doacao', 'parceria'],
+        status='nova'
+    ).count()
+
+    paginator = Paginator(solicitacoes, 8)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    return render(
+        request,
+        'inscricoes/listar_doacoes_parcerias.html',
+        {
+            'current_admin_page': 'doacoes_parcerias',
+            'solicitacoes': page_obj.object_list,
+            'page_obj': page_obj,
+            'total_count': paginator.count,
+            'start_index': page_obj.start_index() if paginator.count else 0,
+            'end_index': page_obj.end_index() if paginator.count else 0,
+            'tipo_selecionado': tipo,
+            'status_selecionado': status,
+            'q': q,
+            'status_opcoes': SolicitacaoContato.STATUS,
+            'total_doacoes': total_doacoes,
+            'total_parcerias': total_parcerias,
+            'total_novas': total_novas,
+        }
+    )
+
+
+@login_required
+@require_POST
+def atualizar_status_doacao_parceria(request, id):
+
+    if not request.user.is_staff:
+
+        return redirect('listar_inscricoes')
+
+    solicitacao = get_object_or_404(
+        SolicitacaoContato,
+        id=id,
+        tipo__in=['doacao', 'parceria']
+    )
+    novo_status = request.POST.get('status', '')
+    status_validos = {opcao[0] for opcao in SolicitacaoContato.STATUS}
+
+    if novo_status in status_validos:
+        solicitacao.status = novo_status
+        solicitacao.save(update_fields=['status', 'atualizada_em'])
+        messages.success(request, 'Status atualizado com sucesso.')
+    else:
+        messages.warning(request, 'Escolha um status valido.')
+
+    proxima_url = request.POST.get('next') or reverse('listar_doacoes_parcerias')
+
+    if not url_has_allowed_host_and_scheme(
+        proxima_url,
+        allowed_hosts={request.get_host()}
+    ):
+        proxima_url = reverse('listar_doacoes_parcerias')
+
+    return redirect(proxima_url)

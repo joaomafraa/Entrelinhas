@@ -1,0 +1,14 @@
+{# inscricoes/_badge_status_solicitacao.html
+   Uso: {% include "inscricoes/_badge_status_solicitacao.html" with status=s.status %}
+#}
+{% if status == 'nova' %}
+  <span class="badge rounded-pill" style="background:#d1fae5;color:#065f46;">Nova</span>
+{% elif status == 'em_analise' %}
+  <span class="badge rounded-pill" style="background:#fef9c3;color:#a16207;">Em análise</span>
+{% elif status == 'respondida' %}
+  <span class="badge rounded-pill" style="background:#dbeafe;color:#1e40af;">Respondida</span>
+{% elif status == 'arquivada' %}
+  <span class="badge rounded-pill" style="background:#f3f4f6;color:#6b7280;">Arquivada</span>
+{% else %}
+  <span class="badge rounded-pill bg-secondary">{{ status }}</span>
+{% endif %}
