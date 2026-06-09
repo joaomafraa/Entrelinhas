@@ -4,19 +4,30 @@
 
 {% block content %}
 
-<section class="contact-hero">
+<section class="contact-hero support-page">
     <div class="container">
         <div class="contact-layout">
             <article class="contact-copy">
                 <span class="section-label">Suporte</span>
-                <h1>Fale com a equipe da EntreLinhas.</h1>
+                <h1>Fale com o suporte da EntreLinhas.</h1>
                 <p>
                     Use este canal para duvidas sobre acesso, inscricao, area da aluna,
                     frequencia, certificado ou uso da plataforma.
                 </p>
+
+                <div class="support-page__notes">
+                    <strong>Quando usar este formulario</strong>
+                    <span>Problemas de acesso, dados da matricula, frequencia, certificado ou duvidas que a Lia nao conseguiu resolver.</span>
+                    <small>Doacoes e parcerias continuam na pagina Apoiar.</small>
+                </div>
             </article>
 
             <div class="surface-card contact-form-card">
+                <div class="support-form-header">
+                    <h2>Mensagem para o suporte</h2>
+                    <p>Quanto mais detalhes voce enviar, mais facil sera para a equipe ajudar.</p>
+                </div>
+
                 <form method="POST" class="form-stack">
                     {% csrf_token %}
 

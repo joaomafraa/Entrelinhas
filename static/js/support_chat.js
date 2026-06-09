@@ -15,8 +15,8 @@
     };
 
     const saudacoes = {
-        public: 'Olá! Sou a **Lia**, assistente da EntreLinhas. 💜\n\nPosso te ajudar com dúvidas sobre **cursos**, **inscrições** ou o **bazar solidário**. Como posso te ajudar hoje?',
-        student: 'Olá! Sou a **Lia**, assistente da EntreLinhas. 💜\n\nPosso te ajudar com dúvidas sobre **cursos**, **inscrições**, **frequência**, **certificados** ou o **bazar solidário**. Como posso te ajudar hoje?',
+        public: 'Ol\u00e1! Sou a **Lia**, assistente da EntreLinhas. \ud83d\udc9c\n\nPosso te ajudar com d\u00favidas sobre **cursos**, **inscri\u00e7\u00f5es** ou o **bazar solid\u00e1rio**. Como posso te ajudar hoje?',
+        student: 'Ol\u00e1! Sou a **Lia**, assistente da EntreLinhas. \ud83d\udc9c\n\nPosso te ajudar com d\u00favidas sobre **cursos**, **inscri\u00e7\u00f5es**, **frequ\u00eancia**, **certificados** ou o **bazar solid\u00e1rio**. Como posso te ajudar hoje?',
     };
 
     function escaparHtml(texto) {
@@ -28,16 +28,40 @@
             .replace(/'/g, '&#039;');
     }
 
-    function renderizarMarkdownSeguro(texto, supportUrl) {
+    function textoNormalizado(texto) {
+        return texto
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    }
+
+    function precisaMostrarSuporte(texto) {
+        const normalizado = textoNormalizado(texto);
+
+        return (
+            normalizado.includes('formulario de suporte')
+            || normalizado.includes('abrir suporte')
+            || normalizado.includes('falar com suporte')
+            || normalizado.includes('equipe de suporte')
+            || normalizado.includes('atendimento humano')
+            || normalizado.includes('abrir chamado')
+            || normalizado.includes('nao resolveu')
+            || normalizado.includes('nao consegui')
+            || normalizado.includes('nao consigo')
+        );
+    }
+
+    function renderizarMarkdownSeguro(texto, supportUrl, permitirSuporte) {
         let html = escaparHtml(texto)
             .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
             .replace(/\n/g, '<br>');
 
-        if (supportUrl) {
+        if (permitirSuporte && supportUrl && precisaMostrarSuporte(texto)) {
             html = html.replace(
-                /formulario de suporte/gi,
-                `<a href="${supportUrl}" class="support-chat__message-link">formulario de suporte</a>`
+                /formul(?:a|&aacute;|\u00e1)rio de suporte/gi,
+                `<a href="${supportUrl}" class="support-chat__message-link">formul\u00e1rio de suporte</a>`
             );
+            html += `<br><a href="${supportUrl}" class="support-chat__support-button">Abrir formul\u00e1rio de suporte</a>`;
         }
 
         return html;
@@ -116,7 +140,11 @@
                 linha.className = `support-chat__message support-chat__message--${mensagem.role}`;
 
                 const bolha = document.createElement('p');
-                bolha.innerHTML = renderizarMarkdownSeguro(mensagem.content, supportUrl);
+                bolha.innerHTML = renderizarMarkdownSeguro(
+                    mensagem.content,
+                    supportUrl,
+                    mensagem.role === 'assistant'
+                );
                 linha.appendChild(bolha);
                 messagesEl.appendChild(linha);
             });
@@ -160,7 +188,7 @@
             const textoSeguro = escaparHtml(texto);
 
             if (mostrarSuporte && supportUrl) {
-                errorEl.innerHTML = `${textoSeguro} <a href="${supportUrl}">Abrir formulario de suporte</a>.`;
+                errorEl.innerHTML = `${textoSeguro}<br><a href="${supportUrl}" class="support-chat__support-button">Abrir formul\u00e1rio de suporte</a>`;
             } else {
                 errorEl.textContent = texto;
             }
@@ -199,6 +227,7 @@
                 return;
             }
 
+            const usuarioPediuSuporte = precisaMostrarSuporte(texto);
             limparErro();
             input.value = '';
             input.style.height = '';
@@ -228,9 +257,15 @@
                     return;
                 }
 
+                let respostaLia = dados.reply || 'Nao consegui montar uma resposta agora.';
+
+                if (usuarioPediuSuporte && !precisaMostrarSuporte(respostaLia)) {
+                    respostaLia += '\n\nSe preferir, abra o formul\u00e1rio de suporte.';
+                }
+
                 mensagens.push({
                     role: 'assistant',
-                    content: dados.reply || 'Nao consegui montar uma resposta agora.',
+                    content: respostaLia,
                 });
                 salvarMensagens(chaveHistorico, mensagens);
                 renderizarMensagens();
