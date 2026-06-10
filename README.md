@@ -14,10 +14,14 @@ O EntreLinhas centraliza os principais fluxos da ONG em uma unica aplicacao:
 
 ## Links
 
-- [Prototipo no Figma](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
+- [Prototipo no Figma LO-FI](https://www.figma.com/design/h6YsEeVpd3D9KYrYruWpGY/Lo-fi-epicos?node-id=29-159&t=2rZ7MKiQh6C3mTaF-1)
+- [Prototipo no Figma HI-FI](https://www.figma.com/file/bwWHMEyJaw1yB2yQbOPtrL?node-id=0:1&locale=pt-br&type=design)
 - [Documentacao no Google Sites](https://sites.google.com/cesar.school/entrelinhas/home)
 - [Gestao do Projeto no Jira](https://cesar-team-n9qvr2he.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?epics=visible&jql=parent%20IN%20%28SCRUM-8%2C%20SCRUM-9%2C%20SCRUM-10%29&selectedIssue=SCRUM-8)
 - [Deploy](https://entrelinhas-e759.onrender.com)
+- [screencast E2E](https://youtu.be/iwpXMyesjmQ)
+- [screencast ci/cd](https://youtu.be/EKdjPhmJ4w8)
+- [screencast Deploy final](https://youtu.be/Ig0aF1VkaJU)
 
 ## Funcionalidades
 
