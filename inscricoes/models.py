@@ -292,6 +292,7 @@ class Servico(models.Model):
     descricao = models.TextField()
     preco = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     tipo = models.CharField(max_length=80)
+    whatsapp_contato = models.CharField(max_length=20, blank=True)
     imagem_nome = models.CharField(max_length=255, blank=True)
     imagem_tipo = models.CharField(max_length=100, blank=True)
     imagem_conteudo = models.BinaryField(blank=True, null=True, editable=False)

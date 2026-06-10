@@ -611,20 +611,42 @@ class ServicoForm(BazarItemForm):
             'nome',
             'descricao',
             'tipo',
+            'whatsapp_contato',
             'ativo',
         ]
         labels = {
             'nome': 'Nome',
             'descricao': 'Descricao',
             'tipo': 'Tipo de servico',
+            'whatsapp_contato': 'WhatsApp de contato',
             'ativo': 'Ativo',
+        }
+        help_texts = {
+            'whatsapp_contato': 'Opcional. Use DDI, DDD e numero. Ex.: 5581999999999',
         }
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Ajuste de roupa'}),
             'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Descreva o servico'}),
             'tipo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: Costura'}),
+            'whatsapp_contato': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex.: 5581999999999'}),
             'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+    def clean_whatsapp_contato(self):
+
+        whatsapp_contato = self.cleaned_data.get('whatsapp_contato', '').strip()
+
+        if not whatsapp_contato:
+
+            return ''
+
+        whatsapp_contato = normalizar_telefone(whatsapp_contato)
+
+        if len(whatsapp_contato) < 12 or len(whatsapp_contato) > 13:
+
+            raise forms.ValidationError('Informe o WhatsApp com DDI, DDD e numero.')
+
+        return whatsapp_contato
 
 
 class SolicitacaoContatoForm(forms.ModelForm):

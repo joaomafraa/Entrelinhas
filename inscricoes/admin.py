@@ -123,6 +123,7 @@ class ServicoAdmin(admin.ModelAdmin):
     list_display = (
         'nome',
         'tipo',
+        'whatsapp_contato',
         'ativo',
         'data_criacao',
     )
@@ -130,6 +131,7 @@ class ServicoAdmin(admin.ModelAdmin):
     search_fields = (
         'nome',
         'tipo',
+        'whatsapp_contato',
     )
 
     list_filter = (

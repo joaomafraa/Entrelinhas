@@ -2382,7 +2382,7 @@ def detalhe_vitrine_servico(request, id):
                 'servico',
                 False
             ),
-            'whatsapp_disponivel': bool(settings.WHATSAPP_CONTATO),
+            'whatsapp_disponivel': bool(servico.whatsapp_contato or settings.WHATSAPP_CONTATO),
         }
     )
 

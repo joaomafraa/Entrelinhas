@@ -408,6 +408,7 @@ class Epico3BazarTests(TestCase):
                 'nome': 'Ajuste de roupa',
                 'descricao': 'Servico de ajuste sob consulta.',
                 'tipo': 'Costura',
+                'whatsapp_contato': '55 (81) 98888-7777',
                 'ativo': 'on',
                 'imagem': arquivo_imagem(),
             }
@@ -415,6 +416,7 @@ class Epico3BazarTests(TestCase):
 
         self.assertRedirects(response, reverse('listar_servicos'))
         self.assertTrue(Servico.objects.filter(nome='Ajuste de roupa').exists())
+        self.assertTrue(Servico.objects.filter(whatsapp_contato='5581988887777').exists())
 
     def test_epico3_h1_cadastro_invalido_nao_cria_produto(self):
 
