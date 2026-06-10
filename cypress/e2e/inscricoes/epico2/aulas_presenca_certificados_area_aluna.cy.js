@@ -39,6 +39,30 @@ describe('Epico 2 - Aulas, presenca, certificados e area da aluna', () => {
       cy.get('input[type="checkbox"][name^="presente_"]').should('be.checked');
       cy.conclusao('status de presenca salvo aparece ao acessar novamente');
     });
+
+    it('H1 Cenario 3 - registra falta quando aluna nao e marcada presente', () => {
+      cy.login('cypress-admin@example.com');
+      cy.visit('/inscricao/aulas/');
+      cy.contains('tr', 'Falta Cypress').within(() => {
+        cy.contains('a', 'Registrar presenca').click();
+      });
+
+      cy.contains('Aluna Cypress').should('be.visible');
+      cy.contains('tr', 'Aluna Cypress').within(() => {
+        cy.get('input[type="checkbox"][name^="presente_"]').uncheck();
+      });
+      cy.step();
+      cy.contains('button', 'Salvar presencas').click();
+      cy.contains('Presencas registradas com sucesso.').should('be.visible');
+      cy.visit('/sair/');
+
+      cy.login('cypress-aluna@example.com');
+      cy.visit('/inscricao/area-aluna/?aba=frequencia');
+      cy.contains('.admin-stat-card', 'Faltas').should('be.visible');
+      cy.contains('Falta Cypress').should('be.visible');
+      cy.contains('Falta').should('be.visible');
+      cy.conclusao('aula passada sem presenca aparece como falta na area da aluna');
+    });
   });
 
   describe('H2 - Gerenciar calendario de aulas', () => {
@@ -115,6 +139,22 @@ describe('Epico 2 - Aulas, presenca, certificados e area da aluna', () => {
       cy.contains('Baixar certificado').should('not.exist');
       cy.conclusao('aluna sem certificado postado nao consegue baixar certificado');
     });
+
+    it('H3 Cenario 3 - baixa certificado liberado com arquivo valido', () => {
+      cy.login('cypress-aluna@example.com');
+      cy.visit('/inscricao/area-aluna/?aba=certificados');
+
+      cy.contains('Baixar certificado').should('be.visible');
+      cy.request({
+        url: '/inscricao/certificado/baixar/',
+        encoding: 'binary',
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.headers['content-disposition']).to.include('certificado-cypress.pdf');
+        expect(response.body).to.include('%PDF-1.4 cypress');
+      });
+      cy.conclusao('certificado liberado e baixado com o arquivo cadastrado');
+    });
   });
 
   describe('H4 - Funcionalidade principal', () => {
@@ -142,20 +182,5 @@ describe('Epico 2 - Aulas, presenca, certificados e area da aluna', () => {
       cy.conclusao('visitante nao logado visualiza a vitrine publica do bazar');
     });
 
-    it('H4 Cenario 4 - mudanca de status atualiza area exibida para usuaria', () => {
-      cy.login('cypress-admin@example.com');
-      cy.visit('/inscricao/inscricoes/');
-      cy.contains('tr', 'Edicao Cypress').within(() => {
-        cy.get('select[name="status"]').select('aprovada');
-      });
-      cy.contains('Status da matricula atualizado com sucesso.').should('be.visible');
-      cy.visit('/sair/');
-
-      cy.login('cypress-edicao@example.com');
-      cy.visit('/inscricao/area-aluna/');
-      cy.contains('Ola, Edicao Cypress').should('be.visible');
-      cy.contains('aprovada').should('be.visible');
-      cy.conclusao('apos aprovacao a aluna passa a ver a area de acompanhamento');
-    });
   });
 });

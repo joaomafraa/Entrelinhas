@@ -192,7 +192,7 @@ Como administrador, quero liberar certificados para que alunas concluintes compr
   - Quando a aluna solicita o download
   - Entao o arquivo do certificado deve ser baixado
 
-### H4 - Funcionalidade principal da aluna
+### H4 - area da aluna liberada
 
 Como usuaria, quero ver a area mais relevante conforme minha matricula para acessar rapidamente acompanhamento, inscricao ou bazar.
 
@@ -201,7 +201,7 @@ Como usuaria, quero ver a area mais relevante conforme minha matricula para aces
 - Cenario 1: Aluna matriculada
   - Dado que a usuaria esta matriculada no curso
   - Quando realiza login no sistema
-  - Entao a area de acompanhamento deve ser exibida como funcionalidade principal
+  - Entao a area de acompanhamento deve ser liberada
 
 - Cenario 2: Usuaria sem matricula
   - Dado que a usuaria nao possui matricula
@@ -212,11 +212,6 @@ Como usuaria, quero ver a area mais relevante conforme minha matricula para aces
   - Dado que a visitante nao esta logada
   - Quando acessa a plataforma
   - Entao deve conseguir visualizar a area publica e o bazar
-
-- Cenario 4: Status da matricula muda
-  - Dado que o status da matricula da usuaria foi alterado
-  - Quando a usuaria acessa novamente o sistema
-  - Entao a funcionalidade principal deve ser atualizada conforme sua situacao atual
 
 </details>
 
@@ -235,10 +230,10 @@ Como administrador, quero cadastrar produtos e servicos no bazar para disponibil
   - E preencho os dados de um produto ou servico corretamente
   - Entao o item deve ser registrado no bazar
 
-- Cenario 2: Cadastro de produto
+- Cenario 2: Cadastro de produto ou servico
   - Dado que estou cadastrando um produto
-  - Quando informo nome, descricao, preco, categoria, imagem e WhatsApp
-  - Entao o produto deve ser salvo corretamente
+  - Quando informo nome, descricao, preco, categoria, imagem e WhatsApp invalidos
+  - Entao o usuario deve ser notificado
 
 - Cenario 3: Cadastro de servico
   - Dado que estou cadastrando um servico
@@ -277,10 +272,10 @@ Como administrador, quero visualizar e gerenciar contatos de doacoes e parcerias
   - Quando o administrador acessa a area de Doacoes e Parcerias
   - Entao deve visualizar a lista de pessoas que entraram em contato
 
-- Cenario 2: Visualizar detalhes do formulario
-  - Dado que existe um contato registrado
+- Cenario 2: Visualizar daodos do formulario
+  - Dado que nao existe contato registrado
   - Quando o administrador consulta a lista
-  - Entao deve visualizar nome, e-mail, telefone, tipo e mensagem enviada
+  - Entao o sistema deve informar o administrador
 
 - Cenario 3: Atualizar status da solicitacao
   - Dado que estou na lista de contatos
@@ -305,10 +300,10 @@ Como usuario interessado, quero enviar uma solicitacao de doacao ou parceria par
   - E preencho meus dados e mensagem
   - Entao a solicitacao deve ser enviada para analise
 
-- Cenario 3: Solicitacao de parceria
-  - Dado que seleciono a opcao de parceria
-  - Quando preencho meus dados e proposta
-  - Entao a solicitacao deve ser enviada para analise
+- Cenario 3: Solicitacao com dados invalidos
+  - Dado que seleciono a opcao de parceria ou doacao 
+  - Quando preencho meus dados invalidos
+  - Entao o sistema deve notificar
 
 </details>
 

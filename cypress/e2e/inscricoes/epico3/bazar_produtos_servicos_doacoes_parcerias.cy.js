@@ -40,18 +40,31 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
       cy.conclusao('administrador registra um item no bazar');
     });
 
-    it('H1 Cenario 2 - salva produto com nome descricao preco e categoria', () => {
+    it('H1 Cenario 2 - notifica produto com WhatsApp ou imagem invalidos', () => {
       const nome = `Bolsa Produto Cypress ${sufixo()}`;
 
       cy.login('cypress-admin@example.com');
       cy.visit('/inscricao/produtos/novo/');
-      preencherProduto(nome);
+      cy.get('input[name="nome"]').type(nome);
+      cy.get('textarea[name="descricao"]').type('Produto artesanal com dados invalidos.');
+      cy.get('input[name="preco"]').type('89.90');
+      cy.get('input[name="categoria"]').type('Bolsas');
+      cy.get('input[name="whatsapp_contato"]').type('abc');
+      cy.get('input[name="ativo"]').check();
+      cy.get('input[name="imagem"]').selectFile(
+        {
+          contents: Cypress.Buffer.from('arquivo-invalido'),
+          fileName: 'arquivo-cypress.txt',
+          mimeType: 'text/plain',
+        },
+        { force: true }
+      );
+      cy.step();
       cy.contains('button', 'Salvar produto').click();
 
-      cy.contains('Produto cadastrado com sucesso.').should('be.visible');
-      cy.contains(nome).should('be.visible');
-      cy.contains('Bolsas').should('be.visible');
-      cy.conclusao('produto e salvo corretamente com seus dados principais');
+      cy.contains('Informe o WhatsApp com DDI, DDD e numero.').should('be.visible');
+      cy.contains('Envie apenas imagens JPG, JPEG, PNG ou WEBP.').should('be.visible');
+      cy.conclusao('produto com dados invalidos notifica o administrador');
     });
 
     it('H1 Cenario 3 - salva servico com descricao tipo e imagem', () => {
@@ -112,17 +125,15 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
       cy.conclusao('administrador visualiza solicitacoes recebidas no painel da plataforma');
     });
 
-    it('H3 Cenario 2 - administrador visualiza detalhe do formulario enviado', () => {
+    it('H3 Cenario 2 - informa quando nao existe contato registrado', () => {
       cy.login('cypress-admin@example.com');
-      cy.visit('/inscricao/doacoes-parcerias/?q=Contato%20Cypress');
+      cy.exec(
+        'python manage.py shell -c "from inscricoes.models import SolicitacaoContato; SolicitacaoContato.objects.filter(tipo__in=[\'doacao\', \'parceria\']).delete()"'
+      );
+      cy.visit('/inscricao/doacoes-parcerias/');
 
-      cy.contains('tr', 'Contato Cypress').within(() => {
-        cy.contains('contato-cypress@example.com').should('be.visible');
-        cy.contains('11900000000').should('be.visible');
-        cy.contains('Contato criado para teste Cypress.').should('be.visible');
-        cy.contains('Doacao').should('be.visible');
-      });
-      cy.conclusao('painel administrativo exibe as informacoes enviadas no formulario');
+      cy.contains('Nenhuma doacao ou parceria encontrada.').should('be.visible');
+      cy.conclusao('painel administrativo informa quando nao ha contatos registrados');
     });
 
     it('H3 Cenario 3 - administrador atualiza status da solicitacao', () => {
@@ -182,21 +193,18 @@ describe('Epico 3 - Bazar, produtos, servicos, doacoes e parcerias', () => {
       cy.conclusao('doacao exibe PIX da ONG e tambem registra a solicitacao para analise');
     });
 
-    it('H4 Cenario 3 - envia solicitacao de parceria para analise', () => {
-      const email = `parceria-${sufixo()}@example.com`;
-
+    it('H4 Cenario 3 - notifica solicitacao com dados invalidos', () => {
       cy.visit('/contato/?tipo=parceria');
       cy.get('select[name="tipo"]').should('have.value', 'parceria');
-      cy.preencherContato({
-        tipo: 'parceria',
-        nome: 'Parceira Cypress',
-        email,
-        mensagem: 'Quero propor uma parceria para o projeto.',
-      });
+      cy.get('input[name="nome"]').type('Solicitante Invalida');
+      cy.get('input[name="email"]').type(`invalida-${sufixo()}@example.com`);
+      cy.get('input[name="telefone"]').type('telefone');
+      cy.get('textarea[name="mensagem"]').type('Dados invalidos para validar o formulario.');
+      cy.step();
       cy.contains('button', 'Enviar solicitacao').click();
 
-      cy.contains('Solicitacao enviada com sucesso.').should('be.visible');
-      cy.conclusao('solicitacao de parceria e enviada para analise');
+      cy.contains('O telefone deve conter apenas numeros.').should('be.visible');
+      cy.conclusao('formulario de apoio notifica quando os dados sao invalidos');
     });
   });
 });

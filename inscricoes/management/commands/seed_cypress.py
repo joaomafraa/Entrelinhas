@@ -12,6 +12,7 @@ from inscricoes.models import (
     ProdutoImagem,
     Servico,
     SolicitacaoContato,
+    ConfiguracaoSistema,
 )
 
 
@@ -36,6 +37,10 @@ class Command(BaseCommand):
         Produto.objects.filter(nome__icontains='Cypress').delete()
         Servico.objects.filter(nome__icontains='Cypress').delete()
         Aula.objects.filter(topico__icontains='Cypress').delete()
+        ConfiguracaoSistema.objects.update_or_create(
+            pk=1,
+            defaults={'pix_chave_ong': 'pix-cypress@entrelinhas.org'},
+        )
 
         admin = User.objects.create_superuser(
             username='cypress-admin@example.com',
@@ -118,6 +123,11 @@ class Command(BaseCommand):
             data=timezone.localdate() + timedelta(days=7),
             horario='09:00',
             topico='Aula Cypress'
+        )
+        Aula.objects.create(
+            data=timezone.localdate() - timedelta(days=1),
+            horario='09:00',
+            topico='Falta Cypress'
         )
         Presenca.objects.create(
             aula=aula,
