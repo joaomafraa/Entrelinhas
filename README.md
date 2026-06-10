@@ -555,6 +555,79 @@ EntreLinhas/
 └── README.md
 ```
 
+## Entregas
+
+<details>
+<summary>Ver entregas</summary>
+
+<details>
+<summary>Semana 1 - Inscricao no curso</summary>
+
+- Implementacao do epico de inscricao do curso com suas funcionalidades.
+- Cadastro de conta e login.
+- Formulario de inscricao.
+- Gerenciamento administrativo das inscricoes.
+- Edicao e cancelamento de matricula.
+
+<details>
+<summary>Pair Programming e revisao de codigo</summary>
+
+A tecnica de Pair Programming nao foi utilizada nesta atividade porque os integrantes estavam responsaveis por modulos diferentes do sistema e possuiam horarios de desenvolvimento distintos.
+
+Para garantir a qualidade do software, foi adotada a revisao de codigo entre os membros da equipe apos a implementacao de cada funcionalidade.
+
+</details>
+
+<details>
+<summary>Quadro do backlog</summary>
+
+![backlog](assets/backlog_semana_1.png)
+
+</details>
+
+<details>
+<summary>Sprint</summary>
+
+![quadro](assets/semana%201_quadro%20do%20jira.png)
+
+</details>
+
+</details>
+
+<details>
+<summary>Semana 2 - Acompanhamento da aluna</summary>
+
+- Implementacao da area da aluna.
+- Cadastro e gerenciamento de aulas.
+- Registro de presenca.
+- Calendario de aulas e frequencia.
+- Liberacao e download de certificados.
+
+</details>
+
+<details>
+<summary>Semana 3 - Bazar, doacoes e parcerias</summary>
+
+- Cadastro de produtos e servicos do bazar.
+- Vitrine publica com busca e filtros.
+- Contato via WhatsApp para produtos.
+- Formulario de doacao e parceria.
+- Painel administrativo para doacoes, parcerias e chave PIX.
+
+</details>
+
+<details>
+<summary>Semana 4 - Ajustes finais</summary>
+
+- Revisao dos fluxos principais da plataforma.
+- Ajustes finais de interface e organizacao administrativa.
+- Ajustes nos testes automatizados.
+- Atualizacao da documentacao do projeto.
+
+</details>
+
+</details>
+
 ## Tecnologias
 
 - Python 3
