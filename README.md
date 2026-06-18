@@ -564,29 +564,6 @@ EntreLinhas/
 - Gerenciamento administrativo das inscricoes.
 - Edicao e cancelamento de matricula.
 
-<details>
-<summary>Pair Programming e revisao de codigo</summary>
-
-A tecnica de Pair Programming nao foi utilizada nesta atividade porque os integrantes estavam responsaveis por modulos diferentes do sistema e possuiam horarios de desenvolvimento distintos.
-
-Para garantir a qualidade do software, foi adotada a revisao de codigo entre os membros da equipe apos a implementacao de cada funcionalidade.
-
-</details>
-
-<details>
-<summary>Quadro do backlog</summary>
-
-![backlog](assets/backlog_semana_1.png)
-
-</details>
-
-<details>
-<summary>Sprint</summary>
-
-![quadro](assets/semana%201_quadro%20do%20jira.png)
-
-</details>
-
 </details>
 
 <details>
@@ -623,6 +600,12 @@ Para garantir a qualidade do software, foi adotada a revisao de codigo entre os 
 
 </details>
 
+## Pair Programming e Revisao de Codigo
+
+A tecnica de Pair Programming nao foi utilizada como pratica principal durante o desenvolvimento porque a equipe dividiu o sistema em modulos independentes, como inscricoes, acompanhamento da aluna, bazar, suporte, testes e documentacao. Essa organizacao permitiu que cada integrante trabalhasse em entregas especificas, respeitando diferentes horarios de disponibilidade e evitando bloqueios entre tarefas que nao dependiam diretamente uma da outra.
+
+Mesmo sem pareamento continuo em tempo real, a equipe manteve colaboracao tecnica por meio de revisao de codigo, validacao cruzada das funcionalidades e alinhamento dos criterios de aceite definidos nas historias de usuario. Assim, as implementacoes foram conferidas por outros membros antes da consolidacao, garantindo consistencia entre requisitos, testes, interface e comportamento esperado do sistema.
+
 ## Tecnologias
 
 - Python 3
@@ -643,6 +626,16 @@ Para garantir a qualidade do software, foi adotada a revisao de codigo entre os 
 
 Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Autor
+## Autores
 
-Grupo EntreLinhas
+- João Carlos Mafra - jcmsn@cesar.school
+- Laura Vitória - lvsa@gmail.com
+- Marina Marinho - mmm3@cesar.school
+- Márcio Rodrigues Perez - mrpf@cesar.school
+- Ivan Pinto - iprf@cesar.school
+- Gabriel Tabosa - ggt2@cesar.school
+- Pedro José - pjos@cesar.school
+- João Neto - jffn@cesar.school
+- Clara Kyrillos - crk@cesar.school
+- Guilherme Lira - gmcl@cesar.school
+- Luísa Feitosa Magalhães - lfm3@cesar.school
