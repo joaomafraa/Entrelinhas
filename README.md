@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/LOGO%20ENTRELINHAS_page-0001.jpg" alt="Logo EntreLinhas" width="220">
+  <img src="assets/LOGO%20ENTRELINHAS_page-0001.jpg" alt="Logo EntreLinhas" width="360">
 </p>
 
 # EntreLinhas
