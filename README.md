@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/LOGO%20ENTRELINHAS_page-0001.jpg" alt="Logo EntreLinhas" width="220">
+</p>
+
 # EntreLinhas
 
 Plataforma digital para inscricao em cursos de costura, acompanhamento de alunas, gestao administrativa e bazar solidario.
