@@ -572,16 +572,33 @@ EntreLinhas/
 - Gerenciamento administrativo das inscricoes.
 - Edicao e cancelamento de matricula.
 
+### Backlog do Jira
+
+![Backlog da Semana 1 no Jira](assets/backlog_semana_1.png)
+
+### Quadro do Jira
+
+![Quadro da Semana 1 no Jira](assets/semana%201_quadro%20do%20jira.png)
+
 </details>
 
 <details>
 <summary>Semana 2 - Acompanhamento da aluna</summary>
 
+- Deploy do projeto
 - Implementacao da area da aluna.
 - Cadastro e gerenciamento de aulas.
 - Registro de presenca.
 - Calendario de aulas e frequencia.
 - Liberacao e download de certificados.
+
+### Backlog do Jira
+
+![Backlog da Semana 2 no Jira](assets/backlog_semana2.png)
+
+### Quadro do Jira
+
+![Quadro da Semana 2 no Jira](assets/quadro_jiira_semana2.png)
 
 </details>
 
@@ -594,6 +611,14 @@ EntreLinhas/
 - Formulario de doacao e parceria.
 - Painel administrativo para doacoes, parcerias e chave PIX.
 
+### Backlog do Jira
+
+![Backlog da Semana 3 no Jira](assets/BACKLOG_SEMANA3.png)
+
+### Quadro do Jira
+
+![Quadro da Semana 3 no Jira](assets/QUADRO_SEMANA3.png)
+
 </details>
 
 <details>
@@ -603,6 +628,14 @@ EntreLinhas/
 - Ajustes finais de interface e organizacao administrativa.
 - Ajustes nos testes automatizados.
 - Atualizacao da documentacao do projeto.
+
+### Backlog do Jira
+
+![Backlog da Semana 4 no Jira](assets/BACKLOG_SEMANA4.png)
+
+### Quadro do Jira
+
+![Quadro da Semana 4 no Jira](assets/QUADRO_SEMANA4.png)
 
 </details>
 
@@ -637,7 +670,7 @@ Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Autores
 
 - João Carlos Mafra - jcmsn@cesar.school
-- Laura Vitória - lvsa@gmail.com
+- Laura Vitória - lvsa@cesar.school
 - Marina Marinho - mmm3@cesar.school
 - Márcio Rodrigues Perez - mrpf@cesar.school
 - Ivan Pinto - iprf@cesar.school
