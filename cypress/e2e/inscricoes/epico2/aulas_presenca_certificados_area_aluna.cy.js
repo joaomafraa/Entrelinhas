@@ -91,15 +91,19 @@ describe('Epico 2 - Aulas, presenca, certificados e area da aluna', () => {
         cy.contains('a', 'Editar').click();
       });
 
-      cy.get('input[name="topico"]').clear();
-      cy.get('input[name="topico"]').type('Aula Cypress Atualizada');
-      cy.step();
-      cy.contains('button', 'Salvar alteracoes').click();
+      cy.get('input[name="data"]').invoke('val').then((dataAula) => {
+        const [ano, mes] = dataAula.split('-');
 
-      cy.contains('Aula atualizada com sucesso.').should('be.visible');
-      cy.visit('/inscricao/aulas/calendario/');
-      cy.contains('Aula Cypress Atualizada').should('be.visible');
-      cy.conclusao('alteracao da aula e refletida no calendario');
+        cy.get('input[name="topico"]').clear();
+        cy.get('input[name="topico"]').type('Aula Cypress Atualizada');
+        cy.step();
+        cy.contains('button', 'Salvar alteracoes').click();
+
+        cy.contains('Aula atualizada com sucesso.').should('be.visible');
+        cy.visit(`/inscricao/aulas/calendario/?ano=${ano}&mes=${Number(mes)}`);
+        cy.contains('Aula Cypress Atualizada').should('be.visible');
+        cy.conclusao('alteracao da aula e refletida no calendario');
+      });
     });
 
     it('H2 Cenario 3 - impede cadastro de aula com data invalida', () => {
